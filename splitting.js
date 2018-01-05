@@ -1,58 +1,67 @@
-function Splitting(els, callback, splitChars = true) {
+/**
+ * # Splitting
+ * CSS vars for split words & chars!
+ * `Splitting` fn handles array-ifying the
+ * @param {*} els
+ * @param {*} callback
+ */
+
+function Splitting(els) {
   els = els.nodeName
     ? [els]
     : els[0].nodeName ? els : document.querySelectorAll(els);
-
-  return Array.prototype.map.call(els, function(el) {
+  return Array.prototype.map.call(els, function(el, i) {
     if (!el._splitting) {
-      var words = el.innerText.split(/\s+/);
-      var chars = [];
-
-      el.innerHTML = "";
+      el._splitting = { el: el };
       el.className += " splitting";
-
-      words = words.map(function(word, i) {
-        word = word + (i !== words.length - 1 ? " " : "");
-        var wordChars = word.split(""),
-          wordEl = document.createElement("i");
-
-        wordEl.className = "word";
-        wordEl.setAttribute("data-word", word);
-        wordEl.style.setProperty("--word-index", i);
-        wordEl.style.setProperty("--word-length", wordChars.length);
-
-        if (splitChars) {
-          chars = chars.concat(
-            wordChars.map(function(c, i) {
-              var char = document.createElement("i");
-              char.className = "char";
-              char.setAttribute("data-char", c);
-              char.innerText = c;
-              wordEl.appendChild(char);
-              return char;
-            })
-          );
-        }
-
-        el.appendChild(wordEl);
-
-        return wordEl;
-      });
-
-      chars.map(function(letter, i) {
-        letter.style.setProperty("--char-index", i);
-      });
-
-      el.style.setProperty("--total-words", words.length);
-      el.style.setProperty("--total-chars", chars.length);
-
-      el._splitting = { el: el, word: words, chars: chars };
     }
-
-    if (callback) {
-      callback(el, el._splitting);
-    }
-
     return el._splitting;
   });
 }
+
+Splitting.split = function(el, key, splitBy, space) {
+  var text = (space ? " " : "") + el.innerText;
+  el.innerHTML = "";
+
+  return text.split(splitBy).map(function(split, i) {
+    var splitEl = document.createElement("i");
+    splitEl.className = key;
+    splitEl.setAttribute("data-" + key, split);
+    splitEl.innerText = split;
+    el.appendChild(splitEl);
+    return splitEl;
+  });
+};
+
+Splitting.index = function(s, key, splits) {
+  if (splits) {
+    s[key + "s"] = splits;
+    s.el.style.setProperty("--total-" + key + "s", splits.length);
+    splits.map(function(el, i) {
+      el.style.setProperty("--" + key + "-index", i);
+    });
+  }
+  return s;
+};
+
+Splitting.words = function(els) {
+  return Splitting(els).map(function(s, i) {
+    return s.words
+      ? s
+      : Splitting.index(s, "word", Splitting.split(s.el, "word", /\s+/));
+  });
+};
+
+Splitting.chars = function(els) {
+  return Splitting.words(els).map(function(s) {
+    return s.chars
+      ? s
+      : Splitting.index(
+          s,
+          "char",
+          s.words.reduce(function(val, word, i) {
+            return val.concat(Splitting.split(word, "char", "", i));
+          }, [])
+        );
+  });
+};
