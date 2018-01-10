@@ -1,3 +1,9 @@
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.Splitting = factory());
+}(this, (function () { 'use strict';
+
 /**
  * # Splitting
  * CSS vars for split words & chars!
@@ -114,4 +120,6 @@ Splitting.chars = function(els) {
   });
 };
 
-export default Splitting;
+return Splitting;
+
+})));
