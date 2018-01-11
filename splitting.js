@@ -66,11 +66,14 @@ function split(el, key, splitBy, space) {
   el.innerHTML = "";
 
   return text.split(splitBy).map(function(split, i) {
-    var splitEl = document.createElement("i");
+    var splitEl = document.createElement("span");
     splitEl.className = key;
     splitEl.setAttribute("data-" + key, split);
-    splitEl.innerText = (space && i > 0 ? " " : "") + split;
+    splitEl.innerText = split;
     el.appendChild(splitEl);
+    if (space) {
+      splitEl.insertAdjacentText("beforebegin", " ");
+    }
     return splitEl;
   });
 }
