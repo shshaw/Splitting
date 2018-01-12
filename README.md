@@ -1,8 +1,8 @@
 # Splitting
 
-_CSS Vars for split words and chars!_
+### _CSS Vars for split words and chars!_
 
-Splitting is a JavaScript microlibrary (1.2kb min, 0.6kb gzipped) to split a DOM element's words and characters into elements. The word and character elements are populated with CSS vars to assist with transitions and animations that were previously not feasible with CSS.
+Splitting is a JavaScript microlibrary (1.2kb min, 0.6kb gzipped) to split a DOM element's words and characters into `<span>`s with CSS variables that can unlock transitions and animations that were previously not feasible with CSS.
 
 ---
 
@@ -26,13 +26,13 @@ for easy embedding on platforms like [Codepen](https://codepen.io), use [unpkg](
 
 All methods can accept a selector, element, or a NodeList/Array of elements. The parent/targetted element will receive a `splitting` class.
 
-* [Splitting.words](#splittingwords)
-* [Splitting.chars](#splittingchars)
-* [Splitting.children](#splittingchildren)
+* [Splitting.words()](#splittingwords)
+* [Splitting.chars()](#splittingchars)
+* [Splitting.children()](#splittingchildren)
 
 ---
 
-# Splitting.words
+# Splitting.words(el)
 
 Divide an element's `innerText` into words.
 
@@ -61,7 +61,7 @@ _Output:_
 
 ---
 
-# Splitting.chars
+# Splitting.chars(el)
 
 Divide an element's `innerText` into words and characters. `Splitting.words` is called on the element first to prevent characters from wrapping to the next line unnecessarily, then each word is divided into characters.
 
@@ -100,7 +100,7 @@ _Output:_
 
 ---
 
-# Splitting.children
+# Splitting.children(el)
 
 Apply CSS var indexes to an element's children.
 

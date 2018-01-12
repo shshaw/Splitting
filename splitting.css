@@ -9,7 +9,11 @@
   position: relative;
 }
 
-/* Populate the psuedo elements with the character to allow for expanded effects */
+/**
+ * Populate the psuedo elements with the character to allow for expanded effects
+ * Set to `display: none` by default; just add `display: block` when you want
+ * to use the psuedo elements
+ */
 .splitting .char::before,
 .splitting .char::after {
   content: attr(data-char);
