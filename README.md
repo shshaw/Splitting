@@ -4,24 +4,44 @@ _CSS Vars for split words and chars!_
 
 Splitting is a JavaScript microlibrary (1.2kb min, 0.6kb gzipped) to split a DOM element's words and characters into elements. The word and character elements are populated with CSS vars to assist with transitions and animations that were previously not feasible with CSS.
 
+---
+
 ## Installation
 
-Add Splitting to an existing project with [npm](https://npmjs.org) using `npm install -s splitting` or use [unpkg](https://unpkg.com) with `<script src="https://unpkg.com/splitting/index.js"></script>` for easy embedding on platforms like [Codepen](https://codepen.io).
+Add Splitting to a projects with [npm](https://npmjs.org):
+
+```
+npm install -s splitting
+```
+
+for easy embedding on platforms like [Codepen](https://codepen.io), use [unpkg](https://unpkg.com)
+
+```html
+<script src="https://unpkg.com/splitting/index.js"></script>
+```
+
+---
 
 ## Methods
 
 All methods can accept a selector, element, or a NodeList/Array of elements. The parent/targetted element will receive a `splitting` class.
 
-### Splitting.words
+* [Splitting.words](#splittingwords)
+* [Splitting.chars](#splittingchars)
+* [Splitting.children](#splittingchildren)
+
+---
+
+# Splitting.words
 
 Divide an element's `innerText` into words.
 
 Parent element receives a `--total-words` CSS var containing the total number of words. Each word is wrapped in an `<span>` element with a `--word-index` containing the word's position, and a `data-word` attribute containing the actual word.
 
-#### Example
+### Example
 
 ```js
-Splitting.wordss("[data-splitting-words]");
+Splitting.words("[data-splitting-words]");
 ```
 
 _Input:_
@@ -39,13 +59,15 @@ _Output:_
 </h1>
 ```
 
-### Splitting.chars
+---
+
+# Splitting.chars
 
 Divide an element's `innerText` into words and characters. `Splitting.words` is called on the element first to prevent characters from wrapping to the next line unnecessarily, then each word is divided into characters.
 
 Parent element receives a `--total-char` CSS var containing the total number of characters. Each character is wrapped in an `<span>` element with a `--char-index` containing the characters's position, and a `data-char` attribute containing the actual character.
 
-#### Example
+### Example
 
 ```js
 Splitting.chars("[data-splitting-chars]");
@@ -76,11 +98,13 @@ _Output:_
 </h1>
 ```
 
-### Splitting.children
+---
+
+# Splitting.children
 
 Apply CSS var indexes to an element's children.
 
-#### Example
+### Example
 
 ```js
 Splitting.children(".list", ".list-item", "item");
@@ -106,11 +130,13 @@ _Output:_
 </ul>
 ```
 
+---
+
 ## Styles
 
 ### Recommended Styles
 
-Many CSS properties, like `transform`, will not work on `display: inline` elements, so applying `display: inline-block` will keep your words and characters looking the same, while giving you the most flexibility in transitions and animations.
+Many CSS properties, like `transform`, will not work by default on `display: inline` elements like `<span>`, so applying `display: inline-block` give you the most flexibility in transitions and animations while keeping your words and character layout mostly the same.
 
 ```css
 .splitting .word,
