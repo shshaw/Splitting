@@ -34,12 +34,12 @@
 
 .splitting .word {
   /* Pecent (0-1) of the word's position */
-  --word-percent: calc(var(--word-index) / var(--total-words));
+  --word-percent: calc(var(--word-index) / (var(--total-words) - 1));
 }
 
 .splitting .char {
   /* Percent (0-1) of the char's position */
-  --char-percent: calc(var(--char-index) / var(--total-chars));
+  --char-percent: calc(var(--char-index) / (var(--total-chars) - 1));
 
   /* Offset from center, positive & negative */
   --offset: calc(var(--char-index) - var(--center));
