@@ -44,7 +44,7 @@ Splitting.$ = $;
 function index(s, key, splits) {
   if (splits) {
     s[key + "s"] = splits;
-    s.el.style.setProperty("--total-" + key + "s", splits.length);
+    s.el.style.setProperty("--" + key + "-total", splits.length);
     splits.map(function(el, i) {
       el.style.setProperty("--" + key + "-index", i);
     });
