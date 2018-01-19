@@ -1,12 +1,12 @@
 {
   "name": "splitting",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description":
     "Microlibrary to split a DOM element's words & chars into elements populated with CSS vars.",
-  "main": "index.js",
+  "main": "splitting.js",
   "scripts": {
     "build":
-      "rollup splitting.js --output.format umd --name 'Splitting' --output.file index.js && uglifyjs -c -m -o splitting.min.js -- index.js && npm run sizes",
+      "rollup src/splitting.js --output.format umd --name 'Splitting' --output.file splitting.js && uglifyjs -c -m -o splitting.min.js -- splitting.js && npm run sizes",
     "sizes":
       "gzip -9 -c splitting.min.js | wc -c && cat splitting.min.js | wc -c"
   },
