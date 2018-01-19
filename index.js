@@ -32,8 +32,8 @@ function Splitting(els) {
 function $(els, parent) {
   return Array.prototype.slice.call(
     els.nodeName
-    ? [els]
-    : els[0].nodeName ? els : (parent || document).querySelectorAll(els),
+      ? [els]
+      : els[0].nodeName ? els : (parent || document).querySelectorAll(els),
     0
   );
 }
@@ -68,21 +68,25 @@ Splitting.index = index;
  * @param {Boolean} space - Add a space to each split if index is greater than 0. Mainly for `Splitting.words`
  */
 function split(el, key, splitBy, space) {
+  var parent = el.parentNode;
+  if (parent) {
+    var temp = document.createTextNode("");
+    parent.replaceChild(temp, el);
+  }
 
   var children = $(el.childNodes);
+  el.innerHTML = "";
 
-  el.innerHTML = '';
-
-  return children.reduce(function(val, child) {
-
-    var isEl = child.innerText;
-    var text = child[ isEl ? 'innerText' : 'wholeText' ].trim();
-
-    if ( !text.length ) { return val; }
-
-    if ( isEl ) {
-      child.innerHTML = '';
+  children = children.reduce(function(val, child) {
+    // Recursively run through child nodes.
+    if (child && child.childNodes && child.childNodes.length) {
       el.appendChild(child);
+      return val.concat(split(child, key, splitBy, space));
+    }
+
+    var text = (child.wholeText || "").trim();
+    if (!text.length) {
+      return val;
     }
 
     return val.concat(
@@ -91,16 +95,20 @@ function split(el, key, splitBy, space) {
         splitEl.className = key;
         splitEl.setAttribute("data-" + key, split);
         splitEl.innerText = split;
-        ( isEl ? child : el ).appendChild(splitEl);
+        el.appendChild(splitEl);
         if (space) {
           splitEl.insertAdjacentText("beforebegin", " ");
         }
         return splitEl;
       })
     );
-
   }, []);
 
+  if (parent) {
+    parent.replaceChild(el, temp);
+  }
+
+  return children;
 }
 Splitting.split = split;
 
@@ -132,13 +140,13 @@ Splitting.chars = function(els) {
   return Splitting.words(els).map(function(s) {
     return s.chars
       ? s
-    : index(
-      s,
-      "char",
-      s.words.reduce(function(val, word, i) {
-        return val.concat(split(word, "char", ""));
-      }, [])
-    );
+      : index(
+          s,
+          "char",
+          s.words.reduce(function(val, word, i) {
+            return val.concat(split(word, "char", ""));
+          }, [])
+        );
   });
 };
 

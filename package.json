@@ -1,6 +1,6 @@
 {
   "name": "splitting",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description":
     "Microlibrary to split a DOM element's words & chars into elements populated with CSS vars.",
   "main": "index.js",
