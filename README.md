@@ -147,9 +147,7 @@ Many CSS properties, like `transform`, will not work by default on `display: inl
 
 ### Pseudo Elements
 
-You may have noticed that `Splitting.words` and `Splitting.chars` apply `data-word` and `data-char` attributes, respectively.
-
-This allows for great flexibility in your CSS by using Psuedo elements with `content: attr(data-char)`.
+You may have noticed that `Splitting.words` and `Splitting.chars` apply `data-word` and `data-char` attributes, respectively. This allows for great flexibility in your CSS by using Psuedo elements with `content: attr(data-char)`.
 
 ```css
 .splitting .char {
