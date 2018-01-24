@@ -2,7 +2,7 @@
 
 ### _CSS Vars for split words and chars!_
 
-Splitting is a JavaScript microlibrary (1.2kb min, 0.6kb gzipped) to split a DOM element's words and characters into `<span>`s with CSS variables that can unlock transitions and animations that were previously not feasible with CSS.
+Splitting is a JavaScript microlibrary (1.4kb min, 0.7kb gzipped) to split a DOM element's words and characters into `<span>`s with CSS variables, unlocking transitions and animations that were previously not feasible with CSS.
 
 ---
 
@@ -14,11 +14,13 @@ Add Splitting to a projects with [npm](https://npmjs.org):
 npm install -s splitting
 ```
 
-for easy embedding on platforms like [Codepen](https://codepen.io), use [unpkg](https://unpkg.com)
+For easy embedding on platforms like [Codepen](https://codepen.io), use [unpkg](https://unpkg.com)
 
 ```html
-<script src="https://unpkg.com/splitting/index.js"></script>
+<script src="https://unpkg.com/splitting/splitting.js"></script>
 ```
+
+Be sure to include `splitting.css` for some helpful defaults to make building effects easier.
 
 ---
 
@@ -28,6 +30,7 @@ All methods can accept a selector, element, or a NodeList/Array of elements. The
 
 * [Splitting.words()](#splittingwords)
 * [Splitting.chars()](#splittingchars)
+* [Splitting.fromString()](#splittingfromstring)
 * [Splitting.children()](#splittingchildren)
 
 ---
@@ -95,6 +98,59 @@ _Output:_
     <span class="char" data-char="G" style="--char-index:8;">G</i>
     <span class="char" data-char="G" style="--char-index:8;">!</i>
   </i>
+</h1>
+```
+
+---
+
+# Splitting.fromString(str, opts)
+
+Split a string and receive back the HTML as a string for splitting before hitting the DOM. Useful for frameworks like Vue where you may be splitting a dynamic value.
+
+### Options
+
+Provide an Object as the second parameter to change the options:
+
+```js
+Splitting.fromString("", {
+  type: "chars", // Change to "words" to split only words
+  element: false // Change to true to receive an Element back instead of a String.
+});
+```
+
+### Example
+
+```js
+var heading = document.querySelector(".heading");
+heading.innerHTML = Splitting.fromString("I am split");
+```
+
+_Input_
+
+```html
+<h1 class="heading">I'm not split.</h1>
+```
+
+_Output_
+
+```html
+<h1 class="heading">
+  <span class=" splitting" style="--word-total:3; --char-total:8;">
+    <span class="word" data-word="I" style="--word-index:0;">
+      <span class="char" data-char="I" style="--char-index:0;">I</span>
+    </span>
+    <span class="word" data-word="am" style="--word-index:1;">
+      <span class="char" data-char="a" style="--char-index:1;">a</span>
+      <span class="char" data-char="m" style="--char-index:2;">m</span>
+    </span>
+    <span class="word" data-word="split" style="--word-index:2;">
+      <span class="char" data-char="s" style="--char-index:3;">s</span>
+      <span class="char" data-char="p" style="--char-index:4;">p</span>
+      <span class="char" data-char="l" style="--char-index:5;">l</span>
+      <span class="char" data-char="i" style="--char-index:6;">i</span>
+      <span class="char" data-char="t" style="--char-index:7;">t</span>
+    </span>
+  </span>
 </h1>
 ```
 

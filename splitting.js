@@ -126,6 +126,11 @@ Splitting.children = function(parent, children, key) {
   });
 };
 
+/**
+ * # Splitting.chars
+ * Split an element into words and those words into chars.
+ * @param {String|Node|NodeList|Array} els - Element(s) or selector to target.
+ */
 Splitting.words = function(els) {
   return Splitting(els).map(function(s, i) {
     return s.words ? s : index(s, "word", split(s.el, "word", /\s+/, true));
@@ -134,7 +139,8 @@ Splitting.words = function(els) {
 
 /**
  * # Splitting.chars
- * Split an element into words and those words into chars
+ * Split an element into words and those words into chars.
+ * @param {String|Node|NodeList|Array} els - Element(s) or selector to target.
  */
 Splitting.chars = function(els) {
   return Splitting.words(els).map(function(s) {
@@ -148,6 +154,23 @@ Splitting.chars = function(els) {
           }, [])
         );
   });
+};
+
+/**
+ * # Splitting.fromString
+ * Splits a string and returns the processed HTML with elements and CSS Vars.
+ * @param {String} str - String to split
+ * @param {Object} opts - Options
+ * @param {String} opts.type - Type of splitting to do, 'words' or 'chars';
+ * @param {Boolean} opts.element - Return an element. Defaults to `false` to receive a string
+ *  default is chars
+ */
+Splitting.fromString = function(str, opts) {
+  opts = opts || {};
+  var el = document.createElement("span");
+  el.innerHTML = str;
+  var s = Splitting[opts.type || "chars"](el);
+  return opts.element ? el : el.outerHTML;
 };
 
 return Splitting;
