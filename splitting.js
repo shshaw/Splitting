@@ -11,12 +11,14 @@
  * @param {*} els
  */
 function Splitting(els) {
-  return $(els).map(function(el, i) {
+  return $(els).map(function (el, i) {
     if (!el._splitting) {
       el._splitting = {
         el: el
       };
-      el.className += " splitting";
+      if (el.classList) {
+        el.classList.add("splitting");
+      }
     }
     return el._splitting;
   });
@@ -31,9 +33,8 @@ function Splitting(els) {
  */
 function $(els, parent) {
   return Array.prototype.slice.call(
-    els.nodeName
-      ? [els]
-      : els[0].nodeName ? els : (parent || document).querySelectorAll(els),
+    els.nodeName ? [els] :
+    els[0].nodeName ? els : (parent || document).querySelectorAll(els),
     0
   );
 }
@@ -51,7 +52,7 @@ function index(s, key, splits) {
   if (splits) {
     s[key + "s"] = splits;
     s.el.style.setProperty("--" + key + "-total", splits.length);
-    splits.map(function(el, i) {
+    splits.map(function (el, i) {
       el.style.setProperty("--" + key + "-index", i);
     });
   }
@@ -68,34 +69,46 @@ Splitting.index = index;
  * @param {Boolean} space - Add a space to each split if index is greater than 0. Mainly for `Splitting.words`
  */
 function split(el, key, splitBy, space) {
+  // Remove element from DOM to prevent unnecessary thrashing.
   var parent = el.parentNode;
   if (parent) {
     var temp = document.createTextNode("");
     parent.replaceChild(temp, el);
   }
 
+  // Get all the children and clear out the innerHTML
   var children = $(el.childNodes);
   el.innerHTML = "";
 
-  children = children.reduce(function(val, child) {
-    // Recursively run through child nodes.
+  // Loop through all children to split them up.
+  children = children.reduce(function (val, child) {
+    // Recursively run through child nodes
     if (child && child.childNodes && child.childNodes.length) {
       el.appendChild(child);
       return val.concat(split(child, key, splitBy, space));
     }
 
+    // Get the text to split, trimming out the whitespace
     var text = (child.wholeText || "").trim();
+
+    // If there's no text left after trimming whitespace, continue the loop
     if (!text.length) {
       return val;
     }
 
+    // Concatenate the split text children back into the full array
     return val.concat(
-      text.split(splitBy).map(function(split) {
+      text.split(splitBy).map(function (split) {
+        // Create a span
         var splitEl = document.createElement("span");
+        // Give it the key as a class
         splitEl.className = key;
-        splitEl.setAttribute("data-" + key, split);
         splitEl.innerText = split;
+        // Populate data-{{key}} with the split value
+        splitEl.setAttribute("data-" + key, split);
         el.appendChild(splitEl);
+        // If items should be spaced out (Splitting.words, primarily), insert
+        // the space into the parent before the element.
         if (space) {
           splitEl.insertAdjacentText("beforebegin", " ");
         }
@@ -104,6 +117,7 @@ function split(el, key, splitBy, space) {
     );
   }, []);
 
+  // Put the element back into the DOM
   if (parent) {
     parent.replaceChild(el, temp);
   }
@@ -120,8 +134,8 @@ Splitting.split = split;
  * @param {String} key -
  * @example `Splitting.children('ul','li','item'); // Index every unordered list's items with the --item CSS var.`
  */
-Splitting.children = function(parent, children, key) {
-  return Splitting(parent).map(function(s) {
+Splitting.children = function (parent, children, key) {
+  return Splitting(parent).map(function (s) {
     return index(s, key, $(children, s.el));
   });
 };
@@ -131,8 +145,8 @@ Splitting.children = function(parent, children, key) {
  * Split an element into words and those words into chars.
  * @param {String|Node|NodeList|Array} els - Element(s) or selector to target.
  */
-Splitting.words = function(els) {
-  return Splitting(els).map(function(s, i) {
+Splitting.words = function (els) {
+  return Splitting(els).map(function (s, i) {
     return s.words ? s : index(s, "word", split(s.el, "word", /\s+/, true));
   });
 };
@@ -142,17 +156,17 @@ Splitting.words = function(els) {
  * Split an element into words and those words into chars.
  * @param {String|Node|NodeList|Array} els - Element(s) or selector to target.
  */
-Splitting.chars = function(els) {
-  return Splitting.words(els).map(function(s) {
-    return s.chars
-      ? s
-      : index(
-          s,
-          "char",
-          s.words.reduce(function(val, word, i) {
-            return val.concat(split(word, "char", ""));
-          }, [])
-        );
+Splitting.chars = function (els) {
+  return Splitting.words(els).map(function (s) {
+    return s.chars ?
+      s :
+      index(
+        s,
+        "char",
+        s.words.reduce(function (val, word, i) {
+          return val.concat(split(word, "char", ""));
+        }, [])
+      );
   });
 };
 
@@ -165,7 +179,7 @@ Splitting.chars = function(els) {
  * @param {Boolean} opts.element - Return an element. Defaults to `false` to receive a string
  *  default is chars
  */
-Splitting.fromString = function(str, opts) {
+Splitting.fromString = function (str, opts) {
   opts = opts || {};
   var el = document.createElement("span");
   el.innerHTML = str;
