@@ -37,20 +37,20 @@ All methods can accept a selector, element, or a NodeList/Array of elements. The
 
 # Splitting.words(el)
 
-Divide an element's `innerText` into words.
+Divide an element's contents into words.
 
 Parent element receives a `--total-words` CSS var containing the total number of words. Each word is wrapped in an `<span>` element with a `--word-index` containing the word's position, and a `data-word` attribute containing the actual word.
 
 ### Example
 
-```js
-Splitting.words("[data-splitting-words]");
-```
-
 _Input:_
 
 ```html
 <h1 data-splitting-words>Splitting words!</h1>
+```
+
+```js
+Splitting.words("[data-splitting-words]");
 ```
 
 _Output:_
@@ -66,20 +66,20 @@ _Output:_
 
 # Splitting.chars(el)
 
-Divide an element's `innerText` into words and characters. `Splitting.words` is called on the element first to prevent characters from wrapping to the next line unnecessarily, then each word is divided into characters.
+Divide an element's contents into words and characters. `Splitting.words` is called on the element first to prevent characters from wrapping to the next line unnecessarily, then each word is divided into characters.
 
 Parent element receives a `--total-char` CSS var containing the total number of characters. Each character is wrapped in an `<span>` element with a `--char-index` containing the characters's position, and a `data-char` attribute containing the actual character.
 
 ### Example
 
-```js
-Splitting.chars("[data-splitting-chars]");
-```
-
 _Input:_
 
 ```html
 <h1 data-splitting-chars>SPLITTING!</h1>
+```
+
+```js
+Splitting.chars("[data-splitting-chars]");
 ```
 
 _Output:_
@@ -120,15 +120,15 @@ Splitting.fromString("", {
 
 ### Example
 
-```js
-var heading = document.querySelector(".heading");
-heading.innerHTML = Splitting.fromString("I am split");
-```
-
 _Input_
 
 ```html
 <h1 class="heading">I'm not split.</h1>
+```
+
+```js
+var heading = document.querySelector(".heading");
+heading.innerHTML = Splitting.fromString("I am split");
 ```
 
 _Output_
@@ -162,10 +162,6 @@ Apply CSS var indexes to an element's children.
 
 ### Example
 
-```js
-Splitting.children(".list", ".list-item", "item");
-```
-
 _Input:_
 
 ```html
@@ -174,6 +170,10 @@ _Input:_
   <li class="list-item">2</li>
   <li class="list-item">3</li>
 </ul>
+```
+
+```js
+Splitting.children(".list", ".list-item", "item");
 ```
 
 _Output:_
