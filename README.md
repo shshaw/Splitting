@@ -103,6 +103,20 @@ _Output:_
 
 ---
 
+# Splitting.lines(el)
+
+Splits an element by words, if not already done so, and adds an extra `--line-index` variable to each `.word`. The parent element also gets a `--line-total` var.
+
+_Does not update automatically on resize._ You'll need to attach your own event listeners _with debouncing_ for when the element's line width may have changed. Simply call `Splitting.lines` again on the element and the indexes will be updated.
+
+### Example
+
+```js
+Splitting.lines("p[data-splitting]");
+```
+
+---
+
 # Splitting.fromString(str, opts)
 
 Split a string and receive back the HTML as a string for splitting before hitting the DOM. Useful for frameworks like Vue where you may be splitting a dynamic value.
