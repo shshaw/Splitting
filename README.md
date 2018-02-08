@@ -28,10 +28,11 @@ Be sure to include `splitting.css` for some helpful defaults to make building ef
 
 All methods can accept a selector, element, or a NodeList/Array of elements. The parent/targetted element will receive a `splitting` class.
 
-* [Splitting.words()](#splittingwords)
-* [Splitting.chars()](#splittingchars)
-* [Splitting.fromString()](#splittingfromstring)
-* [Splitting.children()](#splittingchildren)
+* [Splitting.words(el)](#splittingwordsel)
+* [Splitting.chars(el)](#splittingcharsel)
+* [Splitting.lines(el)](#splittinglinesel)
+* [Splitting.fromString(str, opts)](#splittingfromstringstropts)
+* [Splitting.children(parent,children,key)](#splittingchildrenparentchildrenkey)
 
 ---
 
@@ -170,7 +171,7 @@ _Output_
 
 ---
 
-# Splitting.children(el)
+# Splitting.children(parent,children,key)
 
 Apply CSS var indexes to an element's children.
 
