@@ -170,26 +170,36 @@ Splitting.chars = function(els) {
  * Index each word by line. Does not automatically update on resize, so retrigger `Splitting.lines` again _with debouncing_ when the element's line width may have changed.
  * @param {*} els
  */
-Splitting.lines = function(els) {
-  return Splitting.words(els).map(function(s) {
-    var lines = [],
-      lineIndex = -1,
-      top,
-      lastTop = 0;
 
-    s.words.map(function(w) {
-      top = w.offsetTop;
-      if (top > lastTop) {
-        lineIndex++;
-        lastTop = top;
-      }
-      lines[lineIndex] = lines[lineIndex] || [];
-      lines[lineIndex].push(w);
-      w.style.setProperty("--line-index", lineIndex);
-    });
+function splitLines(els) {
+  var lines = [],
+    lineIndex = -1,
+    lastTop = -1,
+    top;
 
-    s.lines = lines;
-    s.el.style.setProperty("--line-total", lines.length);
+  els.map(function(w) {
+    top = w.offsetTop;
+    if (top > lastTop) {
+      lineIndex++;
+      lastTop = top;
+    }
+    lines[lineIndex] = lines[lineIndex] || [];
+    lines[lineIndex].push(w);
+    w.style.setProperty("--line-index", lineIndex);
+  });
+
+  return lines;
+}
+
+Splitting.lines = function(els, children, key) {
+  key = children ? key || "item" : "word";
+
+  return (children
+    ? Splitting.children(els, children, key)
+    : Splitting.words(els)
+  ).map(function(s) {
+    s.lines = splitLines(s[key + "s"]);
+    s.el.style.setProperty("--line-total", s.lines.length);
     return s;
   });
 };
