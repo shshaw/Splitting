@@ -2,7 +2,7 @@
 
 ### _CSS Vars for split words and chars!_
 
-Splitting is a JavaScript microlibrary (1.4kb min, 0.7kb gzipped) to split a DOM element's words and characters into `<span>`s with CSS variables, unlocking transitions and animations that were previously not feasible with CSS.
+Splitting is a JavaScript microlibrary (1.9kb min, 0.86kb gzipped) to split a DOM element's words and characters into `<span>`s with CSS variables, unlocking transitions and animations that were previously not feasible with CSS.
 
 ---
 
