@@ -190,6 +190,8 @@ _Output:_
 
 ## Styles
 
+The included `splitting.css` file contains all the recommended styles and easy setup for more complex CSS vars. You can include that entire stylesheet or copy what you need. Some of the styles are broken out and explained below.
+
 ### Recommended Styles
 
 Many CSS properties, like `transform`, will not work by default on `display: inline` elements like `<span>`, so applying `display: inline-block` give you the most flexibility in transitions and animations while keeping your words and character layout mostly the same.
@@ -217,7 +219,7 @@ You may have noticed that `Splitting.words` and `Splitting.chars` apply `data-wo
   position: absolute;
   top: 0;
   left: 0;
-  display: none;
+  visibility: hidden;
   transition: inherit;
   user-select: none;
 }

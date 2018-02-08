@@ -20,7 +20,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  display: none;
+  visibility: hidden;
   transition: inherit;
   user-select: none;
 }
@@ -37,12 +37,12 @@
 
 .splitting .word {
   /* Pecent (0-1) of the word's position */
-  --word-percent: calc(var(--word-index) / (var(--word-total) - 1));
+  --word-percent: calc(var(--word-index) / var(--word-total));
 }
 
 .splitting .char {
   /* Percent (0-1) of the char's position */
-  --char-percent: calc(var(--char-index) / (var(--char-total) - 1));
+  --char-percent: calc(var(--char-index) / var(--char-total));
 
   /* Offset from center, positive & negative */
   --char-offset: calc(var(--char-index) - var(--char-center));
