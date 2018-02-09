@@ -88,6 +88,7 @@ function split(el, key, splitBy, space) {
 
     // If there's no text left after trimming whitespace, continue the loop
     if (!text.length) {
+      el.appendChild(child);
       return val;
     }
 
