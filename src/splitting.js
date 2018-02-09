@@ -213,11 +213,12 @@ Splitting.lines = function(els, children, key) {
  * @param {Boolean} opts.element - Return an element. Defaults to `false` to receive a string
  *  default is chars
  */
+
 Splitting.fromString = function(str, opts) {
   opts = opts || {};
   var el = document.createElement("span");
   el.innerHTML = str;
-  var s = Splitting[opts.type || "chars"](el);
+  Splitting[opts.type || "chars"].apply(null, [el].concat(opts.args || []));
   return opts.element ? el : el.outerHTML;
 };
 
