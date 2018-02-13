@@ -71,12 +71,11 @@ function split(el, key, splitBy, space) {
     parent.replaceChild(temp, el);
   }
 
-  // Get all the children and clear out the innerHTML
-  var children = $(el.childNodes);
-  el.innerHTML = "";
+  // Combine any strange text nodes or empty whitespace.
+  el.normalize();
 
   // Loop through all children to split them up.
-  children = children.reduce(function(val, child) {
+  var children = $(el.childNodes).reduce(function(val, child) {
     // Recursively run through child nodes
     if (child && child.childNodes && child.childNodes.length) {
       el.appendChild(child);
@@ -92,6 +91,8 @@ function split(el, key, splitBy, space) {
       return val;
     }
 
+    el.removeChild(child);
+
     // Concatenate the split text children back into the full array
     return val.concat(
       text.split(splitBy).map(function(split) {
@@ -106,7 +107,7 @@ function split(el, key, splitBy, space) {
         // If items should be spaced out (Splitting.words, primarily), insert
         // the space into the parent before the element.
         if (space) {
-          splitEl.insertAdjacentText("beforebegin", " ");
+          splitEl.insertAdjacentText("afterend", " ");
         }
         return splitEl;
       })
