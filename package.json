@@ -7,7 +7,8 @@
     "build": "rollup src/splitting.js --output.format umd --name 'Splitting' --output.file splitting.js && uglifyjs -c -m -o splitting.min.js -- splitting.js && npm run sizes",
     "sizes": "gzip -9 -c splitting.min.js | wc -c && cat splitting.min.js | wc -c",
     "version": "npm run build && git add .",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "test": "npm run build && jest"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,18 @@
   "bugs": {
     "url": "https://github.com/shshaw/splitting/issues"
   },
-  "homepage": "https://github.com/shshaw/splitting#readme"
+  "homepage": "https://github.com/shshaw/splitting#readme",
+  "devDependencies": {
+    "jest": "^22.3.0",
+    "rollup": "^0.55.5"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testRegex": "tests/.*\\.js$",
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
+  }
 }
