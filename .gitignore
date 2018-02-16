@@ -1,6 +1,4 @@
-
-Icon
+**/Icon*
 node_modules/
-
 src/original.js
 src/Splitting.string.js
