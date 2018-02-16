@@ -10,7 +10,7 @@
  * `Splitting` fn handles array-ifying the
  * @param {*} els
  */
-function Splitting(els) {
+function Splitting(els) { 
   return $(els).map(function(el, i) {
     if (!el._splitting) {
       el._splitting = {
@@ -32,12 +32,15 @@ function Splitting(els) {
  * @param {*} parent
  */
 function $(els, parent) {
-  return Array.prototype.slice.call(
-    els.nodeName
-      ? [els]
-      : els[0].nodeName ? els : (parent || document).querySelectorAll(els),
-    0
-  );
+  return !els ? [] :
+    Array.prototype.slice.call(
+      els.nodeName
+        ? [els]
+        : els instanceof NodeList
+          ? els
+          : els[0].nodeName ? els : (parent || document).querySelectorAll(els),
+      0
+    );
 }
 Splitting.$ = $;
 

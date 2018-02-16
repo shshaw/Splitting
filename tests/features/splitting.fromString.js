@@ -1,4 +1,7 @@
-var Splitting = require('../splitting');
+// polyfill JSDOM for testing
+require('../_polyfill');
+
+var Splitting = require('../../splitting');
 
 test('an empty element', function () {
   // todo

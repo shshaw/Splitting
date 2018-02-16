@@ -37,7 +37,7 @@
     "moduleFileExtensions": [
       "js"
     ],
-    "testRegex": "tests/.*\\.js$",
+    "testRegex": "tests/features/.*\\.js$",
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
