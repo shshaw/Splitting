@@ -10,7 +10,7 @@
  * `Splitting` fn handles array-ifying the
  * @param {*} els
  */
-function Splitting(els) { 
+function Splitting(els) {
   return $(els).map(function(el, i) {
     if (!el._splitting) {
       el._splitting = {
@@ -28,21 +28,36 @@ function Splitting(els) {
  * # Splitting.$
  * Convert selector or NodeList to array for easier manipulation.
  *
- * @param {*} els - Elements or selector
+ * @param {*} els - HTMLElement, NodeList or String selector
  * @param {*} parent
  */
 function $(els, parent) {
-  return !els ? [] :
-    Array.prototype.slice.call(
-      els.nodeName
-        ? [els]
-        : els instanceof NodeList
-          ? els
-          : els[0].nodeName ? els : (parent || document).querySelectorAll(els),
-      0
-    );
+  // Null argument or empty array
+  if (!els || els.length == 0) {
+    return [];
+  } else if (els.nodeName) {
+    // Single HTMLElement
+    els = [els];
+  } else if (els.charAt) {
+    //} else if (typeof els === "string") {
+    //else if (!els[0].nodeName) {
+    // String selector
+    els = (parent || document).querySelectorAll(els);
+  }
+  return [].slice.call(els);
 }
 Splitting.$ = $;
+
+/**
+ * # setCSSVar
+ * Apply a CSS var
+ * @param {*} el
+ * @param {*} varName
+ * @param {*} value
+ */
+function setCSSVar(el, varName, value) {
+  el.style.setProperty("--" + varName, value);
+}
 
 /**
  * # Splitting.index
@@ -55,9 +70,9 @@ Splitting.$ = $;
 function index(s, key, splits) {
   if (splits) {
     s[key + "s"] = splits;
-    s.el.style.setProperty("--" + key + "-total", splits.length);
+    setCSSVar(s.el, key + "-total", splits.length);
     splits.map(function(el, i) {
-      el.style.setProperty("--" + key + "-index", i);
+      setCSSVar(el, key + "-index", i);
     });
   }
   return s;
@@ -196,7 +211,7 @@ function splitLines(els) {
     }
     lines[lineIndex] = lines[lineIndex] || [];
     lines[lineIndex].push(w);
-    w.style.setProperty("--line-index", lineIndex);
+    setCSSVar(w, "line-index", lineIndex);
   });
 
   return lines;
@@ -210,7 +225,7 @@ Splitting.lines = function(els, children, key) {
     : Splitting.words(els)
   ).map(function(s) {
     s.lines = splitLines(s[key + "s"]);
-    s.el.style.setProperty("--line-total", s.lines.length);
+    setCSSVar(s.el, "line-total", s.lines.length);
     return s;
   });
 };
