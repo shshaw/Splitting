@@ -4,7 +4,7 @@
  * `Splitting` fn handles array-ifying the
  * @param {*} els
  */
-function Splitting(els) { 
+function Splitting(els) {
   return $(els).map(function(el, i) {
     if (!el._splitting) {
       el._splitting = {
@@ -22,19 +22,23 @@ function Splitting(els) {
  * # Splitting.$
  * Convert selector or NodeList to array for easier manipulation.
  *
- * @param {*} els - Elements or selector
+ * @param {*} els - HTMLElement, NodeList or String selector
  * @param {*} parent
  */
 function $(els, parent) {
-  return !els ? [] :
-    Array.prototype.slice.call(
-      els.nodeName
-        ? [els]
-        : els instanceof NodeList
-          ? els
-          : els[0].nodeName ? els : (parent || document).querySelectorAll(els),
-      0
-    );
+  // Null argument or empty array
+  if (!els || els.length == 0) {
+    return [];
+  } else if (els.nodeName) {
+    // Single HTMLElement
+    els = [els];
+  } else if (els.charAt) {
+    //} else if (typeof els === "string") {
+    //else if (!els[0].nodeName) {
+    // String selector
+    els = (parent || document).querySelectorAll(els);
+  }
+  return [].slice.call(els);
 }
 Splitting.$ = $;
 
