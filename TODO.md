@@ -8,11 +8,11 @@ All functions, unless otherwise specified should return an empty Array or Array 
 
 ## `Splitting()`
 
-- [ ] No arguments
-- [ ] `Element`
-- [ ] `NodeList`
-- [ ] `".class"` class selector
-- [ ] `"[data-splitting]"` attribute selector
+- [x] No arguments
+- [x] `Element`
+- [x] `NodeList`
+- [x] `".class"` class selector
+- [x] `"[data-splitting]"` attribute selector
 
 
 ## `Splitting.words()`
