@@ -65,7 +65,7 @@ function index(s, key, splits) {
   if (splits) {
     s[key + "s"] = splits;
     setCSSVar(s.el, key + "-total", splits.length);
-    splits.map(function(el, i) {
+    splits.forEach(function(el, i) {
       setCSSVar(el, key + "-index", i);
     });
   }
@@ -82,12 +82,8 @@ Splitting.index = index;
  * @param {Boolean} space - Add a space to each split if index is greater than 0. Mainly for `Splitting.words`
  */
 function split(el, key, splitBy, space) {
-  // Remove element from DOM to prevent unnecessary thrashing.
-  var parent = el.parentNode;
-  if (parent) {
-    var temp = document.createTextNode("");
-    parent.replaceChild(temp, el);
-  }
+  // Use fragment to prevent unnecessary DOM thrashing.
+  var fragment = document.createDocumentFragment();
 
   // Combine any strange text nodes or empty whitespace.
   el.normalize();
@@ -96,7 +92,7 @@ function split(el, key, splitBy, space) {
   var children = $(el.childNodes).reduce(function(val, child) {
     // Recursively run through child nodes
     if (child && child.childNodes && child.childNodes.length) {
-      el.appendChild(child);
+      fragment.appendChild(child);
       return val.concat(split(child, key, splitBy, space));
     }
 
@@ -105,11 +101,9 @@ function split(el, key, splitBy, space) {
 
     // If there's no text left after trimming whitespace, continue the loop
     if (!text.length) {
-      el.appendChild(child);
+      fragment.appendChild(child);
       return val;
     }
-
-    el.removeChild(child);
 
     // Concatenate the split text children back into the full array
     return val.concat(
@@ -121,7 +115,7 @@ function split(el, key, splitBy, space) {
         splitEl.innerText = split;
         // Populate data-{{key}} with the split value
         splitEl.setAttribute("data-" + key, split);
-        el.appendChild(splitEl);
+        fragment.appendChild(splitEl);
         // If items should be spaced out (Splitting.words, primarily), insert
         // the space into the parent before the element.
         if (space) {
@@ -132,10 +126,10 @@ function split(el, key, splitBy, space) {
     );
   }, []);
 
-  // Put the element back into the DOM
-  if (parent) {
-    parent.replaceChild(el, temp);
-  }
+  // Clear out the existing element
+  el.innerHTML = "";
+  // Append elements back into the parent
+  el.appendChild(fragment);
 
   return children;
 }
@@ -197,7 +191,7 @@ function splitLines(els) {
     lastTop = -1,
     top;
 
-  els.map(function(w) {
+  els.forEach(function(w) {
     top = w.offsetTop;
     if (top > lastTop) {
       lineIndex++;
