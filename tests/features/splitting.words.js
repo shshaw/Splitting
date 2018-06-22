@@ -1,48 +1,49 @@
 // polyfill JSDOM for testing
-require('../_polyfill');
+require("../_polyfill");
 
-var Splitting = require('../../splitting');
+var Splitting = require("../../splitting");
 
-test('an empty element', function () {
-  var $el = document.createElement('div');
-
-  var els = Splitting.words($el);
-  expect(els.length).toBe(1); 
-  expect(els[0].words.length).toBe(0); 
-})
-
-test('an element with a single word', function () {
-  var $el = document.createElement('div');
-  $el.innerHTML = 'SPLITTING'
+test("an empty element", function() {
+  var $el = document.createElement("div");
 
   var els = Splitting.words($el);
-  expect(els.length).toBe(1); 
-  expect(els[0].words[0].innerText).toBe('SPLITTING');
-})
+  expect(els.length).toBe(1);
+  expect(els[0].words.length).toBe(0);
+});
 
-test('an element with a multiple words', function () {
-  var $el = document.createElement('div');
-  $el.innerHTML = 'with multiple words'
+test("an element with a single word", function() {
+  var $el = document.createElement("div");
+  $el.innerHTML = "SPLITTING";
 
   var els = Splitting.words($el);
-  expect(els.length).toBe(1);  
-  expect(els[0].words[0].innerText).toBe('with');
-  expect(els[0].words[1].innerText).toBe('multiple');
-  expect(els[0].words[2].innerText).toBe('words');
-})
+  expect(els.length).toBe(1);
+  expect(els[0].words[0].innerText).toBe("SPLITTING");
+});
 
-test('a nested empty element', function () {
-  // todo
-})
+test("an element with a multiple words", function() {
+  var $el = document.createElement("div");
+  $el.innerHTML = "with multiple words";
 
-test('a multi-level nested empty element', function () {
-  // todo
-})
+  var els = Splitting.words($el);
+  expect(els.length).toBe(1);
+  expect(els[0].words.length).toBe(3);
+  expect(els[0].words[0].innerText).toBe("with");
+  expect(els[0].words[1].innerText).toBe("multiple");
+  expect(els[0].words[2].innerText).toBe("words");
+});
 
-test('a multi-level nested element', function () {
+test("a nested empty element", function() {
   // todo
-})
+});
 
-test('retriggering on already split element', function () {
+test("a multi-level nested empty element", function() {
   // todo
-})
+});
+
+test("a multi-level nested element", function() {
+  // todo
+});
+
+test("retriggering on already split element", function() {
+  // todo
+});
