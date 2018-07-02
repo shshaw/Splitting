@@ -8,17 +8,23 @@
     html { height: 100%; display: flex; }
     body { margin: auto; text-align: center; max-width: 36em; }
     html { background: #00043C; color: #FFF; font-family: 'Raleway'; font-weight: 400 }
+    h1 { margin: 0; }
     
 .splitting-logo {
   font-family: 'Kanit';
   font-weight: 900;
   font-style: italic;
-  font-size: 3.5em;
+  font-size: 8vw;
   text-decoration: none;
   line-height: 1;
   color: #00C9B1;
   display: inline-block;
   position: relative;
+  white-space: nowrap;
+}
+    
+@media (max-width: 36em) {
+  .splitting-logo { font-size: 3em; }
 }
 .splitting-logo .char {
   display: inline-block;
@@ -134,7 +140,8 @@
   }
 }
 .splitting-logo .word {
-  padding: 0.5em;
+  display: inline-block;
+  padding: 0.25em;
   opacity: 0.99;
   -webkit-mask-repeat: no-repeat;
           mask-repeat: no-repeat;
