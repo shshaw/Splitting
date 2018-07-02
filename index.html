@@ -4,6 +4,7 @@
   <title>Splitting</title>
   <style>
     @import url("https://fonts.googleapis.com/css?family=Kanit:900i|Raleway:400");
+    @import url("https://unpkg.com/splitting@0.9.11/splitting.css");
     html { height: 100%; display: flex; }
     body { margin: auto; text-align: center; max-width: 36em; }
     html { background: #00043C; color: #FFF; font-family: 'Raleway'; font-weight: 400 }
@@ -20,7 +21,9 @@
   position: relative;
 }
 .splitting-logo .char {
+  display: inline-block;
   overflow-x: visible;
+  --char-percent: calc(var(--char-index) / (var(--char-total) - 1));
   -webkit-animation: hit-right 0.7s cubic-bezier(0.8, 0, 0, 1) both;
           animation: hit-right 0.7s cubic-bezier(0.8, 0, 0, 1) both;
   -webkit-animation-delay: calc(0.8s + 0.02s * var(--char-index));
