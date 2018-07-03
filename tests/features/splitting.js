@@ -10,7 +10,7 @@ test("no arguments", function () {
 
 test("passing an element", function () {
   var el = document.createElement("div");
-  var els = Splitting(el);
+  var els = Splitting({ target: el });
   expect(els.length).toEqual(1);
   expect(els[0].el).toBe(el);
 });
@@ -22,7 +22,7 @@ test("passing a nodelist", function () {
   el.setAttribute('id', id);
   document.body.appendChild(el);
 
-  var els = Splitting(document.querySelectorAll("#" + id));
+  var els = Splitting({ target: document.querySelectorAll("#" + id) });
   expect(els.length).toEqual(1);
   expect(els[0].el).toBe(el);
 
@@ -35,7 +35,7 @@ test("passing a class selector", function () {
   el.className = className;
   document.body.appendChild(el);
 
-  var els = Splitting("." + className);
+  var els = Splitting({ target: "." + className });
   expect(els.length).toEqual(1);
   expect(els[0].el).toBe(el);
 
@@ -44,7 +44,7 @@ test("passing a class selector", function () {
 
 test("passing a non-existant selector", function () {
 
-  var els = Splitting(".nonexistant-class-selector");
+  var els = Splitting({ target: ".nonexistant-class-selector" });
   expect(els.length).toEqual(0);
 
 });
@@ -54,7 +54,7 @@ test("passing an attribute selector", function () {
   el.setAttribute("data-attribute", true);
   document.body.appendChild(el);
 
-  var els = Splitting("[data-attribute]");
+  var els = Splitting({ target: "[data-attribute]" });
   expect(els.length).toEqual(1);
   expect(els[0].el).toBe(el);
 
