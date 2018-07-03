@@ -22,18 +22,36 @@ function Splitting(els) {
  * # Splitting.$
  * Convert selector or NodeList to array for easier manipulation.
  *
- * @param {*} els - Elements or selector
+ * @param {*} els - HTMLElement, NodeList or String selector
  * @param {*} parent
  */
 function $(els, parent) {
-  return Array.prototype.slice.call(
-    els.nodeName
-      ? [els]
-      : els[0].nodeName ? els : (parent || document).querySelectorAll(els),
-    0
-  );
+  // Null argument or empty array
+  if (!els || els.length == 0) {
+    return [];
+  } else if (els.nodeName) {
+    // Single HTMLElement
+    els = [els];
+  } else if (els.charAt) {
+    //} else if (typeof els === "string") {
+    //else if (!els[0].nodeName) {
+    // String selector
+    els = (parent || document).querySelectorAll(els);
+  }
+  return [].slice.call(els);
 }
 Splitting.$ = $;
+
+/**
+ * # setCSSVar
+ * Apply a CSS var
+ * @param {*} el
+ * @param {*} varName
+ * @param {*} value
+ */
+function setCSSVar(el, varName, value) {
+  el.style.setProperty("--" + varName, value);
+}
 
 /**
  * # Splitting.index
@@ -46,9 +64,9 @@ Splitting.$ = $;
 function index(s, key, splits) {
   if (splits) {
     s[key + "s"] = splits;
-    s.el.style.setProperty("--" + key + "-total", splits.length);
-    splits.map(function(el, i) {
-      el.style.setProperty("--" + key + "-index", i);
+    setCSSVar(s.el, key + "-total", splits.length);
+    splits.forEach(function(el, i) {
+      setCSSVar(el, key + "-index", i);
     });
   }
   return s;
@@ -64,12 +82,8 @@ Splitting.index = index;
  * @param {Boolean} space - Add a space to each split if index is greater than 0. Mainly for `Splitting.words`
  */
 function split(el, key, splitBy, space) {
-  // Remove element from DOM to prevent unnecessary thrashing.
-  var parent = el.parentNode;
-  if (parent) {
-    var temp = document.createTextNode("");
-    parent.replaceChild(temp, el);
-  }
+  // Use fragment to prevent unnecessary DOM thrashing.
+  var fragment = document.createDocumentFragment();
 
   // Combine any strange text nodes or empty whitespace.
   el.normalize();
@@ -78,7 +92,7 @@ function split(el, key, splitBy, space) {
   var children = $(el.childNodes).reduce(function(val, child) {
     // Recursively run through child nodes
     if (child && child.childNodes && child.childNodes.length) {
-      el.appendChild(child);
+      fragment.appendChild(child);
       return val.concat(split(child, key, splitBy, space));
     }
 
@@ -87,11 +101,9 @@ function split(el, key, splitBy, space) {
 
     // If there's no text left after trimming whitespace, continue the loop
     if (!text.length) {
-      el.appendChild(child);
+      fragment.appendChild(child);
       return val;
     }
-
-    el.removeChild(child);
 
     // Concatenate the split text children back into the full array
     return val.concat(
@@ -103,7 +115,7 @@ function split(el, key, splitBy, space) {
         splitEl.innerText = split;
         // Populate data-{{key}} with the split value
         splitEl.setAttribute("data-" + key, split);
-        el.appendChild(splitEl);
+        fragment.appendChild(splitEl);
         // If items should be spaced out (Splitting.words, primarily), insert
         // the space into the parent before the element.
         if (space) {
@@ -114,10 +126,10 @@ function split(el, key, splitBy, space) {
     );
   }, []);
 
-  // Put the element back into the DOM
-  if (parent) {
-    parent.replaceChild(el, temp);
-  }
+  // Clear out the existing element
+  el.innerHTML = "";
+  // Append elements back into the parent
+  el.appendChild(fragment);
 
   return children;
 }
@@ -179,7 +191,7 @@ function splitLines(els) {
     lastTop = -1,
     top;
 
-  els.map(function(w) {
+  els.forEach(function(w) {
     top = w.offsetTop;
     if (top > lastTop) {
       lineIndex++;
@@ -187,7 +199,7 @@ function splitLines(els) {
     }
     lines[lineIndex] = lines[lineIndex] || [];
     lines[lineIndex].push(w);
-    w.style.setProperty("--line-index", lineIndex);
+    setCSSVar(w, "line-index", lineIndex);
   });
 
   return lines;
@@ -201,7 +213,7 @@ Splitting.lines = function(els, children, key) {
     : Splitting.words(els)
   ).map(function(s) {
     s.lines = splitLines(s[key + "s"]);
-    s.el.style.setProperty("--line-total", s.lines.length);
+    setCSSVar(s.el, "line-total", s.lines.length);
     return s;
   });
 };
