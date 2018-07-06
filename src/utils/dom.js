@@ -1,13 +1,13 @@
 export var root = document;
 
 /**
- * # setCSSVar
+ * # setProperty
  * Apply a CSS var
  * @param {*} el
  * @param {*} varName
  * @param {*} value
  */
-export function setCSSVar(el, varName, value) {
+export function setProperty(el, varName, value) {
     el.style.setProperty("--" + varName, value);
 }
 

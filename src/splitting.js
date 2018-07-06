@@ -1,53 +1,65 @@
-import { children } from './plugins/children';
-import { index } from './plugins/index'; 
-import { lines } from './plugins/lines';
-import { chars } from './plugins/chars';
-import { words } from './plugins/words';
-import { $ } from './utils/dom';
+/** import('./splitting.d.ts'); */
+
+import { childrenPlugin } from './plugins/children' 
+import { linePlugin } from './plugins/lines'
+import { charPlugin } from './plugins/chars'
+import { wordPlugin } from './plugins/words'
+import { $ } from './utils/dom'
 
 var plugins = {
-  children: children,
-  index: index, 
-  lines: lines,
-  chars: chars,
-  words: words
+  children: childrenPlugin, 
+  lines: linePlugin,
+  chars: charPlugin,
+  words: wordPlugin
 }
 
 /**
- * # Splitting.fromString
- * Splits a string and returns the processed HTML with elements and CSS Vars.
- * @param {String} str - String to split
- * @param {Object} opts - Options
- * @param {String} opts.type - Type of splitting to do, 'words' or 'chars';
- * @param {Boolean} opts.element - Return an element. Defaults to `false` to receive a string
- *  default is chars
+ * Normalizes options between the three parameter methods and the single object mode.
+ * @returns {ISplittingStatic}
  */
-function innerHTML(str, opts) {
-    opts = typeof opts === 'string' ? { by: opts } : opts;
-    var el = document.createElement("span");
-    el.innerHTML = str; 
-    options.target = el;
-    Splitting(options)
-    return el.outerHTML;
+function getOptions (args) {
+  // todo: simplify
+  var firstArg = args[0]
+  var isOptions = firstArg != null 
+    && typeof firstArg == 'object'
+    && !(firstArg instanceof Node)
+    && !firstArg.length
+  return {
+    target: (isOptions ? firstArg.target : firstArg) || '[data-splitting]',
+    by: (isOptions ? firstArg.by : args[1]) || 'chars',
+    options: (isOptions ? firstArg.options : args[2]) || {}
+  }
+}
+
+function splittingInner (opts) {
+  return $(opts.target).map(function (n) {
+    return plugins[opts.by](n, opts)
+  })
+}
+
+/**
+ * # Splitting.html
+ * 
+ * @param {ISplittingOptions} options
+ */
+function html (options) {
+  var el = document.createElement('span')
+  el.innerHTML = str
+  opts.target = el
+
+  splittingInner(getOptions(arguments))
+  return el.outerHTML
 }
 
 /**
  * # Splitting
- * CSS vars for split words & chars!
- * `Splitting` fn handles array-ifying the
- * @param {*} options
+ * 
+ * @param {ISplittingOptions} options
  */
-function Splitting(options) {
-  options = options || {};
-  var by = options.by || 'chars';
-  return $(options.target).reduce(function(c, n) {
-    var results = plugins[by](n, options);
-    if (results){
-      c.push.apply(c, results)
-    }
-    return c;
-  }, []) 
+function Splitting (options) {
+  return splittingInner(getOptions(arguments))
 }
 
-Splitting.innerHTML = innerHTML;
-export default Splitting;
+Splitting.html = html;
+
+export default Splitting

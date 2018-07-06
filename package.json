@@ -31,8 +31,8 @@
     "url": "https://github.com/shshaw/splitting/issues"
   },
   "homepage": "https://github.com/shshaw/splitting#readme",
-  "devDependencies": {
-    "jest": "^22.3.0",
+  "devDependencies": { 
+    "jest": "^22.3.0", 
     "rollup": "^0.55.5",
     "uglify-js": "^3.3.11"
   },
@@ -41,5 +41,6 @@
       "js"
     ],
     "testRegex": "tests/features/.*\\.js$"
-  }
+  },
+  "dependencies": {}
 }

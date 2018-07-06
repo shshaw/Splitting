@@ -1,6 +1,5 @@
-import { index } from './index';
-import { $ } from '../utils/dom';
-import { splitElement } from '../utils/split';
+import { index } from '../utils/index';
+import { $ } from '../utils/dom'; 
 
 /**
  * # Splitting.children
@@ -10,10 +9,13 @@ import { splitElement } from '../utils/split';
  * @param {String} key -
  * @example `Splitting.children('ul','li','item'); // Index every unordered list's items with the --item CSS var.`
  */
-export function children(parent, options) {
-    var children = options.children;
-    var key = options.key;
-    return splitElement(parent).map(function(s) {
-        return index(s, key, $(children, s.el));
-    });
+export function children(el, options) { 
+    return index(el, options.key || 'item', $(options.children || el.children, el));
+}
+
+export function childrenPlugin (el, options) { 
+    return {
+        el: el,
+        children: children(el, options)
+    }
 }
