@@ -7,13 +7,7 @@ test("no arguments", function () {
   var result = Splitting();
   expect(result).toEqual([]);
 });
-
-test("passing an element shorthand", function () {
-  var el = document.createElement("div");
-  var els = Splitting(el);
-  expect(els.length).toEqual(1);
-  expect(els[0].el).toBe(el);
-});
+ 
 
 test("passing an element", function () {
   var el = document.createElement("div");
@@ -21,21 +15,6 @@ test("passing an element", function () {
   expect(els.length).toEqual(1);
   expect(els[0].el).toBe(el);
 });
-
-test("passing a nodelist shorthand", function () {
-
-  var id = 'test-element';
-  var el = document.createElement("div");
-  el.setAttribute('id', id);
-  document.body.appendChild(el);
-
-  var els = Splitting(document.querySelectorAll("#" + id));
-  expect(els.length).toEqual(1);
-  expect(els[0].el).toBe(el);
-
-  document.body.removeChild(el);
-});
-
 
 test("passing a nodelist", function () {
 
@@ -45,19 +24,6 @@ test("passing a nodelist", function () {
   document.body.appendChild(el);
 
   var els = Splitting({ target: document.querySelectorAll("#" + id) });
-  expect(els.length).toEqual(1);
-  expect(els[0].el).toBe(el);
-
-  document.body.removeChild(el);
-});
-
-test("passing a class selector shorthand", function () {
-  var className = "passing-class-selector"
-  var el = document.createElement("div");
-  el.className = className;
-  document.body.appendChild(el);
-
-  var els = Splitting("." + className);
   expect(els.length).toEqual(1);
   expect(els[0].el).toBe(el);
 

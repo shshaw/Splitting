@@ -29,6 +29,16 @@ function $(e, parent) {
               [].slice.call(e[0].nodeName ? e : (parent || root).querySelectorAll(e));
 }
 
+function eachDeep(items, fn) {
+    if (Array.isArray(items)) {
+        items.some(function(item) {
+            eachDeep(item, fn);
+        });
+    } else {
+        fn(items);
+    }
+}
+
 /**
  * # Splitting.index
  * Index split elements and add them to a Splitting instance.
@@ -37,31 +47,77 @@ function $(e, parent) {
  * @param {*} key
  * @param {*} splits
  */
-function index (element, key, splits) {
-  setProperty(element, key + '-total', splits.length);
-  splits.forEach(function (s, i) {
-    setProperty(s, key + '-index', i);
-  });
-  return splits
+function index(element, key, splits) {
+    splits.forEach(function(items, i) {
+        eachDeep(items, function(item) {
+            setProperty(item, key + "-index", i);
+        });
+    });
+
+    setProperty(element, key + "-total", splits.length);
 }
 
-/**
- * # Splitting.children
- * Add CSS Var indexes to a DOM element's children. Useful for lists.
- * @param {String|NodeList} parent - Parent element(s) or selector
- * @param {String|NodeList} children - Child element(s) or selector
- * @param {String} key -
- * @example `Splitting.children('ul','li','item'); // Index every unordered list's items with the --item CSS var.`
- */
-function children(el, options) { 
-    return index(el, options.key || 'item', $(options.children || el.children, el));
+function itemsPlugin (options) { 
+    var el = options.el;
+    var items = $(options.matching || el.children, el);
+    index(el, options.key || 'item', items);
+
+    return {
+        el: options.el,
+        items: items
+    }
 }
 
-function childrenPlugin (el, options) { 
+function getItems(options) {
+    var el = options.el;
+    return $(options.matching || el.children, el);
+}
+
+function grid(el, items, key, side, threshold) {
+    threshold = threshold || 1;
+    var c = {};
+    items.some(function(w) {
+        var val = Math.round(w[side] * threshold) / threshold;
+        (c[val] = c[val] || []).push(w);
+    });
+
+    var results = Object.keys(c)
+        .map(Number)
+        .sort()
+        .map(function(key) {
+            return c[key];
+        }); 
+
+    index(el, key, results);
+    return results;
+}
+
+function columnPlugin(options) {
+    var columns = grid(options.el, getItems(options), "column", "offsetLeft");
     return {
         el: el,
-        children: children(el, options)
-    }
+        columns: columns
+    };
+}
+
+function rowPlugin(options) {
+    var rows = grid(options.el, getItems(options), "row", "offsetTop");
+    return {
+        el: el,
+        rows: rows
+    };
+}
+
+function gridPlugin(options) {
+    var el = options.el;
+    var items = getItems(options);
+    var columns = grid(el, items, "column", "offsetLeft");
+    var rows = grid(el, items, "row", "offsetTop");
+    return {
+        el: el,
+        columns: columns,
+        rows: rows
+    };
 }
 
 /**
@@ -134,43 +190,28 @@ function split (el, key, by, space) {
  * @return {Element[]}
  */
 function words(el) {
-    return index(el, "word", split(el, "word", /\s+/, true))
+    var wordResults = split(el, "word", /\s+/, true);
+    index(el, "word", wordResults);
+    return wordResults;
 }
 
-function wordPlugin (el) {
+function wordPlugin (options) {
     return {
-        el: el,
-        words: words(el)
+        el: options.el,
+        words: words(options.el)
     }
 }
 
-function linePlugin (el, options) {
-  var childs = options.children;
-  var key = childs ? options.key || 'item' : 'word';
+function linePlugin (options) {
+  var el = options.el;
+  var wordResults = words(el); 
+  var lineResults = grid(el, wordResults, 'line', 'offsetTop');
 
-  var parts = childs ? children(el, { children: childs, key: key }) : words(el);
-  var lines = [];
-  var lineIndex = -1;
-  var lastTop = -1;
-
-  parts.forEach(function (w) {
-    var top = w.offsetTop;
-    if (top > lastTop) {
-      lineIndex++;
-      lastTop = top;
-    }
-    lines[lineIndex] = lines[lineIndex] || [];
-    lines[lineIndex].push(w);
-    setProperty(w, 'line-index', lineIndex);
-  });
-
-  setProperty(el, 'line-total', lines.length);
-  var result = {
-      el: el,
-      lines: lines
+  return {
+    el: el,
+    lines: lineResults,
+    words: wordResults
   };
-  result[key + 's'] = parts;
-  return result;
 }
 
 /**
@@ -178,67 +219,47 @@ function linePlugin (el, options) {
  * Split an element into words and those words into chars.
  * @param {String|Node|NodeList|Array} els - Element(s) or selector to target.
  */
-function charPlugin (el) {
-  var wordResults = words(el);
-  var charResults = index(
-    el,
-    'char',
-    wordResults.reduce(function (val, word, i) {
-      val.push.apply(val, split(word, 'char', ''));
-      return val;
-    }, [])
-  );
-  return {
-      el: el,
-      words: wordResults,
-      chars: charResults
-  }
+function charPlugin(options) {
+    var el = options.el;
+    var wordResults = words(el);
+    var charResults = wordResults.reduce(function(val, word, i) {
+        val.push.apply(val, split(word, "char", ""));
+        return val;
+    }, []);
+
+    index(el, "char", charResults);
+    
+    return {
+        el: el,
+        words: wordResults,
+        chars: charResults
+    };
 }
 
 /** import('./splitting.d.ts'); */
 
 var plugins = {
-  children: childrenPlugin, 
+  items: itemsPlugin, 
   lines: linePlugin,
   chars: charPlugin,
-  words: wordPlugin
+  words: wordPlugin,
+  rows: rowPlugin,
+  columns: columnPlugin,
+  grid: gridPlugin
 };
-
-/**
- * Normalizes options between the three parameter methods and the single object mode.
- * @returns {ISplittingStatic}
- */
-function getOptions (args) {
-  // todo: simplify
-  var firstArg = args[0];
-  var isOptions = firstArg != null 
-    && typeof firstArg == 'object'
-    && !(firstArg instanceof Node)
-    && !firstArg.length;
-  return {
-    target: (isOptions ? firstArg.target : firstArg) || '[data-splitting]',
-    by: (isOptions ? firstArg.by : args[1]) || 'chars',
-    options: (isOptions ? firstArg.options : args[2]) || {}
-  }
-}
-
-function splittingInner (opts) {
-  return $(opts.target).map(function (n) {
-    return plugins[opts.by](n, opts)
-  })
-}
+ 
 
 /**
  * # Splitting.html
  * 
  * @param {ISplittingOptions} options
  */
-function html (options) {
+function html (opts) {
+  opts = opts || {};
   var el = document.createElement('span');
-  el.innerHTML = str;
+  el.innerHTML = opts.content;
   opts.target = el;
-
-  splittingInner(getOptions(arguments));
+  Splitting(opts);
   return el.outerHTML
 }
 
@@ -247,8 +268,24 @@ function html (options) {
  * 
  * @param {ISplittingOptions} options
  */
-function Splitting (options) {
-  return splittingInner(getOptions(arguments))
+function Splitting (opts) {
+  opts = opts || {};
+
+  return $(opts.target || '[data-splitting]').map(function(el) { 
+    var by = opts.by || el.dataset.splitting || 'chars';
+    return plugins[by](
+      inherit(opts, { el: el })
+    )
+  })
+}
+
+function inherit(source, dest) {
+  for (var k in source) {
+    if (!dest.hasOwnProperty(k)) {
+      dest[k] = source[k];
+    }
+  }
+  return dest;
 }
 
 Splitting.html = html;

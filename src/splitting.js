@@ -1,53 +1,34 @@
 /** import('./splitting.d.ts'); */
 
-import { childrenPlugin } from './plugins/children' 
+import { $ } from './utils/dom'
+import { itemsPlugin } from './plugins/items' 
 import { linePlugin } from './plugins/lines'
 import { charPlugin } from './plugins/chars'
 import { wordPlugin } from './plugins/words'
-import { $ } from './utils/dom'
+import { rowPlugin, columnPlugin, gridPlugin } from './plugins/grid';
 
 var plugins = {
-  children: childrenPlugin, 
+  items: itemsPlugin, 
   lines: linePlugin,
   chars: charPlugin,
-  words: wordPlugin
+  words: wordPlugin,
+  rows: rowPlugin,
+  columns: columnPlugin,
+  grid: gridPlugin
 }
-
-/**
- * Normalizes options between the three parameter methods and the single object mode.
- * @returns {ISplittingStatic}
- */
-function getOptions (args) {
-  // todo: simplify
-  var firstArg = args[0]
-  var isOptions = firstArg != null 
-    && typeof firstArg == 'object'
-    && !(firstArg instanceof Node)
-    && !firstArg.length
-  return {
-    target: (isOptions ? firstArg.target : firstArg) || '[data-splitting]',
-    by: (isOptions ? firstArg.by : args[1]) || 'chars',
-    options: (isOptions ? firstArg.options : args[2]) || {}
-  }
-}
-
-function splittingInner (opts) {
-  return $(opts.target).map(function (n) {
-    return plugins[opts.by](n, opts)
-  })
-}
+ 
 
 /**
  * # Splitting.html
  * 
  * @param {ISplittingOptions} options
  */
-function html (options) {
+function html (opts) {
+  opts = opts || {}
   var el = document.createElement('span')
-  el.innerHTML = str
+  el.innerHTML = opts.content;
   opts.target = el
-
-  splittingInner(getOptions(arguments))
+  Splitting(opts)
   return el.outerHTML
 }
 
@@ -56,8 +37,24 @@ function html (options) {
  * 
  * @param {ISplittingOptions} options
  */
-function Splitting (options) {
-  return splittingInner(getOptions(arguments))
+function Splitting (opts) {
+  opts = opts || {};
+
+  return $(opts.target || '[data-splitting]').map(function(el) { 
+    var by = opts.by || el.dataset.splitting || 'chars';
+    return plugins[by](
+      inherit(opts, { el: el })
+    )
+  })
+}
+
+function inherit(source, dest) {
+  for (var k in source) {
+    if (!dest.hasOwnProperty(k)) {
+      dest[k] = source[k]
+    }
+  }
+  return dest;
 }
 
 Splitting.html = html;

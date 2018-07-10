@@ -11,16 +11,6 @@ test("an empty element", function() {
   expect(els[0].words.length).toBe(0);
 });
 
-test("an element with a single word - shorthand", function() {
-  var $el = document.createElement("div");
-  $el.innerHTML = "SPLITTING";
-
-  var els = Splitting($el, 'words');
-  expect(els.length).toBe(1);
-  expect(els[0].words[0].innerText).toBe("SPLITTING");
-});
-
-
 test("an element with a single word", function() {
   var $el = document.createElement("div");
   $el.innerHTML = "SPLITTING";
