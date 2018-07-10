@@ -46,19 +46,18 @@ Element.prototype.insertAdjacentText = function(position, html) {
       break;
   }
 };
-
-// to patch gaps in JSDOM
-Object.defineProperties(Element.prototype, {
+ 
+Object.defineProperties(HTMLElement.prototype, {
   offsetLeft: {
-    get: function() { return parseFloat(window.getComputedStyle(this).marginLeft) || 0; }
+    get: function() { return parseFloat(getComputedStyle(this).marginLeft) || 0; }
   },
   offsetTop: {
-    get: function() { return parseFloat(window.getComputedStyle(this).marginTop) || 0; }
+    get: function() { return parseFloat(getComputedStyle(this).marginTop) || 0; }
   },
   offsetHeight: {
-    get: function() { return parseFloat(window.getComputedStyle(this).height) || 0; }
+    get: function() { return parseFloat(getComputedStyle(this).height) || 0; }
   },
   offsetWidth: {
-    get: function() { return parseFloat(window.getComputedStyle(this).width) || 0; }
+    get: function() { return parseFloat(getComputedStyle(this).width) || 0; }
   }
 });

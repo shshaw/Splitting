@@ -11,8 +11,9 @@ export function grid(el, items, key, side, threshold) {
     var c = {};
     items.some(function(w) {
         var val = Math.round(w[side] * threshold) / threshold;
-        (c[val] = c[val] || []).push(w);
-    });
+        var list = c[val] || (c[val] = [])
+        list.push(w);
+    }); 
 
     var results = Object.keys(c)
         .map(Number)

@@ -1,7 +1,6 @@
-// polyfill JSDOM for testing
-require('../_polyfill');
-
-var Splitting = require('../../splitting');
+// polyfill JSDOM for testing 
+import '../_polyfill';
+import Splitting from '../../src/splitting'
 
 
 test('an empty element', function() {

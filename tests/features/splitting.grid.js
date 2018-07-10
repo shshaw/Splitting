@@ -1,7 +1,6 @@
 // polyfill JSDOM for testing
-require('../_polyfill');
-
-var Splitting = require('../../splitting');
+import '../_polyfill';
+import Splitting from '../../src/splitting'
 
 test('an empty element', function () {
   var el = document.createElement('div');
@@ -42,22 +41,15 @@ test('an element with multiple elements', function () {
 
 test('an element with nested elements', function () {
   var el = document.createElement('div');
-  var el1 = document.createElement('div');
-  el.appendChild(el1);
-
-  var el2 = document.createElement('div');
-  el2.classList.add('item')
-  el2.innerHTML = '1';
-  el1.appendChild(el2);
-
-  var el3 = document.createElement('div');
-  el3.classList.add('item')
-  el3.innerHTML = '2';
-  el1.appendChild(el3);
+  
+  el.innerHTML = `
+    <div class="item2">1</div>
+    <div class="item2">2</div>
+  `;
 
   document.body.appendChild(el);
 
-  var results = Splitting({ target: el, by: 'grid', matching: '.item' });
+  var results = Splitting({ target: el, by: 'grid', matching: '.item2' });
 
   expect(results.length).toBe(1)
   expect(results[0].rows.length).toBe(1); 

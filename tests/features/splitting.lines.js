@@ -1,7 +1,6 @@
 // polyfill JSDOM for testing
-require('../_polyfill')
-
-var Splitting = require('../../splitting')
+import '../_polyfill';
+import Splitting from '../../src/splitting';
 
 test('an empty element', function () {
   var $el = document.createElement('div')
