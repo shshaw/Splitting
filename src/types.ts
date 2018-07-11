@@ -1,6 +1,6 @@
 declare global {
     interface Window {
-        Splitting: splitting.ISplittingStatic
+        Splitting: ISplittingStatic
     }
 }
 
@@ -10,6 +10,7 @@ export interface ISplittingPlugin {
     by: string;
     key?: string;
     depends?: string[];
+    alias?: 1;
     split?: (el: HTMLElement, options?: ISplittingOptions) => HTMLElement[];
 }
 
@@ -21,11 +22,10 @@ export interface ISplittingStatic {
 
 export interface SplittingInstance {
     el: Element;
-    chars?: ISplittingInstance[];
-    words?: ISplittingInstance[];
-    lines?: ISplittingInstance[];
-    items?: ISplittingInstance[];
-    children?: ISplittingInstance[];
+    chars?: SplittingInstance[];
+    words?: SplittingInstance[];
+    lines?: SplittingInstance[];
+    items?: SplittingInstance[];
 } 
 
 export interface ISplittingOptions {

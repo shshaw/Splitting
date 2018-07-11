@@ -1,14 +1,12 @@
-import { grid } from '../plugins/grid' 
-import { words } from './words'
+import { detectGrid } from '../utils/detect-grid' 
 
-export function linePlugin (options) {
-  var el = options.el;
-  var wordResults = words(el); 
-  var lineResults = grid(el, wordResults, 'line', 'offsetTop');
-
-  return {
-    el: el,
-    lines: lineResults,
-    words: wordResults
-  };
+/** @type {import('../types').ISplittingPlugin} */
+export var linePlugin = {
+  by: 'lines',
+  key: 'line',
+  alias: 1,
+  depends: ['words'],
+  split: function(el, _options, ctx) {
+      return detectGrid(ctx.words, 'offsetTop')
+  }
 }

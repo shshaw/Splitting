@@ -1,22 +1,15 @@
 /** @typedef {import('./splitting.d.ts')} */
 
-import { $ } from './utils/dom'
-import { inherit } from './utils/objects'
-import { itemsPlugin } from './plugins/items' 
-import { linePlugin } from './plugins/lines'
-import { charPlugin } from './plugins/chars'
-import { wordPlugin } from './plugins/words'
-import { rowPlugin, columnPlugin, gridPlugin } from './plugins/grid';
-
-var plugins = {
-  items: itemsPlugin, 
-  lines: linePlugin,
-  chars: charPlugin,
-  words: wordPlugin,
-  rows: rowPlugin,
-  columns: columnPlugin,
-  grid: gridPlugin
-}
+import { $ } from './utils/dom' 
+import { index } from './utils/index'
+import { add, resolve } from './plugins';
+import { wordPlugin } from './plugins/words';
+import { charPlugin } from './plugins/chars';
+import { linePlugin } from './plugins/lines';
+import { itemPlugin } from './plugins/items';
+import { rowPlugin } from './plugins/rows';
+import { columnPlugin } from './plugins/columns';
+import { gridPlugin } from './plugins/grid';
 
 /**
  * # Splitting
@@ -26,21 +19,18 @@ var plugins = {
 function Splitting (opts) {
   opts = opts || {};
 
-  return $(opts.target || '[data-splitting]').map(function(el) { 
-    var by = opts.by || el.dataset.splitting || 'chars';
-    var options =  inherit(opts, { el: el });
-    return plugins[by](options)
+  return $(opts.target || '[data-splitting]').map(function(el) {
+    var ctx = { el: el };
+    resolve(opts.by || el.dataset.splitting || 'chars').some(function(plugin) {
+      if (plugin.split) {
+        var results = plugin.split(el, opts, ctx); 
+        index(el, (plugin.key || "item") + (opts.key ? '-' + opts.key : ''), results);
+        ctx[plugin.by] = results;
+      } 
+    });
+    return ctx;
   })
 }
-
-/**
- * Adds a new plugin to splitting
- * @param opts {import('./types').ISplittingPlugin} 
- */
-function add(opts) {
-  plugins[opts.name] = opts;
-}
-Splitting.add = add;
 
 /**
  * # Splitting.html
@@ -55,6 +45,17 @@ function html(opts) {
   Splitting(opts)
   return el.outerHTML
 }
+
 Splitting.html = html;
+Splitting.add = add;
+
+// install plugins
+add(wordPlugin)
+add(charPlugin)
+add(linePlugin)
+add(itemPlugin)
+add(rowPlugin)
+add(columnPlugin)
+add(gridPlugin)
 
 export default Splitting

@@ -44,21 +44,6 @@ function $(e, parent) {
               [].slice.call(e[0].nodeName ? e : (parent || root).querySelectorAll(e));
 }
 
-/**
- * @template T extends {}
- * @param {Partial<T>} source 
- * @param {Partial<T>} dest
- * @returns {T}
- */
-function inherit(source, dest) {
-    for (var k in source) {
-        if (!dest.hasOwnProperty(k)) {
-            dest[k] = source[k];
-        }
-    }
-    return dest;
-}
-
 function eachDeep(items, fn) {
     if (Array.isArray(items)) {
         items.some(function(item) {
@@ -87,68 +72,57 @@ function index(element, key, items) {
     setProperty(element, key + "-total", items.length);
 }
 
-function itemsPlugin (options) { 
-    var el = options.el;
-    var items = $(options.matching || el.children, el);
-    index(el, options.key || 'item', items);
+/**
+ * @type {Record<string, import('./types').ISplittingPlugin>}
+ */
+var plugins = {};
 
-    return {
-        el: options.el,
-        items: items
+/**
+ * @param by {string}
+ * @param parent {string}
+ * @param deps {string[]}
+ */
+function resolvePlugins(by, parent, deps) {
+    // skip if already visited this dependency
+    var index = deps.indexOf(by);
+    if (index == -1) { 
+       // if new to dependency array, add to the beginning
+       deps.unshift(by);
+       
+       // lookup the plugin dependencies
+       var plugin = plugins[by];
+       
+       // recursively call this function for all dependencies
+       (plugin.depends || []).some(function(p) {
+          resolvePlugins(p, by, deps);
+       });
+    } else {
+       // if this dependency was added already move to the left of
+       // the parent dependency so it gets loaded in order
+       var indexOfParent = deps.indexOf(parent);
+       deps.splice(index, 1);
+       deps.splice(indexOfParent, 0, by);
     }
-}
+    return deps
+ }
 
-function getItems(options) {
-    var el = options.el;
-    return $(options.matching || el.children, el);
-}
+ /**
+  * 
+  * @param by {string} 
+  * @returns {import('./types').ISplittingPlugin[]}
+  */
+ function resolve(by) {
+    return resolvePlugins(by, 0, []).map(function(pluginName) {
+        return plugins[pluginName];
+    });
+ }
 
-function grid(el, items, key, side, threshold) {
-    threshold = threshold || 1;
-    var c = {};
-    items.some(function(w) {
-        var val = Math.round(w[side] * threshold) / threshold;
-        var list = c[val] || (c[val] = []);
-        list.push(w);
-    }); 
-
-    var results = Object.keys(c)
-        .map(Number)
-        .sort()
-        .map(function(key) {
-            return c[key];
-        }); 
-
-    index(el, key, results);
-    return results;
-}
-
-function columnPlugin(options) {
-    var columns = grid(options.el, getItems(options), "column", "offsetLeft");
-    return {
-        el: el,
-        columns: columns
-    };
-}
-
-function rowPlugin(options) {
-    var rows = grid(options.el, getItems(options), "row", "offsetTop");
-    return {
-        el: el,
-        rows: rows
-    };
-}
-
-function gridPlugin(options) {
-    var el = options.el;
-    var items = getItems(options);
-    var columns = grid(el, items, "column", "offsetLeft");
-    var rows = grid(el, items, "row", "offsetTop");
-    return {
-        el: el,
-        columns: columns,
-        rows: rows
-    };
+/**
+ * Adds a new plugin to splitting
+ * @param opts {import('./types').ISplittingPlugin} 
+ */
+function add(opts) {
+    plugins[opts.by] = opts;
 }
 
 /**
@@ -221,75 +195,96 @@ function pushAll(list, newItems) {
     list.push.apply(list, newItems);
 }
 
-/**
- * # Splitting.chars
- * Split an element into words and those words into chars.
- * @param {String|Node|NodeList|Array} els - Element(s) or selector to target.
- * @return {Element[]}
- */
-function words(el) {
-    var wordResults = split(el, { 
-        key: "word", 
-        by: /\s+/, 
-        space: true 
-    });
-    
-    index(el, "word", wordResults);
-    return wordResults;
-}
-
-function wordPlugin (options) {
-    return {
-        el: options.el,
-        words: words(options.el)
+/** @type {import('../types').ISplittingPlugin} */
+var wordPlugin = {
+    by: 'words',
+    key: 'word',
+    split: function(el, options) {
+        return split(el, { 
+            key: "word", 
+            by: /\s+/, 
+            space: true 
+        })
     }
+};
+
+/** @type {import('../types').ISplittingPlugin} */
+var charPlugin = {
+    by: 'chars',
+    key: 'char',
+    depends: ['words'],
+    split: function(_el, _options, ctx) {
+        return ctx.words.reduce(function(val, word, i) {
+            val.push.apply(val, split(word, { key: 'char', by: ''  }));
+            return val;
+        }, []);
+    }
+};
+
+function detectGrid(items, side, threshold) {
+    threshold = threshold || 1;
+    var c = {};
+    items.some(function(w) {
+        var val = Math.round(w[side] * threshold) / threshold;
+        var list = c[val] || (c[val] = []);
+        list.push(w);
+    });
+
+    var results = Object.keys(c)
+        .map(Number)
+        .sort()
+        .map(function(key) {
+            return c[key];
+        });
+ 
+    return results;
 }
 
-function linePlugin (options) {
-  var el = options.el;
-  var wordResults = words(el); 
-  var lineResults = grid(el, wordResults, 'line', 'offsetTop');
+/** @type {import('../types').ISplittingPlugin} */
+var linePlugin = {
+  by: 'lines',
+  key: 'line',
+  alias: 1,
+  depends: ['words'],
+  split: function(el, _options, ctx) {
+      return detectGrid(ctx.words, 'offsetTop')
+  }
+};
 
-  return {
-    el: el,
-    lines: lineResults,
-    words: wordResults
-  };
-}
+/** @type {import('../types').ISplittingPlugin} */
+var itemPlugin = {
+    by: 'items',
+    key: 'item',
+    split: function(el, options) {
+        return $(options.matching || el.children, el)
+    }
+};
 
-/**
- * # Splitting.chars
- * Split an element into words and those words into chars.
- * @param {String|Node|NodeList|Array} els - Element(s) or selector to target.
- */
-function charPlugin(options) {
-    var el = options.el;
-    var wordResults = words(el);
-    var charResults = wordResults.reduce(function(val, word, i) {
-        val.push.apply(val, split(word, { key: 'char', by: ''  }));
-        return val;
-    }, []);
+/** @type {import('../types').ISplittingPlugin} */
+var rowPlugin = {
+    by: "rows",
+    key: "row",
+    split: function(el, options, ctx) {
+        return detectGrid($(options.matching || el.children, el), "offsetTop");
+    }
+};
 
-    index(el, "char", charResults);
-    
-    return {
-        el: el,
-        words: wordResults,
-        chars: charResults
-    };
-}
+/** @type {import('../types').ISplittingPlugin} */
+var columnPlugin = {
+    by: "columns",
+    key: "column", 
+    split: function(el, options, ctx) {
+        return detectGrid($(options.matching || el.children, el), "offsetLeft");
+    }
+};
+
+/** @type {import('../types').ISplittingPlugin} */
+var gridPlugin = {
+    by: "grid",
+    depends: ["rows", "columns"]
+};
 
 /** @typedef {import('./splitting.d.ts')} */
-
-var plugins = {
-  items: itemsPlugin, 
-  lines: linePlugin,
-  chars: charPlugin,
-  words: wordPlugin,
-  rows: rowPlugin,
-  columns: columnPlugin,
-  grid: gridPlugin
-};
 
 /**
  * # Splitting
@@ -299,21 +294,18 @@ var plugins = {
 function Splitting (opts) {
   opts = opts || {};
 
-  return $(opts.target || '[data-splitting]').map(function(el) { 
-    var by = opts.by || el.dataset.splitting || 'chars';
-    var options =  inherit(opts, { el: el });
-    return plugins[by](options)
+  return $(opts.target || '[data-splitting]').map(function(el) {
+    var ctx = { el: el };
+    resolve(opts.by || el.dataset.splitting || 'chars').some(function(plugin) {
+      if (plugin.split) {
+        var results = plugin.split(el, opts, ctx); 
+        index(el, (plugin.key || "item") + (opts.key ? '-' + opts.key : ''), results);
+        ctx[plugin.by] = results;
+      } 
+    });
+    return ctx;
   })
 }
-
-/**
- * Adds a new plugin to splitting
- * @param opts {import('./types').ISplittingPlugin} 
- */
-function add(opts) {
-  plugins[opts.name] = opts;
-}
-Splitting.add = add;
 
 /**
  * # Splitting.html
@@ -328,7 +320,18 @@ function html(opts) {
   Splitting(opts);
   return el.outerHTML
 }
+
 Splitting.html = html;
+Splitting.add = add;
+
+// install plugins
+add(wordPlugin);
+add(charPlugin);
+add(linePlugin);
+add(itemPlugin);
+add(rowPlugin);
+add(columnPlugin);
+add(gridPlugin);
 
 return Splitting;
 
