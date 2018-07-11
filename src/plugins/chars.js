@@ -11,7 +11,7 @@ export function charPlugin(options) {
     var el = options.el;
     var wordResults = words(el);
     var charResults = wordResults.reduce(function(val, word, i) {
-        val.push.apply(val, split(word, "char", ""));
+        val.push.apply(val, split(word, { key: 'char', by: ''  }))
         return val;
     }, []);
 

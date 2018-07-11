@@ -10,14 +10,29 @@ var root = document;
 /**
  * # setProperty
  * Apply a CSS var
- * @param {*} el
- * @param {*} varName
- * @param {*} value
+ * @param el{HTMLElement} 
+ * @param varName {string} 
+ * @param value {string|number}  
  */
 function setProperty(el, varName, value) {
     el.style.setProperty("--" + varName, value);
 }
 
+/**
+ * 
+ * @param {Node} el 
+ * @param {Node} child 
+ */
+function appendChild(el, child) {
+  el.appendChild(child);
+}
+
+/**
+ * 
+ * @param e {import('../types').Target} 
+ * @param parent {HTMLElement}
+ * @returns {HTMLElement[]}
+ */
 function $(e, parent) {
     return !e || e.length == 0
         ? // null or empty string returns empty array
@@ -27,6 +42,21 @@ function $(e, parent) {
               [e]
             : // selector and NodeList are converted to Element[]
               [].slice.call(e[0].nodeName ? e : (parent || root).querySelectorAll(e));
+}
+
+/**
+ * @template T extends {}
+ * @param {Partial<T>} source 
+ * @param {Partial<T>} dest
+ * @returns {T}
+ */
+function inherit(source, dest) {
+    for (var k in source) {
+        if (!dest.hasOwnProperty(k)) {
+            dest[k] = source[k];
+        }
+    }
+    return dest;
 }
 
 function eachDeep(items, fn) {
@@ -43,18 +73,18 @@ function eachDeep(items, fn) {
  * # Splitting.index
  * Index split elements and add them to a Splitting instance.
  *
- * @param {*} s
- * @param {*} key
- * @param {*} splits
+ * @param element {HTMLElement}
+ * @param key {string}
+ * @param items {HTMLElement[] | HTMLElement[][]}
  */
-function index(element, key, splits) {
-    splits.forEach(function(items, i) {
+function index(element, key, items) {
+    items.forEach(function(items, i) {
         eachDeep(items, function(item) {
             setProperty(item, key + "-index", i);
         });
     });
 
-    setProperty(element, key + "-total", splits.length);
+    setProperty(element, key + "-total", items.length);
 }
 
 function itemsPlugin (options) { 
@@ -78,8 +108,9 @@ function grid(el, items, key, side, threshold) {
     var c = {};
     items.some(function(w) {
         var val = Math.round(w[side] * threshold) / threshold;
-        (c[val] = c[val] || []).push(w);
-    });
+        var list = c[val] || (c[val] = []);
+        list.push(w);
+    }); 
 
     var results = Object.keys(c)
         .map(Number)
@@ -123,64 +154,71 @@ function gridPlugin(options) {
 /**
  * # Splitting.split
  * Split an element's innerText into individual elements
- * @param {Node} el - Element to split
- * @param {String} key -
- * @param {String|RegEx} by - string or regex to split the innerText by
- * @param {Boolean} space - Add a space to each split if index is greater than 0. Mainly for `Splitting.words`
+ * @param el {Node} Element to split
+ * @param options {{ key: string, by: string, space: boolean }}
  */
-function split (el, key, by, space) {
-  // Use fragment to prevent unnecessary DOM thrashing.
-  var fragment = document.createDocumentFragment();
+function split(el, options) {
+    // Combine any strange text nodes or empty whitespace.
+    el.normalize();
 
-  // Combine any strange text nodes or empty whitespace.
-  el.normalize();
+    // Use fragment to prevent unnecessary DOM thrashing.
+    var result = $(el.childNodes).reduce(splitElements, {
+        $: [],
+        _: options,
+        F: document.createDocumentFragment()
+    });
 
-  // Loop through all children to split them up.
-  var children = $(el.childNodes).reduce(function (val, child) {
+    // Clear out the existing element
+    el.innerHTML = result.F.innerHTML;
+    return result.$;
+}
+
+/**
+ * Loop through all children to split them up. (move this to a reusable function)
+ * @param current {{ $: HTMLElement[], parent: HTMLElement, _: { key: string, by: string, space: boolean } }}
+ * @param next {HTMLElement}
+ */
+function splitElements(current, next) {
     // Recursively run through child nodes
-    if (child && child.childNodes && child.childNodes.length) {
-      fragment.appendChild(child);
-      val.push.apply(val, split(child, key, by, space));
-      return val
+    if (next && next.childNodes && next.childNodes.length) {
+        appendChild(current.F, next);
+        pushAll(current.$, split(next, current._));
+        return current;
     }
 
     // Get the text to split, trimming out the whitespace
-    var text = (child.wholeText || '').trim();
+    var text = (next.wholeText || "").trim();
 
     // If there's no text left after trimming whitespace, continue the loop
     if (!text.length) {
-      fragment.appendChild(child);
-      return val
+        appendChild(current.F, next);
+        return current;
     }
 
     // Concatenate the split text children back into the full array
-    var newItems = text.split(by).map(function (split) {
-      // Create a span
-      var splitEl = document.createElement('span');
-      // Give it the key as a class
-      splitEl.className = key;
-      splitEl.innerText = split;
-      // Populate data-{{key}} with the split value
-      splitEl.setAttribute('data-' + key, split);
-      fragment.appendChild(splitEl);
-      // If items should be spaced out (Splitting.words, primarily), insert
-      // the space into the parent before the element.
-      if (space) {
-        splitEl.insertAdjacentText('afterend', ' ');
-      }
-      return splitEl
+    var newItems = text.split(current._.by).map(function(splitText) {
+        // Create a span
+        var splitEl = document.createElement("span");
+        // Give it the key as a class
+        splitEl.className = current._.key;
+        splitEl.innerText = splitText;
+        // Populate data-{{key}} with the split value
+        splitEl.setAttribute("data-" + current._.key, splitText);
+        appendChild(current.F, splitEl);
+        // If items should be spaced out (Splitting.words, primarily), insert
+        // the space into the parent before the element.
+        if (current._.space) {
+            splitEl.insertAdjacentText("afterend", " ");
+        }
+        return splitEl;
     });
-    
-    val.push.apply(val, newItems);
-    return val
-  }, []);
 
-  // Clear out the existing element
-  el.innerHTML = '';
-  // Append elements back into the parent
-  el.appendChild(fragment);
+    pushAll(current.$, newItems);
+    return current;
+}
 
-  return children
+function pushAll(list, newItems) {
+    list.push.apply(list, newItems);
 }
 
 /**
@@ -190,7 +228,12 @@ function split (el, key, by, space) {
  * @return {Element[]}
  */
 function words(el) {
-    var wordResults = split(el, "word", /\s+/, true);
+    var wordResults = split(el, { 
+        key: "word", 
+        by: /\s+/, 
+        space: true 
+    });
+    
     index(el, "word", wordResults);
     return wordResults;
 }
@@ -223,7 +266,7 @@ function charPlugin(options) {
     var el = options.el;
     var wordResults = words(el);
     var charResults = wordResults.reduce(function(val, word, i) {
-        val.push.apply(val, split(word, "char", ""));
+        val.push.apply(val, split(word, { key: 'char', by: ''  }));
         return val;
     }, []);
 
@@ -236,7 +279,7 @@ function charPlugin(options) {
     };
 }
 
-/** import('./splitting.d.ts'); */
+/** @typedef {import('./splitting.d.ts')} */
 
 var plugins = {
   items: itemsPlugin, 
@@ -247,14 +290,37 @@ var plugins = {
   columns: columnPlugin,
   grid: gridPlugin
 };
- 
+
+/**
+ * # Splitting
+ * 
+ * @param opts {import('./types').ISplittingOptions} 
+ */
+function Splitting (opts) {
+  opts = opts || {};
+
+  return $(opts.target || '[data-splitting]').map(function(el) { 
+    var by = opts.by || el.dataset.splitting || 'chars';
+    var options =  inherit(opts, { el: el });
+    return plugins[by](options)
+  })
+}
+
+/**
+ * Adds a new plugin to splitting
+ * @param opts {import('./types').ISplittingPlugin} 
+ */
+function add(opts) {
+  plugins[opts.name] = opts;
+}
+Splitting.add = add;
 
 /**
  * # Splitting.html
  * 
- * @param {ISplittingOptions} options
+ * @param opts {import('./types').ISplittingOptions}
  */
-function html (opts) {
+function html(opts) {
   opts = opts || {};
   var el = document.createElement('span');
   el.innerHTML = opts.content;
@@ -262,32 +328,6 @@ function html (opts) {
   Splitting(opts);
   return el.outerHTML
 }
-
-/**
- * # Splitting
- * 
- * @param {ISplittingOptions} options
- */
-function Splitting (opts) {
-  opts = opts || {};
-
-  return $(opts.target || '[data-splitting]').map(function(el) { 
-    var by = opts.by || el.dataset.splitting || 'chars';
-    return plugins[by](
-      inherit(opts, { el: el })
-    )
-  })
-}
-
-function inherit(source, dest) {
-  for (var k in source) {
-    if (!dest.hasOwnProperty(k)) {
-      dest[k] = source[k];
-    }
-  }
-  return dest;
-}
-
 Splitting.html = html;
 
 return Splitting;

@@ -8,7 +8,12 @@ import { split } from '../utils/split';
  * @return {Element[]}
  */
 export function words(el) {
-    var wordResults = split(el, "word", /\s+/, true);
+    var wordResults = split(el, { 
+        key: "word", 
+        by: /\s+/, 
+        space: true 
+    });
+    
     index(el, "word", wordResults)
     return wordResults;
 }

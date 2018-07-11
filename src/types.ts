@@ -6,11 +6,17 @@ declare global {
 
 export type Target = string | Node | NodeList | Element[];
 
+export interface ISplittingPlugin {
+    by: string;
+    key?: string;
+    depends?: string[];
+    split?: (el: HTMLElement, options?: ISplittingOptions) => HTMLElement[];
+}
+
 export interface ISplittingStatic {
-    (options?: ISplittingOptions): SplittingInstance[];
-    (target?: Target, by?: string, options?: {}): SplittingInstance[];
+    (options?: ISplittingOptions): SplittingInstance[]; 
+    add(options?: ISplittingPlugin): void;
     html(options?: ISplittingOptions): string;
-    html(target?: Target, by?: string, options?: {}): string;
 }
 
 export interface SplittingInstance {

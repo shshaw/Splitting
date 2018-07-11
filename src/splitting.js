@@ -1,6 +1,7 @@
-/** import('./splitting.d.ts'); */
+/** @typedef {import('./splitting.d.ts')} */
 
 import { $ } from './utils/dom'
+import { inherit } from './utils/objects'
 import { itemsPlugin } from './plugins/items' 
 import { linePlugin } from './plugins/lines'
 import { charPlugin } from './plugins/chars'
@@ -16,14 +17,37 @@ var plugins = {
   columns: columnPlugin,
   grid: gridPlugin
 }
- 
+
+/**
+ * # Splitting
+ * 
+ * @param opts {import('./types').ISplittingOptions} 
+ */
+function Splitting (opts) {
+  opts = opts || {};
+
+  return $(opts.target || '[data-splitting]').map(function(el) { 
+    var by = opts.by || el.dataset.splitting || 'chars';
+    var options =  inherit(opts, { el: el });
+    return plugins[by](options)
+  })
+}
+
+/**
+ * Adds a new plugin to splitting
+ * @param opts {import('./types').ISplittingPlugin} 
+ */
+function add(opts) {
+  plugins[opts.name] = opts;
+}
+Splitting.add = add;
 
 /**
  * # Splitting.html
  * 
- * @param {ISplittingOptions} options
+ * @param opts {import('./types').ISplittingOptions}
  */
-function html (opts) {
+function html(opts) {
   opts = opts || {}
   var el = document.createElement('span')
   el.innerHTML = opts.content;
@@ -31,32 +55,6 @@ function html (opts) {
   Splitting(opts)
   return el.outerHTML
 }
-
-/**
- * # Splitting
- * 
- * @param {ISplittingOptions} options
- */
-function Splitting (opts) {
-  opts = opts || {};
-
-  return $(opts.target || '[data-splitting]').map(function(el) { 
-    var by = opts.by || el.dataset.splitting || 'chars';
-    return plugins[by](
-      inherit(opts, { el: el })
-    )
-  })
-}
-
-function inherit(source, dest) {
-  for (var k in source) {
-    if (!dest.hasOwnProperty(k)) {
-      dest[k] = source[k]
-    }
-  }
-  return dest;
-}
-
 Splitting.html = html;
 
 export default Splitting

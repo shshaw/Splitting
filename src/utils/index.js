@@ -5,18 +5,16 @@ import { eachDeep } from "./arrays";
  * # Splitting.index
  * Index split elements and add them to a Splitting instance.
  *
- * @param {*} s
- * @param {*} key
- * @param {*} splits
+ * @param element {HTMLElement}
+ * @param key {string}
+ * @param items {HTMLElement[] | HTMLElement[][]}
  */
-export function index(element, key, splits) {
-    splits.forEach(function(items, i) {
+export function index(element, key, items) {
+    items.forEach(function(items, i) {
         eachDeep(items, function(item) {
             setProperty(item, key + "-index", i);
         });
     });
 
-    setProperty(element, key + "-total", splits.length);
+    setProperty(element, key + "-total", items.length);
 }
-
-

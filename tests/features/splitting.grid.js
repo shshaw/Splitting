@@ -11,9 +11,10 @@ test('an empty element', function () {
 });
 
 test('an element with one element', function () {
-  var el = document.createElement('div');
-  var el2 = document.createElement('div');
-  el.appendChild(el2);
+  var el = $create`
+    <div><div></div></div>
+  `
+
   var results = Splitting({ target: el, by: 'grid' });
 
   expect(results.length).toBe(1)
@@ -38,12 +39,12 @@ test('an element with multiple elements', function () {
 });
 
 test('an element with nested elements', function () {
-  var el = document.createElement('div');
-  
-  el.innerHTML = `
-    <div class="item2">1</div>
-    <div class="item2">2</div>
-  `;
+  var el = $create`
+    <div>
+      <div class="item2">1</div>
+      <div class="item2">2</div>
+    </div>
+  `
 
   el.children[1].offsetTop = 10;
 
