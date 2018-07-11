@@ -1,7 +1,5 @@
-// polyfill JSDOM for testing 
-import '../_polyfill';
 import Splitting from '../../src/splitting'
-
+import { $create } from '../utils/dom';
 
 test('an empty element', function() {
   var $el = document.createElement('div');
@@ -23,7 +21,7 @@ test('an element with a single character', function() {
 
 test('an element with a single word', function() {
   var $el = document.createElement('div');
-  $el.innerHTML = 'SPLITTING'
+  $el.innerHTML = 'SPLITTING';
 
   var els = Splitting({ target: $el, by: 'chars' });
   expect(els.length).toBe(1); 
@@ -31,8 +29,7 @@ test('an element with a single word', function() {
 });
 
 test('an element with a multiple words', function() {
-  var $el = document.createElement('div');
-  $el.innerHTML = 'with multiple words'
+  var $el = $create(`<div>with multiple words</div>`);
 
   var els = Splitting({ target: $el, by: 'chars' });
   expect(els.length).toBe(1);  

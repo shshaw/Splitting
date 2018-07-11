@@ -1,6 +1,5 @@
-// polyfill JSDOM for testing
-import '../_polyfill';
 import Splitting from '../../src/splitting'
+import { $create } from '../utils/dom';
 
 test('an empty element', function () {
   var el = document.createElement('div');
@@ -23,19 +22,18 @@ test('an element with one element', function () {
 });
 
 test('an element with multiple elements', function () {
-  var el = document.createElement('div');
-  var el2 = document.createElement('div');
-  el2.innerHTML = '1';
-  el.appendChild(el2);
+  var el = $create`
+  <div>
+    <div>1</div>
+    <div>2</div>
+  </div>`
 
-  var el3 = document.createElement('div');
-  el3.innerHTML = '2';
-  el.appendChild(el3);
+  el.children[1].offsetTop = 10;
 
   var results = Splitting({ target: el, by: 'grid' });
 
   expect(results.length).toBe(1)
-  expect(results[0].rows.length).toBe(1); 
+  expect(results[0].rows.length).toBe(2); 
   expect(results[0].columns.length).toBe(1); 
 });
 
@@ -47,12 +45,14 @@ test('an element with nested elements', function () {
     <div class="item2">2</div>
   `;
 
+  el.children[1].offsetTop = 10;
+
   document.body.appendChild(el);
 
   var results = Splitting({ target: el, by: 'grid', matching: '.item2' });
 
   expect(results.length).toBe(1)
-  expect(results[0].rows.length).toBe(1); 
+  expect(results[0].rows.length).toBe(2); 
   expect(results[0].columns.length).toBe(1); 
 
   document.body.removeChild(el);

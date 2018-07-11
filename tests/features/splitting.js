@@ -1,5 +1,3 @@
-// polyfill JSDOM for testing
-import '../_polyfill';
 import Splitting from '../../src/splitting';
 
 test("no arguments", function () {

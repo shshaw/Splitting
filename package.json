@@ -46,7 +46,8 @@
     "moduleFileExtensions": [
       "js"
     ],
-    "testRegex": "tests/features/.*\\.js$"
+    "testRegex": "tests/features/.*\\.js$",
+    "setupTestFrameworkScriptFile": "./tests/_setup.js"
   },
   "dependencies": {}
 }
