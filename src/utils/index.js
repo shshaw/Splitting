@@ -1,5 +1,4 @@
-import { setProperty } from "../utils/dom";
-import { eachDeep } from "./arrays";
+import { setProperty } from "../utils/dom"; 
 
 /**
  * # Splitting.index
@@ -9,12 +8,22 @@ import { eachDeep } from "./arrays";
  * @param key {string}
  * @param items {HTMLElement[] | HTMLElement[][]}
  */
-export function index(element, key, items) {
-    items.forEach(function(items, i) {
+export function index(element, key, items) { 
+    items.some(function(items, i) {
         eachDeep(items, function(item) {
             setProperty(item, key + "-index", i);
         });
     });
 
     setProperty(element, key + "-total", items.length);
+}
+
+function eachDeep(items, fn) {
+    if (Array.isArray(items)) {
+        items.some(function(item) {
+            eachDeep(item, fn);
+        });
+    } else {
+        fn(items);
+    }
 }

@@ -4,6 +4,7 @@ import { $ } from './utils/dom'
 import { index } from './utils/index'
 import { add, resolve } from './plugins';
 import { wordPlugin } from './plugins/words';
+import { allCharPlugin } from './plugins/all-chars';
 import { charPlugin } from './plugins/chars';
 import { linePlugin } from './plugins/lines';
 import { itemPlugin } from './plugins/items';
@@ -52,10 +53,12 @@ Splitting.add = add;
 // install plugins
 add(wordPlugin)
 add(charPlugin)
+add(allCharPlugin)
 add(linePlugin)
 add(itemPlugin)
 add(rowPlugin)
 add(columnPlugin)
 add(gridPlugin)
+
 
 export default Splitting

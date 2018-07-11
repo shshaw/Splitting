@@ -7,12 +7,8 @@ export function detectGrid(items, side, threshold) {
         list.push(w);
     });
 
-    var results = Object.keys(c)
+    return Object.keys(c)
         .map(Number)
         .sort()
-        .map(function(key) {
-            return c[key];
-        });
- 
-    return results;
+        .map(function(key) { return c[key]; });
 }
