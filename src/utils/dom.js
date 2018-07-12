@@ -23,7 +23,7 @@ export function appendChild(el, child) {
 
 export function createElement(parent, key, text) {
   var el = document.createElement('span');
-  key && el.classList.add(key);
+  el.className = key; 
   if (text) {
       el.setAttribute("data-" + key, text);
       el.textContent = text; 
