@@ -10,6 +10,10 @@ import { itemPlugin } from './plugins/items';
 import { rowPlugin } from './plugins/rows';
 import { columnPlugin } from './plugins/columns';
 import { gridPlugin } from './plugins/grid';
+import { layoutPlugin } from './plugins/layoutPlugin';
+import { cellColumnPlugin } from './plugins/cellColumnPlugin'
+import { cellRowPlugin } from './plugins/cellRowPlugin' 
+import { cellPlugin } from './plugins/cellPlugin';
 
 /**
  * # Splitting
@@ -24,7 +28,8 @@ function Splitting (opts) {
     resolve(opts.by || el.dataset.splitting || 'chars').some(function(plugin) {
       if (plugin.split) {
         var results = plugin.split(el, opts, ctx); 
-        index(el, (plugin.key || "item") + (opts.key ? '-' + opts.key : ''), results);
+        var key = (plugin.key || '') + (opts.key ? '-' + opts.key : '')
+        key && index(el, key, results);
         ctx[plugin.by] = results;
       } 
     });
@@ -50,12 +55,19 @@ Splitting.html = html;
 Splitting.add = add;
 
 // install plugins
+// word/char plugins
 add(wordPlugin)
 add(charPlugin) 
 add(linePlugin)
+// grid plugins
 add(itemPlugin)
 add(rowPlugin)
 add(columnPlugin)
 add(gridPlugin)
+// cell-layout plugins
+add(layoutPlugin)
+add(cellRowPlugin)
+add(cellColumnPlugin)
+add(cellPlugin)
 
 export default Splitting

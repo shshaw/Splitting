@@ -58,8 +58,7 @@ test('an element with a multiple words with spaces', function() {
   var input = document.createElement('div');
   input.textContent = 'with many';
 
-  var actual = Splitting({ target: input, by: 'chars', whitespace: true });
-  console.log(JSON.stringify(actual[0].chars.map(s => s.innerHTML).join('')));
+  var actual = Splitting({ target: input, by: 'chars', whitespace: true }); 
   expect(actual.length).toBe(1);
   expect(actual[0].chars[0].textContent).toBe('w');
   expect(actual[0].chars[1].textContent).toBe('i');

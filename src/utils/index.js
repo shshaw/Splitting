@@ -1,4 +1,4 @@
-import { setProperty } from "../utils/dom"; 
+import { setProperty } from "./dom"; 
 
 /**
  * # Splitting.index

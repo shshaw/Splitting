@@ -21,6 +21,17 @@ export function appendChild(el, child) {
   return child;
 }
 
+export function createElement(parent, key, text) {
+  var el = document.createElement('span');
+  el.setAttribute("data-split", key);
+  if (text) {
+      el.setAttribute("data-" + key, text);
+      el.textContent = text; 
+  }
+  parent.appendChild(el);
+  return el;
+}
+
 /**
  * 
  * @param e {import('../types').Target} 

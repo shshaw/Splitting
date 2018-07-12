@@ -1,4 +1,4 @@
-import { appendChild } from "./dom";
+import { appendChild, createElement } from "./dom";
 
 export var PRESERVE_SPACE = 1;
 export var INCLUDE_PREVIOUS = 2; 
@@ -57,15 +57,7 @@ export function split(el, key, splitOn, mode) {
 
     // Clear out the existing element
     el.innerHTML = "";
-    el.appendChild(F);
+    appendChild(el, F);
     return elements;
 }
 
-function createElement(parent, key, text) {
-    var el = document.createElement('span');
-    el.textContent = text; 
-    el.setAttribute("data-split", key);
-    el.setAttribute("data-" + key, text);
-    parent.appendChild(el);
-    return el;
-}

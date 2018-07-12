@@ -28,6 +28,17 @@ function appendChild(el, child) {
   return child;
 }
 
+function createElement(parent, key, text) {
+  var el = document.createElement('span');
+  el.setAttribute("data-split", key);
+  if (text) {
+      el.setAttribute("data-" + key, text);
+      el.textContent = text; 
+  }
+  parent.appendChild(el);
+  return el;
+}
+
 /**
  * 
  * @param e {import('../types').Target} 
@@ -183,17 +194,8 @@ function split(el, key, splitOn, mode) {
 
     // Clear out the existing element
     el.innerHTML = "";
-    el.appendChild(F);
+    appendChild(el, F);
     return elements;
-}
-
-function createElement(parent, key, text) {
-    var el = document.createElement('span');
-    el.textContent = text; 
-    el.setAttribute("data-split", key);
-    el.setAttribute("data-" + key, text);
-    parent.appendChild(el);
-    return el;
 }
 
 /** @type {import('../types').ISplittingPlugin} */
@@ -277,6 +279,83 @@ var gridPlugin = {
     depends: ["rows", "columns"]
 };
 
+var layoutPlugin = {
+    by: "layout",
+    split: function(el, opts) { 
+        // detect and set options
+        opts.image = opts.image || (el.dataset && el.dataset.image) || el.currentSrc || el.src;
+        opts.rows = opts.rows || (el.dataset && el.dataset.rows) || 1;
+        opts.cols =  opts.cols || (el.dataset && el.dataset.cols) || 1;
+ 
+        if (!opts.image) {
+            var img = el.querySelector("img");
+            opts.image = img && (img.currentSrc || img.src);
+        }
+
+        var totalCells = opts.rows * opts.cols;
+        var elements = [];
+        var fragment = document.createDocumentFragment();
+        for (var i = 0; i < totalCells; i++) {
+            // Create a span
+            var cell = createElement(fragment, 'cell');
+            inner = createElement(cell, 'cell-inner');
+            elements.push(cell);
+        }
+
+        // Append elements back into the parent
+        el.appendChild(fragment);
+
+        // add optional image to background
+        if (opts.image) {
+            el.style.setProperty("background-image", "url(" + opts.image + ")");
+        } 
+
+        return elements;
+    }
+};
+
+var cellColumnPlugin = {
+    by: "cell-columns",
+    key: 'cell-column',
+    depends: ['layout'],
+    split: function(el, opts, ctx) {
+        var columnCount = opts.rows; 
+        return ctx.layout.reduce(function(columns, cell, i) {
+            if (i % columnCount == 0) {
+                columns.push([]);
+            }
+            columns[Math.floor(i / columnCount)][i % columnCount] = cell;
+            return columns;
+        }, []);
+    }
+};
+
+var cellRowPlugin = {
+    by: "cell-rows",
+    key: 'cell-row',
+    depends: ['layout'],
+    split: function(el, opts, ctx) {
+        var rowCount = opts.rows; 
+        return ctx.layout.reduce(function(rows, cell, i) {
+            if (i % rowCount == 0) {
+                rows.push([]);
+            }
+            rows[Math.floor(i / rowCount)][i % rowCount] = cell;
+            return rows;
+        }, []);
+    }
+};
+
+var cellPlugin = {
+    by: "cells",
+    key: "cell",
+    depends: ['cell-rows', 'cell-columns'],
+    split: function(el, opt, ctx) { 
+        // re-index the layout as the cells
+        return ctx.layout;
+    }
+};
+
 /** @typedef {import('./splitting.d.ts')} */
 
 /**
@@ -292,7 +371,8 @@ function Splitting (opts) {
     resolve(opts.by || el.dataset.splitting || 'chars').some(function(plugin) {
       if (plugin.split) {
         var results = plugin.split(el, opts, ctx); 
-        index(el, (plugin.key || "item") + (opts.key ? '-' + opts.key : ''), results);
+        var key = (plugin.key || '') + (opts.key ? '-' + opts.key : '');
+        key && index(el, key, results);
         ctx[plugin.by] = results;
       } 
     });
@@ -318,13 +398,20 @@ Splitting.html = html;
 Splitting.add = add;
 
 // install plugins
+// word/char plugins
 add(wordPlugin);
 add(charPlugin); 
 add(linePlugin);
+// grid plugins
 add(itemPlugin);
 add(rowPlugin);
 add(columnPlugin);
 add(gridPlugin);
+// cell-layout plugins
+add(layoutPlugin);
+add(cellRowPlugin);
+add(cellColumnPlugin);
+add(cellPlugin);
 
 return Splitting;
 
