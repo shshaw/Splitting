@@ -4,13 +4,11 @@ export var cellRowPlugin = {
     depends: ['layout'],
     split: function(el, opts, ctx) {
         var rowCount = opts.rows; 
-        return ctx.layout.reduce(function(rows, cell, i) {
-            if (i % rowCount == 0) {
-                rows.push([]);
-            }
-            rows[Math.floor(i / rowCount)][i % rowCount] = cell
-            return rows;
-        }, []);
+        var result = Array(rowCount).map(function() { return [] })
+        ctx.layout.some(function(cell, i) {
+            results[Math.floor(i / rowCount)].push(cell)
+        });
+        return results;
     }
 }
 
