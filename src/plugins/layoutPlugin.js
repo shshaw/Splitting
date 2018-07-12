@@ -21,16 +21,17 @@ export var layoutPlugin = {
 
         var totalCells = opts.rows * opts.cols;
         var elements = [];
-        var fragment = document.createDocumentFragment();
+        var container = document.createElement('span'); 
+        container.className = 'cell-grid';
         for (var i = 0; i < totalCells; i++) {
             // Create a span
-            var cell = createElement(fragment, 'cell');
+            var cell = createElement(container, 'cell');
             var inner = createElement(cell, 'cell-inner');
             elements.push(cell);
         }
 
         // Append elements back into the parent
-        el.appendChild(fragment);
+        el.appendChild(container);
 
         return elements;
     }
