@@ -4,12 +4,10 @@ export var cellColumnPlugin = {
     depends: ['layout'],
     split: function(el, opts, ctx) {
         var columnCount = opts.rows; 
-        return ctx.layout.reduce(function(columns, cell, i) {
-            if (i % columnCount == 0) {
-                columns.push([]);
-            }
-            columns[Math.floor(i / columnCount)][i % columnCount] = cell
-            return columns;
-        }, []);
+        var result = Array(columnCount).map(function() { return [] });
+        ctx.layout.some(function(cell) {
+            columns[i % columnCount].push(cell)
+        });
+        return result;
     }
 }
