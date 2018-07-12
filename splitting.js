@@ -25,6 +25,7 @@ function setProperty(el, varName, value) {
  */
 function appendChild(el, child) {
   el.appendChild(child);
+  return child;
 }
 
 /**
@@ -125,59 +126,74 @@ function add(opts) {
     plugins[opts.by] = opts;
 }
 
+var PRESERVE_SPACE = 1;
+var INCLUDE_PREVIOUS = 2; 
+
 /**
  * # Splitting.split
- * Split an element's innerText into individual elements
+ * Split an element's textContent into individual elements
  * @param el {Node} Element to split
  * @param key {string}
- * @param by {string}
- * @param space {boolean}
+ * @param splitOn {string}
+ * @param includeSpace {boolean}
+ * @returns {HTMLElement[]}
  */
-function split(el, key, by, space) {
+function split(el, key, splitOn, mode) {
+    if (splitOn === '') {
+        debugger
+    }
+
     // Combine any strange text nodes or empty whitespace.
     el.normalize();
 
     // Use fragment to prevent unnecessary DOM thrashing.
     var elements = [];
     var F = document.createDocumentFragment();
+    
+    if (mode === INCLUDE_PREVIOUS) {
+        elements.push(el.previousSibling);
+    }
 
-    $(el.childNodes).some(function(next) {
+    el.childNodes.forEach(function(next) {
         // Recursively run through child nodes
         if (next && next.childNodes && next.childNodes.length) {
             appendChild(F, next);
-            elements.push.apply(elements, split(next, key, by, space));
-        } else {
-            // Get the text to split, trimming out the whitespace
-            var text = (next.wholeText || "").trim();
-
-            // If there's no text left after trimming whitespace, continue the loop
-            if (!text.length) {
-                appendChild(F, next);
-            } else {
-                // Concatenate the split text children back into the full array
-                text.split(by).some(function(splitText) {
-                    // Create a span
-                    var splitEl = document.createElement("span");
-                    // Give it the key as a class
-                    splitEl.className = key;
-                    splitEl.innerText = splitText;
-                    // Populate data-{{key}} with the split value
-                    splitEl.setAttribute("data-" + key, splitText);
-                    appendChild(F, splitEl);
-                    // If items should be spaced out (Splitting.words, primarily), insert
-                    // the space into the parent before the element.
-                    if (space) {
-                        splitEl.insertAdjacentText("afterend", " ");
-                    }
-                    elements.push(splitEl);
-                });
-            }
+            elements.push.apply(elements, split(next, key, splitOn, mode));
+            return;
         }
+
+        // Get the text to split, trimming out the whitespace
+        /** @type {string} */
+        var text = (next.wholeText || "").trim();
+
+        // If there's no text left after trimming whitespace, continue the loop
+        if (!text.length) {
+            appendChild(F, next);
+            return;
+        }
+
+        // Concatenate the split text children back into the full array
+        text.split(splitOn).some(function(splitText, i) {
+            if (i && mode === PRESERVE_SPACE) {
+                createElement(F, key, ' ');
+            }
+            elements.push(createElement(F, key, splitText)); 
+        });
     });
 
     // Clear out the existing element
-    el.innerHTML = F.innerHTML;
+    el.innerHTML = "";
+    el.appendChild(F);
     return elements;
+}
+
+function createElement(parent, key, text) {
+    var el = document.createElement('span');
+    el.textContent = text; 
+    el.setAttribute("data-split", key);
+    el.setAttribute("data-" + key, text);
+    parent.appendChild(el);
+    return el;
 }
 
 /** @type {import('../types').ISplittingPlugin} */
@@ -185,33 +201,22 @@ var wordPlugin = {
     by: 'words',
     key: 'word',
     split: function(el, options) {
-        return split(el, 'word', /\s+/, 1)
-    }
-};
-
-/** @type {import('../types').ISplittingPlugin} */
-var allCharPlugin = {
-    by: 'all-chars',
-    key: 'all-char',
-    split: function(el) {
-        return split(el, 'word', '')
+        return split(el, 'word', /\s+/, PRESERVE_SPACE)
     }
 };
 
 /** @type {import('../types').ISplittingPlugin} */
 var charPlugin = {
-    by: 'chars',
-    key: 'char',
-    depends: ['words'],
-    split: function(_el, _options, ctx) {
-        return ctx.words.reduce(chars, []);
+    by: "chars",
+    key: "char",
+    depends: ["words"],
+    split: function(el, options, ctx) {
+        return ctx.words.reduce(function(val, word, i) { 
+            val.push.apply(val, split(word, "char", "", options.whitespace && i ? INCLUDE_PREVIOUS : 0));
+            return val;
+        }, []);
     }
 };
-
-function chars(val, word) {
-    val.push.apply(val, split(word, 'char', ''));
-    return val;
-}
 
 function detectGrid(items, side, threshold) {
     threshold = threshold || 1;
@@ -314,8 +319,7 @@ Splitting.add = add;
 
 // install plugins
 add(wordPlugin);
-add(charPlugin);
-add(allCharPlugin);
+add(charPlugin); 
 add(linePlugin);
 add(itemPlugin);
 add(rowPlugin);

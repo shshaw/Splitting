@@ -18,6 +18,7 @@ export function setProperty(el, varName, value) {
  */
 export function appendChild(el, child) {
   el.appendChild(child);
+  return child;
 }
 
 /**

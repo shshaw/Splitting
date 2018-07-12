@@ -36,6 +36,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-preset-env": "^1.7.0",
     "jest": "^22.3.0",
+    "jsdom": "^11.11.0",
     "rollup": "^0.55.5",
     "uglify-js": "^3.3.11"
   },

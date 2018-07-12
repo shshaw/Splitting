@@ -14,7 +14,7 @@ test("an element with a single word", function() {
 
   var els = Splitting({ target: $el, by: 'words' });
   expect(els.length).toBe(1);
-  expect(els[0].words[0].innerText).toBe("SPLITTING");
+  expect(els[0].words[0].textContent).toBe("SPLITTING");
 });
 
 test("an element with a multiple words", function() {
@@ -24,9 +24,9 @@ test("an element with a multiple words", function() {
   var els = Splitting({ target: $el, by: 'words' });
   expect(els.length).toBe(1);
   expect(els[0].words.length).toBe(3);
-  expect(els[0].words[0].innerText).toBe("with");
-  expect(els[0].words[1].innerText).toBe("multiple");
-  expect(els[0].words[2].innerText).toBe("words");
+  expect(els[0].words[0].textContent).toBe("with");
+  expect(els[0].words[1].textContent).toBe("multiple");
+  expect(els[0].words[2].textContent).toBe("words");
 });
 
 test("a nested empty element", function() {

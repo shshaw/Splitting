@@ -1,25 +1,9 @@
-/*
- * insertAdjacentHTML.js
- *   Cross-browser full HTMLElement.insertAdjacentHTML implementation.
- *
- * 2011-10-10
- *
- * By Eli Grey, http://eligrey.com
- * Public Domain.
- * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
- */
-
-Element.prototype.insertAdjacentText = function(position, html) {
-  'use strict';
-
-  var ref = this,
-    container = ref.ownerDocument.createElementNS('http://www.w3.org/1999/xhtml', '_'),
-    ref_parent = ref.parentNode,
-    node,
-    first_child,
-    next_sibling;
-
-  container.innerHTML = html;
+Element.prototype.insertAdjacentElement = function(position, container) {
+  var ref = this;
+  var ref_parent = ref.parentNode;
+  var node;
+  var first_child;
+  var next_sibling;
 
   switch (position.toLowerCase()) {
     case 'beforebegin':
@@ -45,10 +29,16 @@ Element.prototype.insertAdjacentText = function(position, html) {
       }
       break;
   }
+}
+
+Element.prototype.insertAdjacentText = function(position, html) { 
+  var container =  this.ownerDocument.createElementNS('http://www.w3.org/1999/xhtml', '_');
+  container.innerHTML = html;
+  this.insertAdjacentElement(position, container);
 };
- 
+
 // MOCK the layout properties. These are not implemented in JSDOM
-Object.defineProperties(HTMLElement.prototype, {
+Object.defineProperties(HTMLElement.prototype, { 
   offsetLeft: {
     get: function() { return this._offsetLeft|| getComputedStyle(this).marginLeft; },
     set: function(v) { this._offsetLeft = v; }
