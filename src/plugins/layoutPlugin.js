@@ -8,9 +8,15 @@ export var layoutPlugin = {
         opts.rows = opts.rows || (el.dataset && el.dataset.rows) || 1;
         opts.cols =  opts.cols || (el.dataset && el.dataset.cols) || 1;
  
-        if (!opts.image) {
+        // Seek out the first <img> if the value is true
+        if ( opts.image === true ) {
             var img = el.querySelector("img");
             opts.image = img && (img.currentSrc || img.src);
+        }
+        
+        // add optional image to background
+        if (opts.image) {
+            el.style.setProperty("background-image", "url(" + opts.image + ")");
         }
 
         var totalCells = opts.rows * opts.cols;
@@ -19,17 +25,12 @@ export var layoutPlugin = {
         for (var i = 0; i < totalCells; i++) {
             // Create a span
             var cell = createElement(fragment, 'cell');
-            inner = createElement(cell, 'cell-inner');
+            var inner = createElement(cell, 'cell-inner');
             elements.push(cell);
         }
 
         // Append elements back into the parent
         el.appendChild(fragment);
-
-        // add optional image to background
-        if (opts.image) {
-            el.style.setProperty("background-image", "url(" + opts.image + ")");
-        } 
 
         return elements;
     }
