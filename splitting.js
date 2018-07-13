@@ -339,7 +339,7 @@ function arrayProvider() {
 /** @type {import('../types').ISplittingPlugin} */
 var cellColumnPlugin = {
     by: "cellColumns",
-    key: 'column',
+    key: 'col',
     depends: ['layout'],
     split: function(el, opts, ctx) {
         var columnCount = opts.columns; 
@@ -394,8 +394,10 @@ function Splitting (opts) {
         var key = (plugin.key || '') + (opts.key ? '-' + opts.key : '');
         key && index(el, key, results);
         ctx[plugin.by] = results;
+        el.classList.add(plugin.by);
       } 
     });
+    el.classList.add('splitting');
     return ctx;
   })
 }

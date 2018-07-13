@@ -31,8 +31,10 @@ function Splitting (opts) {
         var key = (plugin.key || '') + (opts.key ? '-' + opts.key : '')
         key && index(el, key, results);
         ctx[plugin.by] = results;
+        el.classList.add(plugin.by);
       } 
     });
+    el.classList.add('splitting');
     return ctx;
   })
 }

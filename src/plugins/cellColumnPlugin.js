@@ -3,7 +3,7 @@ import { fill, arrayProvider } from '../utils/arrays';
 /** @type {import('../types').ISplittingPlugin} */
 export var cellColumnPlugin = {
     by: "cellColumns",
-    key: 'column',
+    key: 'col',
     depends: ['layout'],
     split: function(el, opts, ctx) {
         var columnCount = opts.columns; 
