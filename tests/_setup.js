@@ -37,6 +37,20 @@ Element.prototype.insertAdjacentText = function(position, html) {
   this.insertAdjacentElement(position, container);
 };
 
+// polyfill css variables
+var originalSetProperty = CSSStyleDeclaration.prototype.setProperty;
+var originalPropValue = CSSStyleDeclaration.prototype.getPropertyValue;
+CSSStyleDeclaration.prototype.setProperty = function(key, value) {
+  if (!key.startsWith('--')) {
+    return originalSetProperty.call(this, key, value);
+  }
+  var maps = (this._maps || (this._maps = {}));
+  maps[key] = value;
+}
+CSSStyleDeclaration.prototype.getPropertyValue = function(key) {
+  return (this._maps || {})[key] || originalPropValue.call(this, key);
+}
+
 // MOCK the layout properties. These are not implemented in JSDOM
 Object.defineProperties(HTMLElement.prototype, { 
   offsetLeft: {

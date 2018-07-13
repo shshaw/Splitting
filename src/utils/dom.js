@@ -28,7 +28,7 @@ export function createElement(parent, key, text) {
       el.setAttribute("data-" + key, text);
       el.textContent = text; 
   }
-  parent.appendChild(el);
+  parent && parent.appendChild(el);
   return el;
 }
 

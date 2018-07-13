@@ -1,12 +1,15 @@
+import { fill, arrayProvider } from '../utils/arrays';
+
+/** @type {import('../types').ISplittingPlugin} */
 export var cellColumnPlugin = {
-    by: "cell-columns",
-    key: 'cell-column',
+    by: "cellColumns",
+    key: 'column',
     depends: ['layout'],
     split: function(el, opts, ctx) {
-        var columnCount = opts.rows; 
-        var result = Array(columnCount).map(function() { return [] });
-        ctx.layout.some(function(cell) {
-            columns[i % columnCount].push(cell)
+        var columnCount = opts.columns; 
+        var result = fill(columnCount, arrayProvider);
+        ctx.layout.some(function(cell, i) {
+            result[i % columnCount].push(cell)
         });
         return result;
     }
