@@ -30,12 +30,12 @@ function appendChild(el, child) {
 
 function createElement(parent, key, text) {
   var el = document.createElement('span');
-  el.setAttribute("data-split", key);
+  el.className = key; 
   if (text) {
       el.setAttribute("data-" + key, text);
       el.textContent = text; 
   }
-  parent.appendChild(el);
+  parent && parent.appendChild(el);
   return el;
 }
 
@@ -279,73 +279,97 @@ var gridPlugin = {
     depends: ["rows", "columns"]
 };
 
+/** @type {import('../types').ISplittingPlugin} */
 var layoutPlugin = {
     by: "layout",
     split: function(el, opts) { 
         // detect and set options
         opts.image = opts.image || (el.dataset && el.dataset.image) || el.currentSrc || el.src;
-        opts.rows = opts.rows || (el.dataset && el.dataset.rows) || 1;
-        opts.cols =  opts.cols || (el.dataset && el.dataset.cols) || 1;
+        opts.rows = +(opts.rows || (el.dataset && el.dataset.rows) || 1);
+        opts.columns = +(opts.columns || (el.dataset && el.dataset.columns) || 1);
  
-        if (!opts.image) {
-            var img = el.querySelector("img");
+        // Seek out the first <img> if the value is true
+        if (opts.image) {
+            var img = $('img', el)[0];
             opts.image = img && (img.currentSrc || img.src);
         }
+        
+        // add optional image to background
+        if (opts.image) {
+            el.style.setProperty("background-image", "url(" + opts.image + ")");
+        }
 
-        var totalCells = opts.rows * opts.cols;
+        var totalCells = opts.rows * opts.columns;
         var elements = [];
-        var fragment = document.createDocumentFragment();
+        
+        var container = createElement(0, 'cell-grid');
         for (var i = 0; i < totalCells; i++) {
             // Create a span
-            var cell = createElement(fragment, 'cell');
-            inner = createElement(cell, 'cell-inner');
+            var cell = createElement(container, 'cell');
+            createElement(cell, 'cell-inner');
             elements.push(cell);
         }
 
         // Append elements back into the parent
-        el.appendChild(fragment);
-
-        // add optional image to background
-        if (opts.image) {
-            el.style.setProperty("background-image", "url(" + opts.image + ")");
-        } 
+        el.appendChild(container);
 
         return elements;
     }
 };
 
+/**
+ * Creates and fills an array with the value provided
+ * @template {T}
+ * @param {number} count
+ * @param {() => T} valueProvider
+ * @return {T}
+ */
+function fill(count, valueProvider) {
+    var a = [];
+    for (; count--; ) {
+        a[count] = valueProvider();
+    }
+    return a;
+}
+
+function arrayProvider() {
+    return [];
+}
+
+/** @type {import('../types').ISplittingPlugin} */
 var cellColumnPlugin = {
-    by: "cell-columns",
-    key: 'cell-column',
+    by: "cellColumns",
+    key: 'column',
     depends: ['layout'],
     split: function(el, opts, ctx) {
-        var columnCount = opts.rows; 
-        var result = Array(columnCount).map(function() { return [] });
-        ctx.layout.some(function(cell) {
-            columns[i % columnCount].push(cell);
+        var columnCount = opts.columns; 
+        var result = fill(columnCount, arrayProvider);
+        ctx.layout.some(function(cell, i) {
+            result[i % columnCount].push(cell);
         });
         return result;
     }
 };
 
+/** @type {import('../types').ISplittingPlugin} */
 var cellRowPlugin = {
-    by: "cell-rows",
-    key: 'cell-row',
+    by: "cellRows",
+    key: 'row',
     depends: ['layout'],
     split: function(el, opts, ctx) {
         var rowCount = opts.rows; 
-        var result = Array(rowCount).map(function() { return [] });
-        ctx.layout.some(function(cell, i) {
-            results[Math.floor(i / rowCount)].push(cell);
+        var result = fill(rowCount, arrayProvider);
+        ctx.layout.some(function(cell, i, src) {
+            result[Math.floor(i / (src.length / rowCount))].push(cell);
         });
-        return results;
+        return result;
     }
 };
 
 var cellPlugin = {
     by: "cells",
     key: "cell",
-    depends: ['cell-rows', 'cell-columns'],
+    depends: ['cellRows', 'cellColumns'],
     split: function(el, opt, ctx) { 
         // re-index the layout as the cells
         return ctx.layout;
