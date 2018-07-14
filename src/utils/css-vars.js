@@ -11,7 +11,7 @@ import { each } from './arrays';
  */
 export function index(element, key, items) {
     var prefix = '--' + key;
-    var cssVar = prefix + "-index"
+    var cssVar = prefix + "-index";
 
     each(items, function (items, i) {
         if (Array.isArray(items)) {

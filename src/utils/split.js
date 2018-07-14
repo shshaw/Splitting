@@ -13,7 +13,7 @@ export var INCLUDE_PREVIOUS = 2;
  * @param includeSpace {boolean}
  * @returns {HTMLElement[]}
  */
-export function split(el, key, splitOn, mode) {
+export function split(el, key, splitOn, includePrevious, preserveWhitespace) {
     // Combine any strange text nodes or empty whitespace.
     el.normalize();
 
@@ -21,7 +21,7 @@ export function split(el, key, splitOn, mode) {
     var elements = [];
     var F = document.createDocumentFragment();
     
-    if (mode === INCLUDE_PREVIOUS) {
+    if (includePrevious) {
         elements.push(el.previousSibling);
     }
 
@@ -29,7 +29,7 @@ export function split(el, key, splitOn, mode) {
         // Recursively run through child nodes
         if (next && next.childNodes && next.childNodes.length) {
             appendChild(F, next);
-            elements.push.apply(elements, split(next, key, splitOn, mode));
+            elements.push.apply(elements, split(next, key, splitOn, includePrevious, preserveWhitespace));
             return;
         }
 
@@ -45,7 +45,7 @@ export function split(el, key, splitOn, mode) {
 
         // Concatenate the split text children back into the full array
         each(text.split(splitOn), function(splitText, i) {
-            if (i && mode === PRESERVE_SPACE) {
+            if (i && preserveWhitespace) {
                 createElement(F, key, ' ');
             }
             elements.push(createElement(F, key, splitText)); 

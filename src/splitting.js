@@ -32,11 +32,12 @@ function Splitting (opts) {
 
     each(items, function(plugin) {
       if (plugin.split) {
-        var key2 = (plugin.key || '') + (key ? '-' + key : '');
+        var pluginBy = plugin.by;
+        var key2 = pluginBy + (key ? '-' + key : '');
         var results = plugin.split(el, opts, ctx);
         key2 && index(el, key2, results);
-        ctx[plugin.by] = results;
-        el.classList.add(plugin.by);
+        ctx[pluginBy] = results;
+        el.classList.add(pluginBy);
       } 
     });
 

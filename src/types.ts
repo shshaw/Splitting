@@ -9,8 +9,7 @@ export type Target = string | Node | NodeList | Element[];
 export interface ISplittingPlugin {
     by: string;
     key?: string;
-    depends?: string[];
-    alias?: 1;
+    depends?: string[]; 
     split?: (el: HTMLElement, options?: ISplittingOptions) => HTMLElement[];
 }
 

@@ -1,6 +1,8 @@
 import { selectFrom, each } from "./arrays";
+import { $ } from './dom';
 
-export function detectGrid(items, side) {
+export function detectGrid(el, options, side) {
+    var items = $(options.matching || el.children, el);
     var c = {};
 
     each(items, function(w) {

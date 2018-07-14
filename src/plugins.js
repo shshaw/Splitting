@@ -33,6 +33,24 @@ function resolvePlugins(by, parent, deps) {
 }
 
 /**
+ * Internal utility for creating plugins... essentially to reduce
+ * the size of the library
+ * @param {string} by 
+ * @param {string} key 
+ * @param {string[]} depends 
+ * @param {Function} split 
+ * @returns {import('./types').ISplittingPlugin}
+ */
+export function createPlugin(by, depends, key, split) {
+    return {
+        by: by,
+        depends: depends,
+        key: key,
+        split: split
+    }
+}
+
+/**
  *
  * @param by {string}
  * @returns {import('./types').ISplittingPlugin[]}

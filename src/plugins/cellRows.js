@@ -1,12 +1,12 @@
 import { Array2D, each } from "../utils/arrays";
 import { LAYOUT } from './layout';
+import { createPlugin } from '../plugins';
 
-/** @type {import('../types').ISplittingPlugin} */
-export var cellRowPlugin = {
-    by: "cellRows",
-    key: "row",
-    depends: [LAYOUT],
-    split: function(el, opts, ctx) {
+export var cellRowPlugin = createPlugin(
+    /*by: */ "cellRows",
+    /*depends: */ [LAYOUT],
+    /*key: */ "row",
+    /*split: */ function(el, opts, ctx) {
         var rowCount = opts.rows;
         var result = Array2D(rowCount);
 
@@ -16,4 +16,4 @@ export var cellRowPlugin = {
 
         return result;
     }
-};
+);

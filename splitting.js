@@ -137,6 +137,24 @@ function resolvePlugins(by, parent, deps) {
 }
 
 /**
+ * Internal utility for creating plugins... essentially to reduce
+ * the size of the library
+ * @param {string} by 
+ * @param {string} key 
+ * @param {string[]} depends 
+ * @param {Function} split 
+ * @returns {import('./types').ISplittingPlugin}
+ */
+function createPlugin(by, depends, key, split) {
+    return {
+        by: by,
+        depends: depends,
+        key: key,
+        split: split
+    }
+}
+
+/**
  *
  * @param by {string}
  * @returns {import('./types').ISplittingPlugin[]}
@@ -153,9 +171,6 @@ function add(opts) {
     plugins[opts.by] = opts;
 }
 
-var PRESERVE_SPACE = 1;
-var INCLUDE_PREVIOUS = 2; 
-
 /**
  * # Splitting.split
  * Split an element's textContent into individual elements
@@ -165,7 +180,7 @@ var INCLUDE_PREVIOUS = 2;
  * @param includeSpace {boolean}
  * @returns {HTMLElement[]}
  */
-function split(el, key, splitOn, mode) {
+function split(el, key, splitOn, includePrevious, preserveWhitespace) {
     // Combine any strange text nodes or empty whitespace.
     el.normalize();
 
@@ -173,7 +188,7 @@ function split(el, key, splitOn, mode) {
     var elements = [];
     var F = document.createDocumentFragment();
     
-    if (mode === INCLUDE_PREVIOUS) {
+    if (includePrevious) {
         elements.push(el.previousSibling);
     }
 
@@ -181,7 +196,7 @@ function split(el, key, splitOn, mode) {
         // Recursively run through child nodes
         if (next && next.childNodes && next.childNodes.length) {
             appendChild(F, next);
-            elements.push.apply(elements, split(next, key, splitOn, mode));
+            elements.push.apply(elements, split(next, key, splitOn, includePrevious, preserveWhitespace));
             return;
         }
 
@@ -197,7 +212,7 @@ function split(el, key, splitOn, mode) {
 
         // Concatenate the split text children back into the full array
         each(text.split(splitOn), function(splitText, i) {
-            if (i && mode === PRESERVE_SPACE) {
+            if (i && preserveWhitespace) {
                 createElement(F, key, ' ');
             }
             elements.push(createElement(F, key, splitText)); 
@@ -210,36 +225,39 @@ function split(el, key, splitOn, mode) {
     return elements;
 }
 
+/** an empty value */
+var _ = 0;
+
 var WORDS = 'words';
 
-/** @type {import('../types').ISplittingPlugin} */
-var wordPlugin = {
-    by: WORDS,
-    key: 'word',
-    split: function(el, options) {
-        return split(el, 'word', /\s+/, PRESERVE_SPACE)
+var wordPlugin = createPlugin(
+    /*by: */ WORDS,
+    /*depends: */ _,
+    /*key: */ 'word', 
+    /*split: */ function(el) {
+        return split(el, 'word', /\s+/, 0, 1)
     }
-};
+);
 
 var CHARS = "chars";
 
-/** @type {import('../types').ISplittingPlugin} */
-var charPlugin = {
-    by: CHARS,
-    key: "char",
-    depends: [WORDS],
-    split: function(el, options, ctx) {
+var charPlugin = createPlugin(
+    /*by: */ CHARS,
+    /*depends: */ [WORDS],
+    /*key: */ "char", 
+    /*split: */ function(el, options, ctx) {
         var results = [];
 
         each(ctx[WORDS], function(word, i) {
-            results.push.apply(results, split(word, "char", "", options.whitespace && i ? INCLUDE_PREVIOUS : 0));
+            results.push.apply(results, split(word, "char", "", options.whitespace && i));
         });
 
         return results;
     }
-};
+);
 
-function detectGrid(items, side) {
+function detectGrid(el, options, side) {
+    var items = $(options.matching || el.children, el);
     var c = {};
 
     each(items, function(w) {
@@ -250,113 +268,112 @@ function detectGrid(items, side) {
     return Object.keys(c).map(Number).sort().map(selectFrom(c));
 }
 
-/** @type {import('../types').ISplittingPlugin} */
-var linePlugin = {
-  by: 'lines',
-  key: 'line',
-  alias: 1,
-  depends: [WORDS],
-  split: function(el, _options, ctx) {
-      return detectGrid(ctx[WORDS], 'offsetTop')
-  }
-};
+var linePlugin = createPlugin(
+    /*by: */ 'lines',
+    /*depends: */ [WORDS],
+    /*key: */ 'line', 
+    /*split: */ function(el, options, ctx) {
+      return detectGrid(ctx[WORDS], options, 'offsetTop')
+    }
+);
 
-/** @type {import('../types').ISplittingPlugin} */
-var itemPlugin = {
-    by: 'items',
-    key: 'item',
-    split: function(el, options) {
+var itemPlugin = createPlugin(
+    /*by: */ 'items',
+    /*depends: */ _,
+    /*key: */ 'item', 
+    /*split: */ function(el, options) {
         return $(options.matching || el.children, el)
     }
-};
+);
 
-/** @type {import('../types').ISplittingPlugin} */
-var rowPlugin = {
-    by: "rows",
-    key: "row",
-    split: function(el, options, ctx) {
-        return detectGrid($(options.matching || el.children, el), "offsetTop");
+var rowPlugin = createPlugin(
+    /*by: */ 'rows',
+    /*depends: */ _,
+    /*key: */ 'row', 
+    /*split: */ function(el, options) {
+        return detectGrid(el, options, "offsetTop");
     }
-};
+);
 
-/** @type {import('../types').ISplittingPlugin} */
-var columnPlugin = {
-    by: "cols",
-    key: "col", 
-    split: function(el, options, ctx) {
-        return detectGrid($(options.matching || el.children, el), "offsetLeft");
+var columnPlugin = createPlugin(
+    /*by: */ 'cols',
+    /*depends: */ _,
+    /*key: */ "col", 
+    /*split: */ function(el, options) {
+        return detectGrid(el, options, "offsetLeft");
     }
-};
+);
 
-/** @type {import('../types').ISplittingPlugin} */
-var gridPlugin = {
-    by: "grid",
-    depends: ["rows", "cols"]
-};
+var gridPlugin = createPlugin(
+    /*by: */ 'grid',
+    /*depends: */ ['rows', 'cols']
+);
 
-var LAYOUT = 'layout';
+var LAYOUT = "layout";
 
-/** @type {import('../types').ISplittingPlugin} */
-var layoutPlugin = {
-    by: LAYOUT,
-    split: function(el, opts) { 
+var ROWS = 'rows';
+var COLS = 'columns';
+
+var layoutPlugin = createPlugin(
+    /*by: */ LAYOUT,
+    /*depends: */ _,
+    /*key: */ _,
+    /*split: */ function(el, opts) {
         // detect and set options
-        opts.image = opts.image || (el.dataset.image) || el.currentSrc || el.src;
-        var rows = opts.rows = +(opts.rows || el.dataset.rows || 1);
-        var columns = opts.columns = +(opts.columns || el.dataset.columns || 1);
- 
-        // Seek out the first <img> if the value is true
+        var rows =  opts[ROWS] = +(opts[ROWS] || el.dataset[ROWS] || 1);
+        var columns = opts[COLS] = +(opts[COLS] || el.dataset[COLS] || 1);
+
+        // Seek out the first <img> if the value is true 
+        opts.image = opts.image || el.dataset.image || el.currentSrc || el.src;
         if (opts.image) {
-            var img = $('img', el)[0];
+            var img = $("img", el)[0];
             opts.image = img && (img.currentSrc || img.src);
         }
-        
+
         // add optional image to background
         if (opts.image) {
-            setProperty(el, 'background-image', 'url(' + opts.image + ')');
+            setProperty(el, "background-image", "url(" + opts.image + ")");
         }
 
         var totalCells = rows * columns;
         var elements = [];
-        
-        var container = createElement(0, 'cell-grid');
-        while(totalCells--) {
+
+        var container = createElement(_, "cell-grid");
+        while (totalCells--) {
             // Create a span
-            var cell = createElement(container, 'cell');
-            createElement(cell, 'cell-inner');
+            var cell = createElement(container, "cell");
+            createElement(cell, "cell-inner");
             elements.push(cell);
         }
 
         // Append elements back into the parent
-        appendChild(el, container); 
+        appendChild(el, container);
 
         return elements;
     }
-};
+);
 
-/** @type {import('../types').ISplittingPlugin} */
-var cellColumnPlugin = {
-    by: "cellColumns",
-    key: 'col',
-    depends: [LAYOUT],
-    split: function(el, opts, ctx) {
-        var columnCount = opts.columns; 
+var cellColumnPlugin = createPlugin(
+    /*by: */ "cellColumns",
+    /*depends: */ [LAYOUT],
+    /*key: */ "col",
+    /*split: */ function(el, opts, ctx) {
+        var columnCount = opts.columns;
         var result = Array2D(columnCount);
 
         each(ctx[LAYOUT], function(cell, i) {
             result[i % columnCount].push(cell);
         });
-        
+
         return result;
     }
-};
+);
 
-/** @type {import('../types').ISplittingPlugin} */
-var cellRowPlugin = {
-    by: "cellRows",
-    key: "row",
-    depends: [LAYOUT],
-    split: function(el, opts, ctx) {
+var cellRowPlugin = createPlugin(
+    /*by: */ "cellRows",
+    /*depends: */ [LAYOUT],
+    /*key: */ "row",
+    /*split: */ function(el, opts, ctx) {
         var rowCount = opts.rows;
         var result = Array2D(rowCount);
 
@@ -366,18 +383,17 @@ var cellRowPlugin = {
 
         return result;
     }
-};
+);
 
-/** @type {import('../types').ISplittingPlugin} */
-var cellPlugin = {
-    by: "cells",
-    key: "cell",
-    depends: ['cellRows', 'cellColumns'],
-    split: function(el, opt, ctx) { 
+var cellPlugin = createPlugin(
+    /*by: */ "cells",
+    /*depends: */ _,
+    /*key: */ "cell", 
+    /*split: */ function(el, opt, ctx) { 
         // re-index the layout as the cells
-        return ctx.layout;
+        return ctx[LAYOUT];
     }
-};
+);
 
 /** @typedef {import('./splitting.d.ts')} */
 
@@ -396,11 +412,12 @@ function Splitting (opts) {
 
     each(items, function(plugin) {
       if (plugin.split) {
-        var key2 = (plugin.key || '') + (key ? '-' + key : '');
+        var pluginBy = plugin.by;
+        var key2 = pluginBy + (key ? '-' + key : '');
         var results = plugin.split(el, opts, ctx);
         key2 && index(el, key2, results);
-        ctx[plugin.by] = results;
-        el.classList.add(plugin.by);
+        ctx[pluginBy] = results;
+        el.classList.add(pluginBy);
       } 
     });
 

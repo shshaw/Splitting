@@ -1,11 +1,14 @@
 import { detectGrid } from "../utils/detect-grid";
 import { $ } from "../utils/dom";
+import { _ } from '../utils/objects';
+import { createPlugin } from '../plugins';
 
-/** @type {import('../types').ISplittingPlugin} */
-export var columnPlugin = {
-    by: "cols",
-    key: "col", 
-    split: function(el, options, ctx) {
-        return detectGrid($(options.matching || el.children, el), "offsetLeft");
+export var columnPlugin = createPlugin(
+    /*by: */ 'cols',
+    /*depends: */ _,
+    /*key: */ "col", 
+    /*split: */ function(el, options) {
+        return detectGrid(el, options, "offsetLeft");
     }
-};
+);
+

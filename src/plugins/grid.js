@@ -1,8 +1,7 @@
-import { detectGrid } from "../utils/detect-grid";
-import { $ } from "../utils/dom";
+import { createPlugin } from '../plugins';
+import { _ } from '../utils/objects';
 
-/** @type {import('../types').ISplittingPlugin} */
-export var gridPlugin = {
-    by: "grid",
-    depends: ["rows", "cols"]
-};
+export var gridPlugin = createPlugin(
+    /*by: */ 'grid',
+    /*depends: */ ['rows', 'cols']
+);

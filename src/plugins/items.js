@@ -1,10 +1,12 @@
 import { $ } from '../utils/dom'; 
+import { createPlugin } from '../plugins';
+import { _ } from '../utils/objects';
 
-/** @type {import('../types').ISplittingPlugin} */
-export var itemPlugin = {
-    by: 'items',
-    key: 'item',
-    split: function(el, options) {
+export var itemPlugin = createPlugin(
+    /*by: */ 'items',
+    /*depends: */ _,
+    /*key: */ 'item', 
+    /*split: */ function(el, options) {
         return $(options.matching || el.children, el)
     }
-}
+);
