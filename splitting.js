@@ -311,17 +311,14 @@ var gridPlugin = createPlugin(
 
 var LAYOUT = "layout";
 
-var ROWS = 'rows';
-var COLS = 'columns';
-
 var layoutPlugin = createPlugin(
     /*by: */ LAYOUT,
     /*depends: */ _,
     /*key: */ _,
     /*split: */ function(el, opts) {
         // detect and set options
-        var rows =  opts[ROWS] = +(opts[ROWS] || el.dataset[ROWS] || 1);
-        var columns = opts[COLS] = +(opts[COLS] || el.dataset[COLS] || 1);
+        var rows =  opts.rows = +(opts.rows || el.dataset.rows || 1);
+        var columns = opts.columns = +(opts.columns || el.dataset.columns || 1);
 
         // Seek out the first <img> if the value is true 
         opts.image = opts.image || el.dataset.image || el.currentSrc || el.src;
