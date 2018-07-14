@@ -1,4 +1,5 @@
 import { appendChild, createElement } from "./dom";
+import { each } from "./arrays";
 
 export var PRESERVE_SPACE = 1;
 export var INCLUDE_PREVIOUS = 2; 
@@ -13,10 +14,6 @@ export var INCLUDE_PREVIOUS = 2;
  * @returns {HTMLElement[]}
  */
 export function split(el, key, splitOn, mode) {
-    if (splitOn === '') {
-        debugger
-    }
-
     // Combine any strange text nodes or empty whitespace.
     el.normalize();
 
@@ -47,7 +44,7 @@ export function split(el, key, splitOn, mode) {
         }
 
         // Concatenate the split text children back into the full array
-        text.split(splitOn).some(function(splitText, i) {
+        each(text.split(splitOn), function(splitText, i) {
             if (i && mode === PRESERVE_SPACE) {
                 createElement(F, key, ' ');
             }

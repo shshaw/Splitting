@@ -1,13 +1,15 @@
-import { $, createElement } from '../utils/dom';
+import { $, createElement, appendChild, setProperty } from '../utils/dom'; 
+
+export var LAYOUT = 'layout';
 
 /** @type {import('../types').ISplittingPlugin} */
 export var layoutPlugin = {
-    by: "layout",
+    by: LAYOUT,
     split: function(el, opts) { 
         // detect and set options
-        opts.image = opts.image || (el.dataset && el.dataset.image) || el.currentSrc || el.src;
-        opts.rows = +(opts.rows || (el.dataset && el.dataset.rows) || 1);
-        opts.columns = +(opts.columns || (el.dataset && el.dataset.columns) || 1);
+        opts.image = opts.image || (el.dataset.image) || el.currentSrc || el.src;
+        var rows = opts.rows = +(opts.rows || el.dataset.rows || 1);
+        var columns = opts.columns = +(opts.columns || el.dataset.columns || 1);
  
         // Seek out the first <img> if the value is true
         if (opts.image) {
@@ -17,14 +19,14 @@ export var layoutPlugin = {
         
         // add optional image to background
         if (opts.image) {
-            el.style.setProperty("background-image", "url(" + opts.image + ")");
+            setProperty(el, 'background-image', 'url(' + opts.image + ')');
         }
 
-        var totalCells = opts.rows * opts.columns;
+        var totalCells = rows * columns;
         var elements = [];
         
         var container = createElement(0, 'cell-grid');
-        for (var i = 0; i < totalCells; i++) {
+        while(totalCells--) {
             // Create a span
             var cell = createElement(container, 'cell');
             createElement(cell, 'cell-inner')
@@ -32,7 +34,7 @@ export var layoutPlugin = {
         }
 
         // Append elements back into the parent
-        el.appendChild(container);
+        appendChild(el, container); 
 
         return elements;
     }

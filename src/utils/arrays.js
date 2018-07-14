@@ -1,18 +1,24 @@
 /**
  * Creates and fills an array with the value provided
  * @template {T}
- * @param {number} count
+ * @param {number} len
  * @param {() => T} valueProvider
  * @return {T}
  */
-export function fill(count, valueProvider) {
+export function Array2D(len) {
     var a = [];
-    for (; count--; ) {
-        a[count] = valueProvider();
+    for (; len--; ) {
+        a[len] = []
     }
     return a;
 }
 
-export function arrayProvider() {
-    return [];
+export function each(items, fn) {
+    items && items.some(fn);
+}
+
+export function selectFrom(obj) {
+    return function (key) {
+        return obj[key];
+    }
 }

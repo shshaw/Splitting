@@ -6,7 +6,7 @@ test('an empty element', function () {
   var results = Splitting({ target: el, by: 'grid' });
 
   expect(results.length).toBe(1)
-  expect(results[0].columns.length).toBe(0); 
+  expect(results[0].cols.length).toBe(0); 
   expect(results[0].rows.length).toBe(0); 
 });
 
@@ -18,7 +18,7 @@ test('an element with one element', function () {
   var results = Splitting({ target: el, by: 'grid' });
 
   expect(results.length).toBe(1)
-  expect(results[0].columns.length).toBe(1); 
+  expect(results[0].cols.length).toBe(1); 
   expect(results[0].rows.length).toBe(1); 
 });
 
@@ -35,7 +35,7 @@ test('an element with multiple elements', function () {
 
   expect(results.length).toBe(1)
   expect(results[0].rows.length).toBe(2); 
-  expect(results[0].columns.length).toBe(1); 
+  expect(results[0].cols.length).toBe(1); 
 });
 
 test('an element with nested elements', function () {
@@ -54,7 +54,7 @@ test('an element with nested elements', function () {
 
   expect(results.length).toBe(1)
   expect(results[0].rows.length).toBe(2); 
-  expect(results[0].columns.length).toBe(1); 
+  expect(results[0].cols.length).toBe(1); 
 
   document.body.removeChild(el);
 });

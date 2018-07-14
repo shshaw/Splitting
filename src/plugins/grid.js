@@ -4,5 +4,5 @@ import { $ } from "../utils/dom";
 /** @type {import('../types').ISplittingPlugin} */
 export var gridPlugin = {
     by: "grid",
-    depends: ["rows", "columns"]
+    depends: ["rows", "cols"]
 };

@@ -8,8 +8,8 @@ export var root = document;
  * @param value {string|number}  
  */
 export function setProperty(el, varName, value) {
-    el.style.setProperty("--" + varName, value);
-}
+    el.style.setProperty(varName, value);
+} 
 
 /**
  * 
@@ -17,8 +17,7 @@ export function setProperty(el, varName, value) {
  * @param {Node} child 
  */
 export function appendChild(el, child) {
-  el.appendChild(child);
-  return child;
+  return el.appendChild(child);
 }
 
 export function createElement(parent, key, text) {
@@ -28,8 +27,7 @@ export function createElement(parent, key, text) {
       el.setAttribute("data-" + key, text);
       el.textContent = text; 
   }
-  parent && parent.appendChild(el);
-  return el;
+  return (parent && appendChild(parent, el)) || el;
 }
 
 /**

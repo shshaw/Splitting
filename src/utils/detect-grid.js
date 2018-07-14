@@ -1,14 +1,12 @@
-export function detectGrid(items, side, threshold) {
-    threshold = threshold || 1;
+import { selectFrom, each } from "./arrays";
+
+export function detectGrid(items, side) {
     var c = {};
-    items.some(function(w) {
-        var val = Math.round(w[side] * threshold) / threshold;
-        var list = c[val] || (c[val] = []);
-        list.push(w);
+
+    each(items, function(w) {
+        var val = Math.round(w[side]);
+        c[val] || (c[val] = []).push(w);
     });
 
-    return Object.keys(c)
-        .map(Number)
-        .sort()
-        .map(function(key) { return c[key]; });
+    return Object.keys(c).map(Number).sort().map(selectFrom(c));
 }

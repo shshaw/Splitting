@@ -1,19 +1,21 @@
 /** @typedef {import('./splitting.d.ts')} */
 
-import { $ } from './utils/dom' 
-import { index } from './utils/index'
+import { $, createElement } from './utils/dom' 
+import { index } from './utils/css-vars'
+import { each } from './utils/arrays'
+
 import { add, resolve } from './plugins';
 import { wordPlugin } from './plugins/words'; 
-import { charPlugin } from './plugins/chars';
+import { CHARS, charPlugin } from './plugins/chars';
 import { linePlugin } from './plugins/lines';
 import { itemPlugin } from './plugins/items';
 import { rowPlugin } from './plugins/rows';
 import { columnPlugin } from './plugins/columns';
 import { gridPlugin } from './plugins/grid';
-import { layoutPlugin } from './plugins/layoutPlugin';
-import { cellColumnPlugin } from './plugins/cellColumnPlugin'
-import { cellRowPlugin } from './plugins/cellRowPlugin' 
-import { cellPlugin } from './plugins/cellPlugin';
+import { layoutPlugin } from './plugins/layout';
+import { cellColumnPlugin } from './plugins/cellColumns'
+import { cellRowPlugin } from './plugins/cellRows' 
+import { cellPlugin } from './plugins/cells';
 
 /**
  * # Splitting
@@ -22,18 +24,22 @@ import { cellPlugin } from './plugins/cellPlugin';
  */
 function Splitting (opts) {
   opts = opts || {};
+  var key = opts.key;
 
   return $(opts.target || '[data-splitting]').map(function(el) {
     var ctx = { el: el };
-    resolve(opts.by || el.dataset.splitting || 'chars').some(function(plugin) {
+    var items = resolve(opts.by || el.dataset.splitting || CHARS);
+
+    each(items, function(plugin) {
       if (plugin.split) {
-        var results = plugin.split(el, opts, ctx); 
-        var key = (plugin.key || '') + (opts.key ? '-' + opts.key : '')
-        key && index(el, key, results);
+        var key2 = (plugin.key || '') + (key ? '-' + key : '');
+        var results = plugin.split(el, opts, ctx);
+        key2 && index(el, key2, results);
         ctx[plugin.by] = results;
         el.classList.add(plugin.by);
       } 
     });
+
     el.classList.add('splitting');
     return ctx;
   })
@@ -46,9 +52,8 @@ function Splitting (opts) {
  */
 function html(opts) {
   opts = opts || {}
-  var el = document.createElement('span')
+  var el = opts.target = createElement();
   el.innerHTML = opts.content;
-  opts.target = el
   Splitting(opts)
   return el.outerHTML
 }

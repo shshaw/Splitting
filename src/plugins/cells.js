@@ -1,3 +1,4 @@
+/** @type {import('../types').ISplittingPlugin} */
 export var cellPlugin = {
     by: "cells",
     key: "cell",

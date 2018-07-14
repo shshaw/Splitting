@@ -15,8 +15,8 @@ var root = document;
  * @param value {string|number}  
  */
 function setProperty(el, varName, value) {
-    el.style.setProperty("--" + varName, value);
-}
+    el.style.setProperty(varName, value);
+} 
 
 /**
  * 
@@ -24,8 +24,7 @@ function setProperty(el, varName, value) {
  * @param {Node} child 
  */
 function appendChild(el, child) {
-  el.appendChild(child);
-  return child;
+  return el.appendChild(child);
 }
 
 function createElement(parent, key, text) {
@@ -35,8 +34,7 @@ function createElement(parent, key, text) {
       el.setAttribute("data-" + key, text);
       el.textContent = text; 
   }
-  parent && parent.appendChild(el);
-  return el;
+  return (parent && appendChild(parent, el)) || el;
 }
 
 /**
@@ -57,6 +55,31 @@ function $(e, parent) {
 }
 
 /**
+ * Creates and fills an array with the value provided
+ * @template {T}
+ * @param {number} len
+ * @param {() => T} valueProvider
+ * @return {T}
+ */
+function Array2D(len) {
+    var a = [];
+    for (; len--; ) {
+        a[len] = [];
+    }
+    return a;
+}
+
+function each(items, fn) {
+    items && items.some(fn);
+}
+
+function selectFrom(obj) {
+    return function (key) {
+        return obj[key];
+    }
+}
+
+/**
  * # Splitting.index
  * Index split elements and add them to a Splitting instance.
  *
@@ -64,24 +87,21 @@ function $(e, parent) {
  * @param key {string}
  * @param items {HTMLElement[] | HTMLElement[][]}
  */
-function index(element, key, items) { 
-    items.some(function(items, i) {
-        eachDeep(items, function(item) {
-            setProperty(item, key + "-index", i);
-        });
+function index(element, key, items) {
+    var prefix = '--' + key;
+    var cssVar = prefix + "-index";
+
+    each(items, function (items, i) {
+        if (Array.isArray(items)) {
+            each(items, function(item) {
+                setProperty(item, cssVar, i);
+            });
+        } else {
+            setProperty(items, cssVar, i);
+        }
     });
 
-    setProperty(element, key + "-total", items.length);
-}
-
-function eachDeep(items, fn) {
-    if (Array.isArray(items)) {
-        items.some(function(item) {
-            eachDeep(item, fn);
-        });
-    } else {
-        fn(items);
-    }
+    setProperty(element, prefix + "-total", items.length);
 }
 
 /**
@@ -93,45 +113,41 @@ var plugins = {};
  * @param by {string}
  * @param parent {string}
  * @param deps {string[]}
+ * @return {string[]}
  */
 function resolvePlugins(by, parent, deps) {
     // skip if already visited this dependency
     var index = deps.indexOf(by);
-    if (index == -1) { 
-       // if new to dependency array, add to the beginning
-       deps.unshift(by);
-       
-       // lookup the plugin dependencies
-       var plugin = plugins[by];
-       
-       // recursively call this function for all dependencies
-       (plugin.depends || []).some(function(p) {
-          resolvePlugins(p, by, deps);
-       });
-    } else {
-       // if this dependency was added already move to the left of
-       // the parent dependency so it gets loaded in order
-       var indexOfParent = deps.indexOf(parent);
-       deps.splice(index, 1);
-       deps.splice(indexOfParent, 0, by);
-    }
-    return deps
- }
+    if (index == -1) {
+        // if new to dependency array, add to the beginning
+        deps.unshift(by);
 
- /**
-  * 
-  * @param by {string} 
-  * @returns {import('./types').ISplittingPlugin[]}
-  */
- function resolve(by) {
-    return resolvePlugins(by, 0, []).map(function(pluginName) {
-        return plugins[pluginName];
-    });
- }
+        // recursively call this function for all dependencies
+        each(plugins[by].depends, function(p) {
+            resolvePlugins(p, by, deps);
+        });
+    } else {
+        // if this dependency was added already move to the left of
+        // the parent dependency so it gets loaded in order
+        var indexOfParent = deps.indexOf(parent);
+        deps.splice(index, 1);
+        deps.splice(indexOfParent, 0, by);
+    }
+    return deps;
+}
+
+/**
+ *
+ * @param by {string}
+ * @returns {import('./types').ISplittingPlugin[]}
+ */
+function resolve(by) {
+    return resolvePlugins(by, 0, []).map(selectFrom(plugins));
+}
 
 /**
  * Adds a new plugin to splitting
- * @param opts {import('./types').ISplittingPlugin} 
+ * @param opts {import('./types').ISplittingPlugin}
  */
 function add(opts) {
     plugins[opts.by] = opts;
@@ -150,10 +166,6 @@ var INCLUDE_PREVIOUS = 2;
  * @returns {HTMLElement[]}
  */
 function split(el, key, splitOn, mode) {
-    if (splitOn === '') {
-        debugger
-    }
-
     // Combine any strange text nodes or empty whitespace.
     el.normalize();
 
@@ -184,7 +196,7 @@ function split(el, key, splitOn, mode) {
         }
 
         // Concatenate the split text children back into the full array
-        text.split(splitOn).some(function(splitText, i) {
+        each(text.split(splitOn), function(splitText, i) {
             if (i && mode === PRESERVE_SPACE) {
                 createElement(F, key, ' ');
             }
@@ -198,41 +210,44 @@ function split(el, key, splitOn, mode) {
     return elements;
 }
 
+var WORDS = 'words';
+
 /** @type {import('../types').ISplittingPlugin} */
 var wordPlugin = {
-    by: 'words',
+    by: WORDS,
     key: 'word',
     split: function(el, options) {
         return split(el, 'word', /\s+/, PRESERVE_SPACE)
     }
 };
 
+var CHARS = "chars";
+
 /** @type {import('../types').ISplittingPlugin} */
 var charPlugin = {
-    by: "chars",
+    by: CHARS,
     key: "char",
-    depends: ["words"],
+    depends: [WORDS],
     split: function(el, options, ctx) {
-        return ctx.words.reduce(function(val, word, i) { 
-            val.push.apply(val, split(word, "char", "", options.whitespace && i ? INCLUDE_PREVIOUS : 0));
-            return val;
-        }, []);
+        var results = [];
+
+        each(ctx[WORDS], function(word, i) {
+            results.push.apply(results, split(word, "char", "", options.whitespace && i ? INCLUDE_PREVIOUS : 0));
+        });
+
+        return results;
     }
 };
 
-function detectGrid(items, side, threshold) {
-    threshold = threshold || 1;
+function detectGrid(items, side) {
     var c = {};
-    items.some(function(w) {
-        var val = Math.round(w[side] * threshold) / threshold;
-        var list = c[val] || (c[val] = []);
-        list.push(w);
+
+    each(items, function(w) {
+        var val = Math.round(w[side]);
+        c[val] || (c[val] = []).push(w);
     });
 
-    return Object.keys(c)
-        .map(Number)
-        .sort()
-        .map(function(key) { return c[key]; });
+    return Object.keys(c).map(Number).sort().map(selectFrom(c));
 }
 
 /** @type {import('../types').ISplittingPlugin} */
@@ -240,9 +255,9 @@ var linePlugin = {
   by: 'lines',
   key: 'line',
   alias: 1,
-  depends: ['words'],
+  depends: [WORDS],
   split: function(el, _options, ctx) {
-      return detectGrid(ctx.words, 'offsetTop')
+      return detectGrid(ctx[WORDS], 'offsetTop')
   }
 };
 
@@ -266,8 +281,8 @@ var rowPlugin = {
 
 /** @type {import('../types').ISplittingPlugin} */
 var columnPlugin = {
-    by: "columns",
-    key: "column", 
+    by: "cols",
+    key: "col", 
     split: function(el, options, ctx) {
         return detectGrid($(options.matching || el.children, el), "offsetLeft");
     }
@@ -276,17 +291,19 @@ var columnPlugin = {
 /** @type {import('../types').ISplittingPlugin} */
 var gridPlugin = {
     by: "grid",
-    depends: ["rows", "columns"]
+    depends: ["rows", "cols"]
 };
+
+var LAYOUT = 'layout';
 
 /** @type {import('../types').ISplittingPlugin} */
 var layoutPlugin = {
-    by: "layout",
+    by: LAYOUT,
     split: function(el, opts) { 
         // detect and set options
-        opts.image = opts.image || (el.dataset && el.dataset.image) || el.currentSrc || el.src;
-        opts.rows = +(opts.rows || (el.dataset && el.dataset.rows) || 1);
-        opts.columns = +(opts.columns || (el.dataset && el.dataset.columns) || 1);
+        opts.image = opts.image || (el.dataset.image) || el.currentSrc || el.src;
+        var rows = opts.rows = +(opts.rows || el.dataset.rows || 1);
+        var columns = opts.columns = +(opts.columns || el.dataset.columns || 1);
  
         // Seek out the first <img> if the value is true
         if (opts.image) {
@@ -296,14 +313,14 @@ var layoutPlugin = {
         
         // add optional image to background
         if (opts.image) {
-            el.style.setProperty("background-image", "url(" + opts.image + ")");
+            setProperty(el, 'background-image', 'url(' + opts.image + ')');
         }
 
-        var totalCells = opts.rows * opts.columns;
+        var totalCells = rows * columns;
         var elements = [];
         
         var container = createElement(0, 'cell-grid');
-        for (var i = 0; i < totalCells; i++) {
+        while(totalCells--) {
             // Create a span
             var cell = createElement(container, 'cell');
             createElement(cell, 'cell-inner');
@@ -311,42 +328,25 @@ var layoutPlugin = {
         }
 
         // Append elements back into the parent
-        el.appendChild(container);
+        appendChild(el, container); 
 
         return elements;
     }
 };
 
-/**
- * Creates and fills an array with the value provided
- * @template {T}
- * @param {number} count
- * @param {() => T} valueProvider
- * @return {T}
- */
-function fill(count, valueProvider) {
-    var a = [];
-    for (; count--; ) {
-        a[count] = valueProvider();
-    }
-    return a;
-}
-
-function arrayProvider() {
-    return [];
-}
-
 /** @type {import('../types').ISplittingPlugin} */
 var cellColumnPlugin = {
     by: "cellColumns",
     key: 'col',
-    depends: ['layout'],
+    depends: [LAYOUT],
     split: function(el, opts, ctx) {
         var columnCount = opts.columns; 
-        var result = fill(columnCount, arrayProvider);
-        ctx.layout.some(function(cell, i) {
+        var result = Array2D(columnCount);
+
+        each(ctx[LAYOUT], function(cell, i) {
             result[i % columnCount].push(cell);
         });
+        
         return result;
     }
 };
@@ -354,18 +354,21 @@ var cellColumnPlugin = {
 /** @type {import('../types').ISplittingPlugin} */
 var cellRowPlugin = {
     by: "cellRows",
-    key: 'row',
-    depends: ['layout'],
+    key: "row",
+    depends: [LAYOUT],
     split: function(el, opts, ctx) {
-        var rowCount = opts.rows; 
-        var result = fill(rowCount, arrayProvider);
-        ctx.layout.some(function(cell, i, src) {
+        var rowCount = opts.rows;
+        var result = Array2D(rowCount);
+
+        each(ctx[LAYOUT], function(cell, i, src) {
             result[Math.floor(i / (src.length / rowCount))].push(cell);
         });
+
         return result;
     }
 };
 
+/** @type {import('../types').ISplittingPlugin} */
 var cellPlugin = {
     by: "cells",
     key: "cell",
@@ -385,18 +388,22 @@ var cellPlugin = {
  */
 function Splitting (opts) {
   opts = opts || {};
+  var key = opts.key;
 
   return $(opts.target || '[data-splitting]').map(function(el) {
     var ctx = { el: el };
-    resolve(opts.by || el.dataset.splitting || 'chars').some(function(plugin) {
+    var items = resolve(opts.by || el.dataset.splitting || CHARS);
+
+    each(items, function(plugin) {
       if (plugin.split) {
-        var results = plugin.split(el, opts, ctx); 
-        var key = (plugin.key || '') + (opts.key ? '-' + opts.key : '');
-        key && index(el, key, results);
+        var key2 = (plugin.key || '') + (key ? '-' + key : '');
+        var results = plugin.split(el, opts, ctx);
+        key2 && index(el, key2, results);
         ctx[plugin.by] = results;
         el.classList.add(plugin.by);
       } 
     });
+
     el.classList.add('splitting');
     return ctx;
   })
@@ -409,9 +416,8 @@ function Splitting (opts) {
  */
 function html(opts) {
   opts = opts || {};
-  var el = document.createElement('span');
+  var el = opts.target = createElement();
   el.innerHTML = opts.content;
-  opts.target = el;
   Splitting(opts);
   return el.outerHTML
 }
