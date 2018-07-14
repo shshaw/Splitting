@@ -25,6 +25,11 @@ export interface SplittingInstance {
     words?: SplittingInstance[];
     lines?: SplittingInstance[];
     items?: SplittingInstance[];
+    cols?: SplittingInstance[][];
+    rows?: SplittingInstance[][];
+    cells?: SplittingInstance[][];
+    cellColumns?: SplittingInstance[][];
+    cellRows?: SplittingInstance[][];
 } 
 
 export interface ISplittingOptions {

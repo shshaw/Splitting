@@ -1,6 +1,6 @@
+import { createPlugin } from '../core/plugin-manager';
 import { Array2D, each } from "../utils/arrays";
 import { LAYOUT } from './layout';
-import { createPlugin } from '../plugins';
 
 export var cellRowPlugin = createPlugin(
     /*by: */ "cellRows",

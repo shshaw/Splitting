@@ -1,5 +1,5 @@
+import { createPlugin } from '../core/plugin-manager';
 import { $ } from '../utils/dom'; 
-import { createPlugin } from '../plugins';
 import { _ } from '../utils/objects';
 
 export var itemPlugin = createPlugin(

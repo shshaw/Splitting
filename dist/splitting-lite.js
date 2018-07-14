@@ -1,4 +1,3 @@
-/*! Splitting, ${npm_package_version} https://github.com/shshaw/splitting/ @license MIT */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
@@ -61,13 +60,7 @@ function $(e, parent) {
  * @param {() => T} valueProvider
  * @return {T}
  */
-function Array2D(len) {
-    var a = [];
-    for (; len--; ) {
-        a[len] = [];
-    }
-    return a;
-}
+
 
 function each(items, fn) {
     items && items.some(fn);
@@ -180,7 +173,7 @@ function add(opts) {
  * @param includeSpace {boolean}
  * @returns {HTMLElement[]}
  */
-function split(el, key, splitOn, includePrevious, preserveWhitespace) {
+function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
     // Combine any strange text nodes or empty whitespace.
     el.normalize();
 
@@ -196,7 +189,7 @@ function split(el, key, splitOn, includePrevious, preserveWhitespace) {
         // Recursively run through child nodes
         if (next && next.childNodes && next.childNodes.length) {
             appendChild(F, next);
-            elements.push.apply(elements, split(next, key, splitOn, includePrevious, preserveWhitespace));
+            elements.push.apply(elements, splitText(next, key, splitOn, includePrevious, preserveWhitespace));
             return;
         }
 
@@ -235,7 +228,7 @@ var wordPlugin = createPlugin(
     /*depends: */ _,
     /*key: */ 'word', 
     /*split: */ function(el) {
-        return split(el, 'word', /\s+/, 0, 1)
+        return splitText(el, 'word', /\s+/, 0, 1)
     }
 );
 
@@ -249,150 +242,12 @@ var charPlugin = createPlugin(
         var results = [];
 
         each(ctx[WORDS], function(word, i) {
-            results.push.apply(results, split(word, "char", "", options.whitespace && i));
+            results.push.apply(results, splitText(word, "char", "", options.whitespace && i));
         });
 
         return results;
     }
 );
-
-function detectGrid(el, options, side) {
-    var items = $(options.matching || el.children, el);
-    var c = {};
-
-    each(items, function(w) {
-        var val = Math.round(w[side]);
-        c[val] || (c[val] = []).push(w);
-    });
-
-    return Object.keys(c).map(Number).sort().map(selectFrom(c));
-}
-
-var linePlugin = createPlugin(
-    /*by: */ 'lines',
-    /*depends: */ [WORDS],
-    /*key: */ 'line', 
-    /*split: */ function(el, options, ctx) {
-      return detectGrid(ctx[WORDS], options, 'offsetTop')
-    }
-);
-
-var itemPlugin = createPlugin(
-    /*by: */ 'items',
-    /*depends: */ _,
-    /*key: */ 'item', 
-    /*split: */ function(el, options) {
-        return $(options.matching || el.children, el)
-    }
-);
-
-var rowPlugin = createPlugin(
-    /*by: */ 'rows',
-    /*depends: */ _,
-    /*key: */ 'row', 
-    /*split: */ function(el, options) {
-        return detectGrid(el, options, "offsetTop");
-    }
-);
-
-var columnPlugin = createPlugin(
-    /*by: */ 'cols',
-    /*depends: */ _,
-    /*key: */ "col", 
-    /*split: */ function(el, options) {
-        return detectGrid(el, options, "offsetLeft");
-    }
-);
-
-var gridPlugin = createPlugin(
-    /*by: */ 'grid',
-    /*depends: */ ['rows', 'cols']
-);
-
-var LAYOUT = "layout";
-
-var layoutPlugin = createPlugin(
-    /*by: */ LAYOUT,
-    /*depends: */ _,
-    /*key: */ _,
-    /*split: */ function(el, opts) {
-        // detect and set options
-        var rows =  opts.rows = +(opts.rows || el.dataset.rows || 1);
-        var columns = opts.columns = +(opts.columns || el.dataset.columns || 1);
-
-        // Seek out the first <img> if the value is true 
-        opts.image = opts.image || el.dataset.image || el.currentSrc || el.src;
-        if (opts.image) {
-            var img = $("img", el)[0];
-            opts.image = img && (img.currentSrc || img.src);
-        }
-
-        // add optional image to background
-        if (opts.image) {
-            setProperty(el, "background-image", "url(" + opts.image + ")");
-        }
-
-        var totalCells = rows * columns;
-        var elements = [];
-
-        var container = createElement(_, "cell-grid");
-        while (totalCells--) {
-            // Create a span
-            var cell = createElement(container, "cell");
-            createElement(cell, "cell-inner");
-            elements.push(cell);
-        }
-
-        // Append elements back into the parent
-        appendChild(el, container);
-
-        return elements;
-    }
-);
-
-var cellColumnPlugin = createPlugin(
-    /*by: */ "cellColumns",
-    /*depends: */ [LAYOUT],
-    /*key: */ "col",
-    /*split: */ function(el, opts, ctx) {
-        var columnCount = opts.columns;
-        var result = Array2D(columnCount);
-
-        each(ctx[LAYOUT], function(cell, i) {
-            result[i % columnCount].push(cell);
-        });
-
-        return result;
-    }
-);
-
-var cellRowPlugin = createPlugin(
-    /*by: */ "cellRows",
-    /*depends: */ [LAYOUT],
-    /*key: */ "row",
-    /*split: */ function(el, opts, ctx) {
-        var rowCount = opts.rows;
-        var result = Array2D(rowCount);
-
-        each(ctx[LAYOUT], function(cell, i, src) {
-            result[Math.floor(i / (src.length / rowCount))].push(cell);
-        });
-
-        return result;
-    }
-);
-
-var cellPlugin = createPlugin(
-    /*by: */ "cells",
-    /*depends: */ _,
-    /*key: */ "cell", 
-    /*split: */ function(el, opt, ctx) { 
-        // re-index the layout as the cells
-        return ctx[LAYOUT];
-    }
-);
-
-/** @typedef {import('./splitting.d.ts')} */
 
 /**
  * # Splitting
@@ -439,21 +294,20 @@ function html(opts) {
 Splitting.html = html;
 Splitting.add = add;
 
+// import { linePlugin } from "./plugins/lines";
+// import { itemPlugin } from "./plugins/items";
+// import { rowPlugin } from "./plugins/rows";
+// import { columnPlugin } from "./plugins/columns";
+// import { gridPlugin } from "./plugins/grid";
+// import { layoutPlugin } from "./plugins/layout";
+// import { cellRowPlugin } from "./plugins/cellRows";
+// import { cellColumnPlugin } from "./plugins/cellColumns";
+// import { cellPlugin } from "./plugins/cells";
+
 // install plugins
 // word/char plugins
 add(wordPlugin);
-add(charPlugin); 
-add(linePlugin);
-// grid plugins
-add(itemPlugin);
-add(rowPlugin);
-add(columnPlugin);
-add(gridPlugin);
-// cell-layout plugins
-add(layoutPlugin);
-add(cellRowPlugin);
-add(cellColumnPlugin);
-add(cellPlugin);
+add(charPlugin);
 
 return Splitting;
 

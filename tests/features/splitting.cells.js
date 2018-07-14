@@ -1,7 +1,7 @@
-import Splitting from '../../src/splitting'
+import Splitting from '../../src/all'
 import { $create } from '../utils/dom';
 
-test('creates a 4 x 3 grid correctly', function() {
+test('creates a 4 x 3 grid correctly', function() { 
   var el = $create`
     <div>
         <img src="http://placehold.it/1/1" />

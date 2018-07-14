@@ -1,7 +1,6 @@
-import { detectGrid } from "../utils/detect-grid";
-import { $ } from "../utils/dom";
+import { createPlugin } from '../core/plugin-manager';
+import { detectGrid } from "../utils/detect-grid"; 
 import { _ } from '../utils/objects';
-import { createPlugin } from '../plugins';
 
 export var columnPlugin = createPlugin(
     /*by: */ 'cols',

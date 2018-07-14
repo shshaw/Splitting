@@ -1,5 +1,4 @@
-import { createPlugin } from '../plugins';
-import { _ } from '../utils/objects';
+import { createPlugin } from '../core/plugin-manager';
 
 export var gridPlugin = createPlugin(
     /*by: */ 'grid',

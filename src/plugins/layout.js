@@ -1,5 +1,5 @@
+import { createPlugin } from "../core/plugin-manager";
 import { $, createElement, appendChild, setProperty } from "../utils/dom";
-import { createPlugin } from "../plugins";
 import { _ } from '../utils/objects';
 
 export var LAYOUT = "layout";

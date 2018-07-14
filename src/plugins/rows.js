@@ -1,6 +1,5 @@
-import { detectGrid } from "../utils/detect-grid";
-import { $ } from "../utils/dom";
-import { createPlugin } from '../plugins';
+import { createPlugin } from '../core/plugin-manager';
+import { detectGrid } from "../utils/detect-grid"; 
 import { _ } from '../utils/objects';
 
 export var rowPlugin = createPlugin(

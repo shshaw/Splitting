@@ -1,6 +1,6 @@
+import { createPlugin } from '../core/plugin-manager';
 import { detectGrid } from '../utils/detect-grid' 
 import { WORDS } from './words';
-import { createPlugin } from '../plugins';
 
 export var linePlugin = createPlugin(
     /*by: */ 'lines',

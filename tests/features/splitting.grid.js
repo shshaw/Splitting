@@ -1,4 +1,4 @@
-import Splitting from '../../src/splitting'
+import Splitting from '../../src/all';
 import { $create } from '../utils/dom';
 
 test('an empty element', function () {

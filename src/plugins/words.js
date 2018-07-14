@@ -1,6 +1,6 @@
-import { split, PRESERVE_SPACE } from '../utils/split'; 
+import { createPlugin } from '../core/plugin-manager';
+import { splitText } from '../utils/split-text'; 
 import { _ } from '../utils/objects';
-import { createPlugin } from '../plugins';
 
 export var WORDS = 'words'
 
@@ -9,6 +9,6 @@ export var wordPlugin = createPlugin(
     /*depends: */ _,
     /*key: */ 'word', 
     /*split: */ function(el) {
-        return split(el, 'word', /\s+/, 0, 1)
+        return splitText(el, 'word', /\s+/, 0, 1)
     }
 );

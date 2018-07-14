@@ -1,4 +1,4 @@
-import { selectFrom, each } from "./utils/arrays";
+import { selectFrom, each } from "../utils/arrays";
 
 /**
  * @type {Record<string, import('./types').ISplittingPlugin>}

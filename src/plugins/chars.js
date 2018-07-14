@@ -1,8 +1,7 @@
-import { split, INCLUDE_PREVIOUS } from "../utils/split";
+import { createPlugin } from '../core/plugin-manager';
+import { splitText } from "../utils/split-text";
 import { each } from "../utils/arrays";
-import { _ } from "../utils/objects";
 import { WORDS } from './words';
-import { createPlugin } from '../plugins';
 
 export var CHARS = "chars";
 
@@ -14,7 +13,7 @@ export var charPlugin = createPlugin(
         var results = [];
 
         each(ctx[WORDS], function(word, i) {
-            results.push.apply(results, split(word, "char", "", options.whitespace && i));
+            results.push.apply(results, splitText(word, "char", "", options.whitespace && i));
         });
 
         return results;

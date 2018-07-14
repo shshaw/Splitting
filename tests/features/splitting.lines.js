@@ -1,4 +1,4 @@
-import Splitting from '../../src/splitting';
+import Splitting from '../../src/all';
 
 test('an empty element', function () {
   var $el = document.createElement('div')

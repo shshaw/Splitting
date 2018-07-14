@@ -1,8 +1,5 @@
 import { appendChild, createElement } from "./dom";
-import { each } from "./arrays";
-
-export var PRESERVE_SPACE = 1;
-export var INCLUDE_PREVIOUS = 2; 
+import { each } from "./arrays"; 
 
 /**
  * # Splitting.split
@@ -13,7 +10,7 @@ export var INCLUDE_PREVIOUS = 2;
  * @param includeSpace {boolean}
  * @returns {HTMLElement[]}
  */
-export function split(el, key, splitOn, includePrevious, preserveWhitespace) {
+export function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
     // Combine any strange text nodes or empty whitespace.
     el.normalize();
 
@@ -29,7 +26,7 @@ export function split(el, key, splitOn, includePrevious, preserveWhitespace) {
         // Recursively run through child nodes
         if (next && next.childNodes && next.childNodes.length) {
             appendChild(F, next);
-            elements.push.apply(elements, split(next, key, splitOn, includePrevious, preserveWhitespace));
+            elements.push.apply(elements, splitText(next, key, splitOn, includePrevious, preserveWhitespace));
             return;
         }
 
