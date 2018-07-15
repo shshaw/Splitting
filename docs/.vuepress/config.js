@@ -1,6 +1,7 @@
 module.exports = {
     title: "Splitting",
     description: "CSS Vars for split words, chars, and images!",
+    base: "/splitting-docs/",
     head: [
         // prettier-ignore
         ["link",  { rel: "icon", href: "/favicon.png" }]
