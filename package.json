@@ -1,0 +1,29 @@
+{
+  "name": "splitting-docs",
+  "version": "0.0.0",
+  "description": "Documentation for Splitting",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "vuepress": "^0.10.1"
+  },
+  "devDependencies": {
+    "scroll-out": "^2.0.1"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shshaw/splitting-docs.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shshaw/splitting-docs/issues"
+  },
+  "homepage": "https://github.com/shshaw/splitting-docs#readme"
+}

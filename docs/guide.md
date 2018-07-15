@@ -1,0 +1,4 @@
+---
+title: Guide
+sidebar: auto
+---
