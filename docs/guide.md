@@ -5,7 +5,7 @@ sidebar: auto
 
 ## API
 
-### ```Splitting()```
+### Splitting()
 
 #### Options
 
@@ -25,16 +25,16 @@ The ```Splitting``` function returns an object with the following properties bas
 
 | Property | Type        | Description |
 | :------ | :---------  | :---------  |
-| ```chars``` | HTMLElement[] | (TODO) |
-| ```words``` | HTMLElement[] | (TODO) |
-| ```lines``` | HTMLElement[][] |(TODO) |
-| ```rows``` | HTMLElement[][] |(TODO) |
-| ```cols``` | HTMLElement[][] |(TODO) |
-| ```cells``` | HTMLElement[] |(TODO) |
-| ```cellRows``` | HTMLElement[][] |(TODO) |
-| ```cellCols``` | HTMLElement[][] |(TODO) |
+| ```chars``` | HTMLElement[] | An array of all characters created by the ```chars``` plugin |
+| ```words``` | HTMLElement[] | An array of all words created by the ```words``` and ```lines``` plugin |
+| ```lines``` | HTMLElement[][] | An array of element arrays by the line.  This is returned by the ```lines``` plugin |
+| ```rows``` | HTMLElement[][] | An array of element arrays by row.  This is returned by the ```rows``` and ```grid``` plugin |
+| ```cols``` | HTMLElement[][] | An array of element arrays by column.  This is returned by the ```cols``` and ```grid``` plugin |
+| ```cells``` | HTMLElement[] | An array of cells created by ```cells```, ```cellRows```, or ```cellCols``` plugin |
+| ```cellRows``` | HTMLElement[][] | An array of element arrays by the row.  This is returned by the ```cellRows``` and ```cells``` plugin |
+| ```cellCols``` | HTMLElement[][] | An array of element arrays by the column.  This is returned by the ```cellCols``` and ```cells``` plugin |
 
-### ```Splitting.html()```
+### Splitting.html()
 
 The ```Splitting.html()``` function takes the same options as ```Splitting``` but has a required property of ```content```.  The ```content``` property should be an html string to be used as the splitting target.  The ```Splitting.html()``` function returns a string of the rendered HTML instead of returning a result object.  This function is intended to be used inside of JS Framework DSL's such as the Vue templating language:
 
@@ -42,7 +42,7 @@ The ```Splitting.html()``` function takes the same options as ```Splitting``` bu
 <div v-html="Splitting.html({ content: myContentString, by: 'chars' })"></div>
 ```
 
-### ```Splitting.add()```
+### Splitting.add()
 
 | Options | Description |
 | :------ | :---------  |
