@@ -5,7 +5,9 @@ sidebar: auto
 
 ## API
 
-### Configuration
+### ```Splitting()```
+
+#### Options
 
 | Options | Description |
 | :------ | :---------  |
@@ -17,6 +19,38 @@ sidebar: auto
 | rows | The number of rows to create or detect.  This is used by the following plugins: ```rows```, ```cellRows```, ```grid```, and ```cells``` |
 | whitespace | If true, the ```chars``` plugin will count whitespace while indexing characters. |
 
+#### Returns
+
+The ```Splitting``` function returns an object with the following properties based on the plugin name:
+
+| Property | Type        | Description |
+| :------ | :---------  | :---------  |
+| ```chars``` | HTMLElement[] | (TODO) |
+| ```words``` | HTMLElement[] | (TODO) |
+| ```lines``` | HTMLElement[][] |(TODO) |
+| ```rows``` | HTMLElement[][] |(TODO) |
+| ```cols``` | HTMLElement[][] |(TODO) |
+| ```cells``` | HTMLElement[] |(TODO) |
+| ```cellRows``` | HTMLElement[][] |(TODO) |
+| ```cellCols``` | HTMLElement[][] |(TODO) |
+
+### ```Splitting.html()```
+
+The ```Splitting.html()``` function takes the same options as ```Splitting``` but has a required property of ```content```.  The ```content``` property should be an html string to be used as the splitting target.  The ```Splitting.html()``` function returns a string of the rendered HTML instead of returning a result object.  This function is intended to be used inside of JS Framework DSL's such as the Vue templating language:
+
+```html
+<div v-html="Splitting.html({ content: myContentString, by: 'chars' })"></div>
+```
+
+### ```Splitting.add()```
+
+| Options | Description |
+| :------ | :---------  |
+| ```target``` | (TODO) |
+| ```by``` | (TODO) |
+| ```split``` | (TODO) |
+| ```depends``` | (TODO) |
+
 ### Splitting Classes
 
 | ClassName | Description |
@@ -24,4 +58,5 @@ sidebar: auto
 | ```splitting``` | Applied to the element targeted by the split operation.  The plugin name is also applied as a classname. |
 | ```char``` | Applied by the ```chars``` plugin on new char elements |
 | ```word``` | Applied by the ```words```, ```lines```, and ```chars``` plugin on new word elements |
+| ```cell``` | Applied by the ```cellRows```, ```cellCols```, and ```cells``` plugin on new cell elements |
  
