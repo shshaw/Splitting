@@ -15,7 +15,7 @@ results.words // an array of 'word' elements
 
 ### chars
 
-The ```chars``` plugin splits an element into separate characters.  Before it can run, it splits each word into a separate element.  This is the default plugin if a plugin name is not specified in the ```by``` options.  Passing ```whitespace: true``` causes the spaces and tabs to be counted toward the character index.
+The ```chars``` plugin splits an element into separate characters.  Before it can run, it splits each word into a separate element.   Passing ```whitespace: true``` causes the spaces and tabs to be counted toward the character index.  This is the default plugin if a plugin name is not specified in the ```by``` options. 
 
 *Usage*
 
@@ -57,35 +57,207 @@ result.words[1] // <span class="word" data-word="Text" style="--word-index: 1">.
 
 ### lines
 
-// todo
+
+The ```lines``` plugin splits an element into separate words and then groups them by the line.  It automatically runs the ```words``` plugin. 
+
+*Usage*
+
+```html
+<div id="target">Splitting Text</div>
+
+<script>
+const target = document.querySelector('#target');
+const result = Splitting({ target: target, by: 'lines' });
+
+target // <div id="target" class="splitting lines" style="--line-total: 1; --word-total: 2">...</div>
+result.words[0] // <span class="word" data-word="Splitting" style="--word-index: 0">...</span> 
+result.words[1] // <span class="word" data-word="Text" style="--word-index: 1">...</span> 
+
+result.lines[0] // [ <span>Splitting</span>, <span>Text</span> ]
+</script>
+``` 
 
 ### items
 
-// todo
+The ```items``` plugin indexes existing elements.  It applies an ```--item-index``` to each matching element and ```--item-total``` to the target.  If ```matching``` is not specified, the direct element children will be selected.
+
+*Usage*
+
+```html
+<div class="container">
+    <ul>
+        <li>One</li>
+        <li>Two</li>
+        <li>Three</li>
+    </ul>
+</div>
+
+<script>
+const result = Splitting({ 
+    target: '.container', 
+    by: 'items', 
+    matching: 'li' 
+});
+
+result.items[0] // <li style="--item-index: 0">One</li>
+result.items[1] // <li style="--item-index: 1">Two</li>
+result.items[2] // <li style="--item-index: 2">Three</li>
+</script>
+```
 
 ### grid
 
-// todo
+The ```grid``` plugin detects the cols and rows of a layout by comparing the distance from the edges of the container.  Plainly speaking, it assigns each selected element a row and column index. It automatically runs the ```rows``` and ```cols``` plugins.
+
+*Usage*
+
+```html
+<div class="container">
+    <div>
+        <div class="col" id="1"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
+    <div>
+        <div class="col" id="2"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<script>
+const result = Splitting({ 
+    target: '.container', 
+    by: 'grid', 
+    matching: '.col' 
+});
+
+result.rows[0][0] // <div id="1" style="--row-index: 0; --col-index: 0">...</div> 
+result.rows[0][1] // <div style="--row-index: 0; --col-index: 1">...</div> 
+result.rows[0][2] // <div style="--row-index: 0; --col-index: 2">...</div> 
+
+result.rows[1][1] // <div id="2" style="--row-index: 1; --col-index: 0">...</div> 
+result.rows[1][2] // <div style="--row-index: 1; --col-index: 1">...</div> 
+result.rows[1][3] // <div style="--row-index: 1; --col-index: 2">...</div> 
+
+result.cols[0][0] // <div id="1" style="--row-index: 0; --col-index: 0">...</div> 
+result.cols[1][0] // <div style="--row-index: 0; --col-index: 1">...</div> 
+result.cols[2][0] // <div style="--row-index: 0; --col-index: 2">...</div> 
+
+result.cols[0][1] // <div id="2" style="--row-index: 1; --col-index: 0">...</div> 
+result.cols[1][1] // <div style="--row-index: 1; --col-index: 1">...</div> 
+result.cols[2][1] // <div style="--row-index: 1; --col-index: 2">...</div> 
+
+</script>
+```
 
 ### cols
 
-// todo
+The ```cols``` plugin detects the cols of a layout by comparing the distance from the left of the container.  
+
+*Usage*
+
+```html
+<div class="container">
+    <div>
+        <div class="col" id="1"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
+    <div>
+        <div class="col" id="2"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<script>
+const result = Splitting({ 
+    target: '.container', 
+    by: 'cols', 
+    matching: '.col' 
+});
+
+result.cols[0][0] // <div id="1" style="--row-index: 0; --col-index: 0">...</div> 
+result.cols[1][0] // <div style="--row-index: 0; --col-index: 1">...</div> 
+result.cols[2][0] // <div style="--row-index: 0; --col-index: 2">...</div> 
+
+result.cols[0][1] // <div id="2" style="--row-index: 1; --col-index: 0">...</div> 
+result.cols[1][1] // <div style="--row-index: 1; --col-index: 1">...</div> 
+result.cols[2][1] // <div style="--row-index: 1; --col-index: 2">...</div> 
+</script>
+```
+
 
 ### rows
 
-// todo
+The ```rows``` plugin detects the cols of a layout by comparing the distance from the top of the container.  
+
+*Usage*
+
+```html
+<div class="container">
+    <div>
+        <div class="col" id="1"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
+    <div>
+        <div class="col" id="2"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<script>
+const result = Splitting({ 
+    target: '.container', 
+    by: 'rows', 
+    matching: '.col' 
+});
+
+result.rows[0][0] // <div id="1" style="--row-index: 0; --col-index: 0">...</div> 
+result.rows[0][1] // <div style="--row-index: 0; --col-index: 1">...</div> 
+result.rows[0][2] // <div style="--row-index: 0; --col-index: 2">...</div> 
+
+result.rows[1][1] // <div id="2" style="--row-index: 1; --col-index: 0">...</div> 
+result.rows[1][2] // <div style="--row-index: 1; --col-index: 1">...</div> 
+result.rows[1][3] // <div style="--row-index: 1; --col-index: 2">...</div> 
+</script>
+```
+
 
 ### cells
 
-// todo
+> Cells requires an additional .css file to properly split images.  Please include /dist/splitting-cells.css in your page to use this feature.
 
-### cellCols
+The ```cells``` plugin splits an element into number of rows and columns and is capable with ```image: true``` of appearing to split images through simple CSS.
 
-// todo
+*Usage*
 
-### cellRows
+```html
+<div class="image">
+    <img src="http://unsplash.it/200/200?random" />
+</div>
 
-// todo
+<script>
+const result = Splitting({ 
+    target: '.image', 
+    by: 'cells', 
+    image: true,
+    cols: 3,
+    rows: 2
+});
+ 
+result.cells[0] // <span class="cell" style="--cell-index: 0; --row-index: 0; --col-index: 0"></span>
+result.cells[1] // <span class="cell" style="--cell-index: 1; --row-index: 0; --col-index: 1"></span>
+result.cells[2] // <span class="cell" style="--cell-index: 2; --row-index: 0; --col-index: 2"></span>
+result.cells[3] // <span class="cell" style="--cell-index: 3; --row-index: 1; --col-index: 0"></span>
+result.cells[4] // <span class="cell" style="--cell-index: 4; --row-index: 1; --col-index: 1"></span>
+result.cells[5] // <span class="cell" style="--cell-index: 5; --row-index: 1; --col-index: 2"></span>
+
+</script>
+```
 
 ## API
 
