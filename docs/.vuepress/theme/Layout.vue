@@ -83,13 +83,7 @@ export default {
         this.$router.afterEach(() => {
             nprogress.done();
             this.isSidebarOpen = false;
-        });
-
-        this.so = ScrollOut({
-            scope: this.$el,
-            targets: ".extra-class",
-            threshold: .1
-        });
+        }); 
     },
 
     destroyed() {
