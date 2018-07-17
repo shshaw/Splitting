@@ -11,6 +11,8 @@ sidebar: auto
 Include the following script in the head of your document
 
 ```html
+<link src="https://unpkg.com/splitting/splitting.css" /> 
+<link src="https://unpkg.com/splitting/splitting-cells.css" />
 <script src="https://unpkg.com/shshaw/dist/splitting.min.js"></script>
 ```
 
@@ -33,6 +35,10 @@ npm i splitting -S
 Them import Splitting from the package and call it
 
 ```js
+// the css imports may vary depending on your bundler.
+import 'splitting/dist/splitting.css';
+import 'splitting/dist/splitting-cells.css';
+
 import Splitting from "splitting";
 
 Splitting({
