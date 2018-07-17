@@ -33,8 +33,7 @@ export default {
     components: { Home, Page, Sidebar, Navbar },
     data() {
         return {
-            isSidebarOpen: false,
-            so: undefined
+            isSidebarOpen: false
         };
     },
 
@@ -84,11 +83,10 @@ export default {
             nprogress.done();
             this.isSidebarOpen = false;
         }); 
-    },
 
-    destroyed() {
-        this.so.teardown();
-    },
+        // initialize page
+        Splitting();
+    }, 
 
     methods: {
         toggleSidebar(to) {

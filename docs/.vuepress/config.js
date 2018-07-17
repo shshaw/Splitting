@@ -4,7 +4,10 @@ module.exports = {
     base: "/splitting-docs/",
     head: [
         // prettier-ignore
-        ["link",  { rel: "icon", href: "/favicon.png" }]
+        ["link", { rel: "icon", href: "/favicon.png" }],
+        ["link", { rel: 'stylesheet', href: "https://lucid-northcutt-877344.netlify.com/dist/splitting.css" }],
+        ["link", { rel: 'stylesheet', href: "https://lucid-northcutt-877344.netlify.com/dist/splitting-cells.css" }],
+        ["script", { src: "https://lucid-northcutt-877344.netlify.com/dist/splitting.js" }]
     ],
     themeConfig: {
         nav: [{ text: "Guide", link: "/guide.md" }],
