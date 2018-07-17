@@ -21,7 +21,7 @@ export function Splitting (opts) {
     each(items, function(plugin) {
       if (plugin.split) {
         var pluginBy = plugin.by;
-        var key2 = pluginBy + (key ? '-' + key : '');
+        var key2 = (key ? '-' + key : '') + plugin.key;
         var results = plugin.split(el, opts, ctx);
         key2 && index(el, key2, results);
         ctx[pluginBy] = results;

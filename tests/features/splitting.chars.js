@@ -15,7 +15,7 @@ test('an element with a single character', function() {
 
   var actual = Splitting({ target: el, by: 'chars' });
   expect(actual.length).toBe(1);  
-  expect(actual[0].words[0].textContent).toBe('C');
+  expect(actual[0].words[0].textContent).toBe('C'); 
 });
 
 test('an element with a single word', function() {

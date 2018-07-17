@@ -43,7 +43,7 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
         // Concatenate the split text children back into the full array
         each(text.split(splitOn), function(splitText, i) {
             if (i && preserveWhitespace) {
-                createElement(F, key, ' ');
+                createElement(F, '', ' ');
             }
             elements.push(createElement(F, key, splitText)); 
         });

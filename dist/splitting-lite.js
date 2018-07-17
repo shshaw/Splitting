@@ -206,7 +206,7 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
         // Concatenate the split text children back into the full array
         each(text.split(splitOn), function(splitText, i) {
             if (i && preserveWhitespace) {
-                createElement(F, key, ' ');
+                createElement(F, '', ' ');
             }
             elements.push(createElement(F, key, splitText)); 
         });
@@ -265,7 +265,7 @@ function Splitting (opts) {
     each(items, function(plugin) {
       if (plugin.split) {
         var pluginBy = plugin.by;
-        var key2 = pluginBy + (key ? '-' + key : '');
+        var key2 = (key ? '-' + key : '') + plugin.key;
         var results = plugin.split(el, opts, ctx);
         key2 && index(el, key2, results);
         ctx[pluginBy] = results;
