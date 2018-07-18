@@ -3,6 +3,49 @@ title: Guide
 sidebar: auto
 ---
 
+
+## Installation
+
+### Using a CDN
+
+Include the following script in the head of your document
+
+```html
+<link src="https://unpkg.com/splitting/splitting.css" /> 
+<link src="https://unpkg.com/splitting/splitting-cells.css" />
+<script src="https://unpkg.com/shshaw/dist/splitting.min.js"></script>
+```
+
+On document load/ready or in a script at the bottom the of the `<body>`, do the following:
+
+```js
+Splitting({
+    /* options */
+});
+```
+
+### Using NPM
+
+Install splitting from NPM:
+
+```bash
+npm i splitting -S
+```
+
+Them import Splitting from the package and call it
+
+```js
+// the css imports may vary depending on your bundler.
+import 'splitting/dist/splitting.css';
+import 'splitting/dist/splitting-cells.css';
+
+import Splitting from "splitting";
+
+Splitting({
+    /* options */
+});
+```
+
 ## Plugins
 
 Each plugin performs a different split on the targeted element.  Some plugins such as ```chars``` will automatically run additional plugins (```words```) in order to complete properly.  Each plugin should return a property matching the plugin name.  For instance:
