@@ -5,6 +5,7 @@ module.exports = {
     head: [
         // prettier-ignore
         ["link", { rel: "icon", href: "/favicon.png" }],
+        ["link", { rel: 'stylesheet', href: "https://fonts.googleapis.com/css?family=Kanit:900i|Raleway:400" }],
         ["link", { rel: 'stylesheet', href: "https://lucid-northcutt-877344.netlify.com/dist/splitting.css" }],
         ["link", { rel: 'stylesheet', href: "https://lucid-northcutt-877344.netlify.com/dist/splitting-cells.css" }],
         ["script", { src: "https://lucid-northcutt-877344.netlify.com/dist/splitting.js" }]

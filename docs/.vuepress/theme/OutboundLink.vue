@@ -6,7 +6,8 @@
 </template>
 
 <style lang="stylus">
-.icon.outbound
-  color #aaa
-  display inline-block
+.icon.outbound {
+  color: #aaa;
+  display: inline-block;
+}
 </style>

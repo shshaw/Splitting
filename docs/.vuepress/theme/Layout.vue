@@ -82,11 +82,8 @@ export default {
         this.$router.afterEach(() => {
             nprogress.done();
             this.isSidebarOpen = false;
-        }); 
-
-        // initialize page
-        Splitting();
-    }, 
+        });
+    },
 
     methods: {
         toggleSidebar(to) {
@@ -113,22 +110,6 @@ export default {
     }
 };
 </script>
-
-<style lang="stylus">
-.extra-class {
-  transition: opacity 250ms linear, transform 250ms ease-in;
-
-  &[data-scroll='in'] {
-    opacity: 1; 
-    transform: translateY(0);
-  }
-
-  &[data-scroll='out'] {
-    opacity: 0.0001;
-    transform: translateY(20px);
-  }
-}
-</style>
 
 <style src="prismjs/themes/prism-tomorrow.css"></style>
 <style src="./styles/theme.styl" lang="stylus"></style>

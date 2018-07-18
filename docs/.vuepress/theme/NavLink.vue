@@ -18,29 +18,29 @@
 </template>
 
 <script>
-import { isExternal, isMailto, isTel, ensureExt } from './util'
+import { isExternal, isMailto, isTel, ensureExt } from "./util";
 
 export default {
-  props: {
-    item: {
-      required: true
-    }
-  },
-  computed: {
-    link () {
-      return ensureExt(this.item.link)
+    props: {
+        item: {
+            required: true
+        }
     },
-    exact () {
-      if (this.$site.locales) {
-        return Object.keys(this.$site.locales).some(rootLink => rootLink === this.link)
-      }
-      return this.link === '/'
+    computed: {
+        link() {
+            return ensureExt(this.item.link);
+        },
+        exact() {
+            if (this.$site.locales) {
+                return Object.keys(this.$site.locales).some(rootLink => rootLink === this.link);
+            }
+            return this.link === "/";
+        }
+    },
+    methods: {
+        isExternal,
+        isMailto,
+        isTel
     }
-  },
-  methods: {
-    isExternal,
-    isMailto,
-    isTel
-  }
-}
+};
 </script>
