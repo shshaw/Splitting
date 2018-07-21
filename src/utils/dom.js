@@ -20,11 +20,11 @@ export function appendChild(el, child) {
   return el.appendChild(child);
 }
 
-export function createElement(parent, key, text) {
+export function createElement(parent, key, text, whitespace) {
   var el = document.createElement('span');
   el.className = key; 
-  if (text) {
-      el.setAttribute("data-" + key, text);
+  if (text) { 
+      !whitespace && el.setAttribute("data-" + key, text);
       el.textContent = text; 
   }
   return (parent && appendChild(parent, el)) || el;

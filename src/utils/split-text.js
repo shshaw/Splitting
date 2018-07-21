@@ -1,5 +1,5 @@
-import { appendChild, createElement } from "./dom";
-import { each } from "./arrays"; 
+import { appendChild, createElement, $ } from "./dom";
+import { each } from "./arrays";
 
 /**
  * # Splitting.split
@@ -17,15 +17,21 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
     // Use fragment to prevent unnecessary DOM thrashing.
     var elements = [];
     var F = document.createDocumentFragment();
-    
+
     if (includePrevious) {
         elements.push(el.previousSibling);
     }
 
-    el.childNodes.forEach(function(next) {
+    var allElements = [];
+    $(el.childNodes).some(function(next) {
+        if (next.tagName && !next.hasChildNodes()) {
+            // keep elements without child nodes (no text and no children)
+            allElements.push(next);
+            return;
+        }
         // Recursively run through child nodes
-        if (next && next.childNodes && next.childNodes.length) {
-            appendChild(F, next);
+        if (next.childNodes && next.childNodes.length) {
+            allElements.push(next);
             elements.push.apply(elements, splitText(next, key, splitOn, includePrevious, preserveWhitespace));
             return;
         }
@@ -35,18 +41,21 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
         var text = (next.wholeText || "").trim();
 
         // If there's no text left after trimming whitespace, continue the loop
-        if (!text.length) {
-            appendChild(F, next);
-            return;
+        if (text.length) {
+            // Concatenate the split text children back into the full array
+            each(text.split(splitOn), function(splitText, i) {
+                if (i && preserveWhitespace) {
+                    allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
+                }
+                var splitEl = createElement(F, key, splitText);
+                elements.push(splitEl);
+                allElements.push(splitEl);
+            });
         }
+    });
 
-        // Concatenate the split text children back into the full array
-        each(text.split(splitOn), function(splitText, i) {
-            if (i && preserveWhitespace) {
-                createElement(F, '', ' ');
-            }
-            elements.push(createElement(F, key, splitText)); 
-        });
+    each(allElements, function(el) {
+        appendChild(F, el);
     });
 
     // Clear out the existing element
@@ -54,4 +63,3 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
     appendChild(el, F);
     return elements;
 }
-
