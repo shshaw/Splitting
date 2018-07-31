@@ -8,37 +8,33 @@ sidebar: auto
 
 ### Using a CDN
 
-Include the following script in the head of your document
+Include the following dependencies:
 
 ```html
-<link src="https://unpkg.com/splitting/splitting.css" /> 
-<link src="https://unpkg.com/splitting/splitting-cells.css" />
+<link src="https://unpkg.com/splitting/splitting.css" /> <!-- Recommended styles for text effects -->
+<link src="https://unpkg.com/splitting/splitting-cells.css" /> <!-- Recommended styles for grid based effects -->
 <script src="https://unpkg.com/shshaw/dist/splitting.min.js"></script>
 ```
 
 On document load/ready or in a script at the bottom the of the `<body>`, do the following:
 
 ```js
-Splitting({
-    /* options */
-});
+Splitting();
 ```
 
 ### Using NPM
 
-Install splitting from NPM:
+Install Splitting from NPM:
 
 ```bash
 npm i splitting -S
 ```
 
-Them import Splitting from the package and call it
+Import Splitting from the package and call it. The CSS imports may vary depending on your bundler.
 
 ```js
-// the css imports may vary depending on your bundler.
 import 'splitting/dist/splitting.css';
 import 'splitting/dist/splitting-cells.css';
-
 import Splitting from "splitting";
 
 Splitting({
@@ -46,19 +42,59 @@ Splitting({
 });
 ```
 
+## How it works
+
+The basic premise of Splitting is dividing an element into a series of `<span>`s populated with CSS variables to handle.
+
+Splitting can be called without any parameters to automatically split all elements with `data-splitting` attributes, defaulting to split by [`chars`](#chars). 
+
+| Initial HTML | JavaScript | Result |
+| - | - | - |
+| ``` <div data-splitting>ABC</div> ``` | ``` Splitting(); ``` | ``` <div data-splitting="" class="words chars splitting" style="--word-total:1; --char-total:3;"><span class="word" data-word="ABC" style="--word-index:0;"><span class="char" data-char="A" style="--char-index:0;">A</span><span class="char" data-char="B" style="--char-index:1;">B</span><span class="char" data-char="C" style="--char-index:2;">C</span></span></div> ``` |
+
+## Basic Usage
+
+Fill the `data-splitting` attribute with specific [plugin](#plugins) names to split the element with that plugin when you call `Splitting()`.
+```html
+<h1 data-splitting>Split by default chars!</h1>
+<p data-splitting="words">Split by words.</p>
+```
+```js
+Splitting();
+```
+
+You can also specific an `options` object with a [variety of parameters](#api). Default options are shown below.
+
+```
+Splitting({
+  target: '[data-splitting]', /* String selector, single Element, Array of Elements, or NodeList */
+  by: 'chars' /* String of the plugin name */
+})
+```
+
+`Splitting` always returns an array of [Splitting objects](#api), giving you access to each split for each element for animation with JavaScript libraries or for additional processing.
+
+
 ## Plugins
 
-Each plugin performs a different split on the targeted element.  Some plugins such as ```chars``` will automatically run additional plugins (```words```) in order to complete properly.  Each plugin should return a property matching the plugin name.  For instance:
+Plugins are the heart of Splitting, each performing a specific split on the targeted element(s). Some plugins have dependencies that will automatically run when called. For example `chars` will automatically split by `words` to prevent issues with text wrapping.
+
+Some plugins have additional options you can pass directly in the main options object for additional. 
+
+Each plugin should return a property matching the plugin name containing the split elements. For instance:
 
 ```js
-const result = Splitting({ by: 'chars' });
-results.chars // an array of 'char' elements
-results.words // an array of 'word' elements
+const results = Splitting({ by: 'chars' });
+results[0].chars // an array of 'char' elements from the first split element
+results[0].words // an array of 'word' elements from the first split element
 ```
+
 
 ### chars
 
-The ```chars``` plugin splits an element into separate characters.  Before it can run, it splits each word into a separate element.   Passing ```whitespace: true``` causes the spaces and tabs to be counted toward the character index.  This is the default plugin if a plugin name is not specified in the ```by``` options. 
+*Dependency: `words`*
+
+The `chars` plugin splits an element into separate characters. Before it can run, it splits each word into a separate element. Passing `whitespace: true` causes the spaces between wordsto be counted toward the character index.  This is the default plugin if a plugin name is not specified in the ```by``` options. 
 
 *Usage*
 
@@ -81,7 +117,7 @@ result.chars[1] // <span class="char" data-char="p" style="--char-index: 1">p</s
 
 ### words
 
-The ```words``` plugin splits an element into separate words. 
+The `words` plugin splits an element into separate words. 
 
 *Usage*
 
