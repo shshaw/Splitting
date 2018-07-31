@@ -5,10 +5,10 @@ actionText: Get Splitting →
 actionLink: /guide.md
 features:
 - title: DoubleDash your CSS
-  details: Makes it possible to do previously unfeasible effects by utilizing CSS Variables and splitting elements.
+  details: Splitting creates elements and adds CSS variables to make previously unfeasible animations possible with CSS.
 - title: Comically Small
-  details: At about 1kb minified and gzipped, it is surprising how much more you'll be able to accomplish.
-- title: Compatible
-  details: Built in a way that lets you upgrade websites without leaving Internet Explorer in the dark.
+  details: A surprising amount of features in a 1.5kb (minified and gzipped) package.
+- title: Progressively Enhance
+  details: Upgrade websites for modern browsers without breaking Internet Explorer.
 footer: MIT Licensed | Copyright © 2018-present Stephen Shaw
 ---
