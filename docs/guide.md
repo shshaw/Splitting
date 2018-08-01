@@ -79,26 +79,6 @@ Splitting({
 })
 ```
 
-### Returns
-
-`Splitting` always [returns an array of Splitting objects](#returns), giving you access to each split for each element to use with JavaScript animation libraries or for additional processing.
-
-```html
-<div data-splitting>Splitting Text</div>
-
-<script>
-const results = Splitting();
-
-results[0].el // <div data-splitting  class="splitting chars words" style="--word-total: 2; --char-total: 13">...</div>
-results[0].words[0] // <span class="word" data-word="Splitting" style="--word-index: 0">...</span>
-results[0].words[1] // <span class="word" data-word="Text" style="--word-index: 1">...</span>
-
-results[0].chars[0] // <span class="char" data-char="S" style="--char-index: 0">S</span>
-results[0].chars[1] // <span class="char" data-char="p" style="--char-index: 1">p</span>
-
-</script>
-```
-
 
 ## Plugins
 
@@ -113,7 +93,7 @@ Each plugin should [return a property matching the plugin name](#returns) contai
 
 *Dependency: `words`*
 
-The `chars` plugin splits an element into separate characters. Before it can run, it splits each word into a separate element.  This is the default plugin if a plugin name is not specified in the ```by``` options.
+The `chars` plugin splits an element into separate characters. Before it can run, it splits each word into a separate element.  This is the default plugin if a plugin name is not specified in the `by` options.
 
 Passing `whitespace: true` causes the space between words to be counted toward the character index, though whitespace is collapsed while splitting so that there won't be more than one space character between words.
 
@@ -140,7 +120,7 @@ result.words[1] // <span class="word" data-word="Text" style="--word-index: 1">.
 ### lines
 
 
-The ```lines``` plugin splits an element into separate words and then groups them by the line.  It automatically runs the `words` plugin.
+The `lines` plugin splits an element into separate words and then groups them by the line.  It automatically runs the `words` plugin.
 
 *Usage*
 
@@ -161,7 +141,7 @@ result.lines[0] // [ <span>Splitting</span>, <span>Text</span> ]
 
 ### items
 
-The ```items``` plugin indexes existing elements.  It applies an ```--item-index``` to each matching element and ```--item-total``` to the target.  If ```matching``` is not specified, the direct element children will be selected.
+The `items` plugin indexes existing elements.  It applies an `--item-index` to each matching element and `--item-total` to the target.  If `matching` is not specified, the direct element children will be selected.
 
 *Usage*
 
@@ -189,7 +169,7 @@ result.items[2] // <li style="--item-index: 2">Three</li>
 
 ### grid
 
-The ```grid``` plugin detects the cols and rows of a layout by comparing the distance from the edges of the container.  Plainly speaking, it assigns each selected element a row and column index. It automatically runs the ```rows``` and ```cols``` plugins.
+The `grid` plugin detects the cols and rows of a layout by comparing the distance from the edges of the container.  Plainly speaking, it assigns each selected element a row and column index. It automatically runs the `rows` and `cols` plugins.
 
 *Usage*
 
@@ -235,7 +215,7 @@ result.cols[2][1] // <div style="--row-index: 1; --col-index: 2">...</div>
 
 ### cols
 
-The ```cols``` plugin detects the cols of a layout by comparing the distance from the left of the container.
+The `cols` plugin detects the cols of a layout by comparing the distance from the left of the container.
 
 *Usage*
 
@@ -273,7 +253,7 @@ result.cols[2][1] // <div style="--row-index: 1; --col-index: 2">...</div>
 
 ### rows
 
-The ```rows``` plugin detects the cols of a layout by comparing the distance from the top of the container.
+The `rows` plugin detects the cols of a layout by comparing the distance from the top of the container.
 
 *Usage*
 
@@ -313,7 +293,7 @@ result.rows[1][3] // <div style="--row-index: 1; --col-index: 2">...</div>
 
 > Cells requires an additional .css file to properly split images.  Please include /dist/splitting-cells.css in your page to use this feature.
 
-The ```cells``` plugin splits an element into number of rows and columns and is capable with ```image: true``` of appearing to split images through simple CSS.
+The `cells` plugin splits an element into number of rows and columns and is capable with `image: true` of appearing to split images through simple CSS.
 
 *Usage*
 
@@ -351,36 +331,52 @@ result.cells[5] // <span class="cell" style="--cell-index: 5; --row-index: 1; --
 | :------ | :---------  |
 | target | An optional list of elements or a css selector. By default, this is `[data-splitting]` |
 | by | The splitting plugin to use. See the plugin page for a full list.  If not specified, the value of the data-splitting attribute will be use. If that is not present, the `chars` plugin will be used. |
-| key | An optional key used as a prefix on on CSS Variables. For instance when a key of ```hero``` is used with the `chars` plugin, it will changethe CSS variable ```--char-index``` to ```--hero-char-index```. This should be used if multiple splits have been performed on the same element, or to resolve conflicts with other libraries.   |
+| key | An optional key used as a prefix on on CSS Variables. For instance when a key of `hero` is used with the `chars` plugin, it will changethe CSS variable `--char-index` to `--hero-char-index`. This should be used if multiple splits have been performed on the same element, or to resolve conflicts with other libraries.   |
 
 #### Plugin-specific Options
 
 | Options | Description |
 | :------ | :---------  |
-| matching | Used by the following plugins to select children to index:  ```items```, ```grid```, ```cols```, ```rows```, ```cellRows```, ```cellCols```, and ```cells```. If not specified, the immediate child elements will be selected. |
-| cols | The number of columns to create or detect.  This is used by the following plugins: ```cols```, ```cellCols```, ```grid```, and ```cells``` |
-| rows | The number of rows to create or detect.  This is used by the following plugins: ```rows```, ```cellRows```, ```grid```, and ```cells``` |
+| matching | Used by the following plugins to select children to index:  `items`, `grid`, `cols`, `rows`, `cellRows`, `cellCols`, and `cells`. If not specified, the immediate child elements will be selected. |
+| cols | The number of columns to create or detect.  This is used by the following plugins: `cols`, `cellCols`, `grid`, and `cells` |
+| rows | The number of rows to create or detect.  This is used by the following plugins: `rows`, `cellRows`, `grid`, and `cells` |
 | whitespace | If true, the `chars` plugin will count whitespace while indexing characters. |
 
 #### Returns
 
-The `Spitting` function returns an object with the following properties based on the plugin name:
+The `Splitting` fucntion always returns an array of objects with the following properties based on plugin name, giving you access to each element's splits to use with JavaScript animation libraries or for additional processing.
+
+```html
+<div data-splitting>Splitting Text</div>
+
+<script>
+const results = Splitting();
+
+results[0].el // <div data-splitting  class="splitting chars words" style="--word-total: 2; --char-total: 13">...</div>
+results[0].words[0] // <span class="word" data-word="Splitting" style="--word-index: 0">...</span>
+results[0].words[1] // <span class="word" data-word="Text" style="--word-index: 1">...</span>
+
+results[0].chars[0] // <span class="char" data-char="S" style="--char-index: 0">S</span>
+results[0].chars[1] // <span class="char" data-char="p" style="--char-index: 1">p</span>
+</script>
+```
+
 
 | Property | Type        | Description |
 | :------ | :---------  | :---------  |
-| `chars` | ```HTMLElement[]``` | An array of all characters created by the `chars` plugin |
-| `words` | ```HTMLElement[]``` | An array of all words created by the `words` and ```lines``` plugin |
-| `lines` | ```HTMLElement[][]``` | An array of element arrays by the line.  This is returned by the ```lines``` plugin |
-| `items` | ```HTMLElement[]``` | An array of elements returned by the ```items``` plugin. |
-| `rows` | ```HTMLElement[][]``` | An array of element arrays by row.  This is returned by the ```rows``` and ```grid``` plugin |
-| `cols` | ```HTMLElement[][]``` | An array of element arrays by column.  This is returned by the ```cols``` and ```grid``` plugin |
-| `cells` | ```HTMLElement[]``` | An array of cells created by ```cells```, ```cellRows```, or ```cellCols``` plugin |
-| `cellRows` | ```HTMLElement[][]``` | An array of element arrays by the row.  This is returned by the ```cellRows``` and ```cells` plugin |
-| `cellCols` | ```HTMLElement[][]``` | An array of element arrays by the column.  This is returned by the ```cellCols``` and ```cells` plugin |
+| `chars` | `HTMLElement[]` | An array of all characters created by the `chars` plugin |
+| `words` | `HTMLElement[]` | An array of all words created by the `words` and `lines` plugin |
+| `lines` | `HTMLElement[][]` | An array of element arrays by the line.  This is returned by the `lines` plugin |
+| `items` | `HTMLElement[]` | An array of elements returned by the `items` plugin. |
+| `rows` | `HTMLElement[][]` | An array of element arrays by row.  This is returned by the `rows` and `grid` plugin |
+| `cols` | `HTMLElement[][]` | An array of element arrays by column.  This is returned by the `cols` and `grid` plugin |
+| `cells` | `HTMLElement[]` | An array of cells created by `cells`, `cellRows`, or `cellCols` plugin |
+| `cellRows` | `HTMLElement[][]` | An array of element arrays by the row.  This is returned by the `cellRows` and ```cells` plugin |
+| `cellCols` | `HTMLElement[][]` | An array of element arrays by the column.  This is returned by the `cellCols` and `cells` plugin |
 
 ### Splitting.html()
 
-The ```Splitting.html()``` function takes the same options as `Spitting` but has a required property of ```content```.  The ```content``` property should be an html string to be used as the splitting target.  The ```Splitting.html()``` function returns a string of the rendered HTML instead of returning a result object.  This function is intended to be used inside of JS Framework DSL's such as the Vue templating language:
+The `Splitting.html()` function takes the same options as `Spitting()` but has a required property of `content`.  The `content` property should be an html string to be used as the splitting target.  The `Splitting.html()` function returns a string of the rendered HTML instead of returning a result object.  This function is intended to be used inside of JS Framework DSL's such as the Vue templating language:
 
 ```html
 <div v-html="Splitting.html({ content: myContentString, by: 'chars' })">
@@ -391,17 +387,17 @@ The ```Splitting.html()``` function takes the same options as `Spitting` but has
 
 | Options | Description |
 | :------ | :---------  |
-| ```by``` | The name of the plugin.  It must be unique. |
-| ```key``` | The prefix to set when adding index/total css custom properties to the elements. |
-| ```split``` | The function to call when this plugin is used.  The return value is set in the result of ```Splitting()``` as the same name as the ```by``` in the plugin. |
-| ```depends``` | The plugins that must run prior to this plugin. |
+| `by` | The name of the plugin.  It must be unique. |
+| `key` | The prefix to set when adding index/total css custom properties to the elements. |
+| `split` | The function to call when this plugin is used.  The return value is set in the result of `Splitting()` as the same name as the `by` in the plugin. |
+| `depends` | The plugins that must run prior to this plugin. |
 
 ### Splitting Classes
 
 | ClassName | Description |
 | :---------| :---------- |
 | `Spitting` | Applied to the element targeted by the split operation.  The plugin name is also applied as a classname. |
-| ```char``` | Applied by the `chars` plugin on new char elements |
-| ```word``` | Applied by the `words`, ```lines```, and `chars` plugin on new word elements |
-| ```cell``` | Applied by the ```cellRows```, ```cellCols```, and ```cells``` plugin on new cell elements |
+| `char` | Applied by the `chars` plugin on new char elements |
+| `word` | Applied by the `words`, `lines`, and `chars` plugin on new word elements |
+| `cell` | Applied by the `cellRows`, `cellCols`, and `cells` plugin on new cell elements |
 
