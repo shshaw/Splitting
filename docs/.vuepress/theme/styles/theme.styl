@@ -4,19 +4,28 @@
 @require './custom-blocks';
 @require './arrow';
 @require './wrapper';
-@require './toc'; 
+@require './toc';
+
+
+// @import url("https://fonts.googleapis.com/css?family=Kanit:500,900i|Roboto:400,500,700");
+@import url("https://fonts.googleapis.com/css?family=Kanit:600,900i|Raleway:400,500,700");
+@import url("https://unpkg.com/splitting@0.9.11/splitting.css");
 
 html, body {
   padding: 0;
   margin: 0;
-  font-family: 'Raleway'; 
-  font-weight: 400
+  // font-family: 'Roboto', sans-serif;
+  // font-weight: 400;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  background: $bgColor;
 }
 
-body { 
+body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 1.6;
   color: $textColor;
 }
 
@@ -31,7 +40,7 @@ body {
   left: 0;
   right: 0;
   height: $navbarHeight;
-  background-color: #fff;
+  background-color: $bgColor;
   box-sizing: border-box;
   border-bottom: 1px solid $borderColor;
 }
@@ -48,7 +57,7 @@ body {
 
 .sidebar {
   font-size: 15px;
-  background-color: #fff;
+  background-color: $bgColor;
   width: $sidebarWidth;
   position: fixed;
   z-index: 10;
@@ -93,7 +102,7 @@ body {
 }
 
 a {
-  font-weight: 500;
+  font-weight: 700;
   color: $accentColor;
   text-decoration: none;
 }
@@ -124,20 +133,21 @@ ul, ol {
 }
 
 strong {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   line-height: 1.25;
+  font-family: 'Kanit', sans-serif;
 
   .content:not(.custom) > & {
-    margin-top: 0.5rem - $navbarHeight;
+    margin-top: 1rem - $navbarHeight;
     padding-top: ($navbarHeight + 1rem);
     margin-bottom: 0;
 
     &:first-child {
-      margin-top: -1.5rem;
+      margin-top: -1rem;
       margin-bottom: 1rem;
 
       + p, + pre, + .custom-block {
@@ -152,17 +162,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 2.2rem;
+  font-size: 3rem;
 }
 
 h2 {
-  font-size: 1.65rem;
+  font-size: 2.5em;
   padding-bottom: 0.3rem;
   border-bottom: 1px solid $borderColor;
 }
 
 h3 {
-  font-size: 1.35rem;
+  font-size: 2rem;
 }
 
 a.header-anchor {
@@ -183,7 +193,7 @@ code, kbd, .line-number {
 }
 
 p, ul, ol {
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 hr {
@@ -198,17 +208,18 @@ table {
   overflow-x: auto;
 }
 
-tr {
-  border-top: 1px solid #dfe2e5;
-
-  &:nth-child(2n) {
-    background-color: #f6f8fa;
-  }
+tbody tr {
+  border-top: 1px dotted lighten($borderColor,10%);
+}
+thead,
+tr:nth-child(2n) {
+  background-color: darken($bgColor, 10%);
 }
 
+
 th, td {
-  border: 1px solid #dfe2e5;
-  padding: 0.6em 1em;
+  // border-top: 1px dotted $borderColor;
+  padding: 0.5em .5em;
 }
 
 .custom-layout {

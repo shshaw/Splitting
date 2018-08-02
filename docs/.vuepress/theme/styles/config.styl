@@ -1,13 +1,19 @@
 // colors
-$accentColor = #5e3eaf;
-$textColor = #2c3e50;
-$borderColor = #eaecef;
-$codeBgColor = #282c34;
+
+$darkBlue = #00043C;
+$blue = saturation(lighten($darkBlue, 15%),50%);
+$lightBlue = #00C9B1;
+
+$bgColor = $darkBlue;
+$accentColor = #00C9B1; /*#5e3eaf;*/
+$textColor = #fff; //2c3e50;
+$borderColor = $blue; //lighten($bgColor, 20%); //#eaecef;
+$codeBgColor = $blue; //#282c34;
 $arrowBgColor = #ccc;
 // layout
-$navbarHeight = 3.6rem;
-$sidebarWidth = 20rem;
-$contentWidth = 740px;
+$navbarHeight = 5rem;
+$sidebarWidth = 15rem;
+$contentWidth = 40rem;
 // responsive breakpoints
 $MQNarrow = 959px;
 $MQMobile = 719px;
