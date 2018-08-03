@@ -5,21 +5,14 @@ sidebar: auto
 
 ## Installation
 
-### Using a CDN
+### CodePen Template
 
-Include the following dependencies:
+Why wait? Make your own Splitting demo on CodePen using this template with all of the essentials included!
 
-```html
-<link src="https://unpkg.com/splitting/splitting.css" /> <!-- Recommended styles for text effects -->
-<link src="https://unpkg.com/splitting/splitting-cells.css" /> <!-- Recommended styles for grid based effects -->
-<script src="https://unpkg.com/shshaw/dist/splitting.min.js"></script>
-```
-
-On document load/ready or in a script at the bottom the of the `<body>`, do the following:
-
-```js
-Splitting();
-```
+<form action="https://codepen.io/pen/define" method="POST" target="_blank">
+  <input type="hidden" name="data" value='{"title": "Splitting Demo", "html": "<div data-splitting>Hello, World!</div>", "css_external": "https://unpkg.com/splitting/splitting.css;https://unpkg.com/splitting/splitting-cells.css", "js": "Splitting();", "js_external": "https://unpkg.com/shshaw/dist/splitting.min.js" }'>
+  <input type="submit" class="action-button" value="Open Template on CodePen →">
+</form>
 
 ### Using NPM
 
@@ -36,48 +29,85 @@ import "splitting/dist/splitting.css";
 import "splitting/dist/splitting-cells.css";
 import Splitting from "splitting";
 
-Splitting({
-  /* options */
-});
+Splitting();
 ```
+
+### Using a CDN
+
+> CDN use is only recommended for demos / experiments on platforms like [CodePen](https://codepen.io). For production use, bundle Splitting using the [NPM package](#using-npm) and Webpack or your preferred code bundler.
+
+You can get the latest version of Splitting off of the [unpkg CDN](https://unpkg.com) and include the necessary files as follows.
+
+```html
+<link rel="stylesheet" src="https://unpkg.com/splitting/splitting.css" />
+<link rel="stylesheet" src="https://unpkg.com/splitting/splitting-cells.css" />
+<script src="https://unpkg.com/shshaw/dist/splitting.min.js"></script>
+```
+
+Then call Splitting on document load/ready or in a script at the bottom the of the `<body>`.
+
+```js
+<script> Splitting(); </script>
+```
+
+### Recommended Styles
+
+Included in the package are two small stylesheets of recommended CSS that will make text and grid based effects much easier. These styles are non-essential, but provide a lot of value.
+
+- `splitting.css` provides many extra CSS Variables that help power advanced animations, especially for text.
+- `splitting-cells.css` contain a lot of basic setup styles for cell/grid based effects you'd otherwise need to implement yourself.
 
 ## Basic Usage
 
-The premise of Splitting is dividing an element into a series of `<span>`s populated with CSS variables to handle.
+Splitting is a library designed to split (section off) an element in a variety of ways, most often utilizing a series of `<span>`s populated with CSS variables and data attributes that empower you to build all kinds of animations, transitions and interactions.
 
-Splitting can be called without any parameters to automatically split all elements with `data-splitting` attributes by the default of [`chars`](#chars).
+### How
 
-### Example
+Splitting can be called without any parameters to automatically split all elements with `data-splitting` attributes by the default of [`chars`](#chars) which wraps the element's text in `<span>`s with relevant CSS vars.
 
-| Initial HTML                    | JavaScript     | Result                                                                                                                                                                                                                                                                                                                                                                  |
-| ------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<div data-splitting>ABC</div>` | `Splitting();` | `<div data-splitting class="words chars splitting" style="--word-total:1; --char-total:3;"><span class="word" data-word="ABC" style="--word-index:0;"><span class="char" data-char="A" style="--char-index:0;">A</span><span class="char" data-char="B" style="--char-index:1;">B</span><span class="char" data-char="C" style="--char-index:2;">C</span></span></div>` |
+_Initial DOM_
 
-The aftermath may seem a bit verbose, but this won't be visible to the end user. They'll still just see "ABC", but now you can
+```html
+<div data-splitting>ABC</div>
+<script> Splitting(); </script>
+```
+
+_DOM Output_
+
+```html
+<div data-splitting class="words chars splitting" style="--word-total:1; --char-total:3;"><span class="word" data-word="ABC" style="--word-index:0;"><span class="char" data-char="A" style="--char-index:0;">A</span><span class="char" data-char="B" style="--char-index:1;">B</span><span class="char" data-char="C" style="--char-index:2;">C</span></span></div>
+```
+
+The aftermath may seem verbose, but this won't be visible to the end user. They'll still just see "ABC", but now you can style, animate and transition all of those characters individually!
 
 ### `[data-splitting]` Attribute
 
 Fill the `data-splitting` attribute with [specific plugin names](#plugins) to split the element with that plugin when you call `Splitting()`.
 
 ```html
-<h1 data-splitting>Split by default chars!</h1>
-<p data-splitting="words">Split by words.</p>
-```
-
-```js
-Splitting();
+<h1 data-splitting>Split by chars (default)</h1>
+<p data-splitting="words">Split by words</p>
+<ul data-splitting="items">
+  <li>Split</li>
+  <li>by</li>
+  <li>children!</li>
+</ul>
+<script> Splitting(); </script>
 ```
 
 ### Options
 
 `Splitting()` takes a single parameter as an [`options` object](#splitting). The default options are shown below, and some plugins offer [expanded options](#splitting).
 
-```
+```js
 Splitting({
-  target: '[data-splitting]', /* String selector, single Element, Array of Elements, or NodeList */
-  by: 'chars', /* String of the plugin name */
-  key: null /* String to prefix the CSS variables by */
-})
+  /* `target`: String selector, Element, Array of Elements, or NodeList */
+  target: "[data-splitting]",
+  /* `by`: String of the plugin name */
+  by: "chars",
+  /* `key: Optional String to prefix the CSS variables */
+  key: null
+});
 ```
 
 ## Plugins
@@ -86,17 +116,9 @@ Plugins are the heart of Splitting, each performing a specific split on the targ
 
 Each plugin should [return a property matching the plugin name](#returns) containing the split elements. Some plugins have [additional options](#splitting) you can pass directly in the main options object for specific uses.
 
-### chars
-
-_Dependency: `words`_
-
-The `chars` plugin splits an element into separate characters. Before it can run, it splits each word into a separate element. This is the default plugin if a plugin name is not specified in the `by` options.
-
-Passing `whitespace: true` causes the space between words to be counted toward the character index, though whitespace is collapsed while splitting so that there won't be more than one space character between words.
-
 ### words
 
-The `words` plugin splits an element into separate words.
+The `words` plugin splits an element's text into separate words, wrapping each in a `<span>` populated with CSS variables and data attributes.
 
 _Usage_
 
@@ -107,30 +129,40 @@ _Usage_
 const target = document.querySelector('#target');
 const results = Splitting({ target: target, by: 'words' });
 
-target // <div id="target" class="splitting words" style="--word-total: 2">...</div>
-results[0].words[0] // <span class="word" data-word="Splitting" style="--word-index: 0">...</span>
-results[0].words[1] // <span class="word" data-word="Text" style="--word-index: 1">...</span>
+// results[0].el = <div id="target" class="splitting words" style="--word-total: 2">...</div>
+// results[0].words[0] = <span class="word" data-word="Splitting" style="--word-index: 0">...</span>
+// results[0].words[1] = <span class="word" data-word="Text" style="--word-index: 1">...</span>
 </script>
 ```
 
+### chars
+
+_Dependency: `words`_
+
+The `chars` plugin splits an element's text into separate characters. Before it can run, it splits by [words](#words) to prevent issues with text wrapping. `chars` is the default plugin if no other plugin is specified.
+
+Passing `whitespace: true` causes the space between words to be counted toward the character index, though whitespace is collapsed while splitting so that there won't be more than one space character between words.
+
 ### lines
+
+_Dependency: `words`_
 
 The `lines` plugin splits an element into separate words and then groups them by the line. It automatically runs the `words` plugin.
 
 _Usage_
 
 ```html
-<div id="target">Splitting Text</div>
+<div id="target">Splitting<br /> Text</div>
 
 <script>
 const target = document.querySelector('#target');
 const results = Splitting({ target: target, by: 'lines' });
 
-target // <div id="target" class="splitting lines" style="--line-total: 1; --word-total: 2">...</div>
+results[0].el // <div id="target" class="splitting lines" style="--line-total: 1; --word-total: 2">...</div>
 results[0].words[0] // <span class="word" data-word="Splitting" style="--word-index: 0">...</span>
 results[0].words[1] // <span class="word" data-word="Text" style="--word-index: 1">...</span>
 
-results[0].lines[0] // [ <span>Splitting</span>, <span>Text</span> ]
+results[0].lines[0][0] // <span class="word" data-word="Splitting" style="--word-index: 0">...</span>
 </script>
 ```
 
