@@ -19,7 +19,7 @@ Why bother with build systems or files? Make your own Splitting demo on [CodePen
 Install Splitting from NPM:
 
 ```bash
-npm i splitting -S
+npm install splitting --save
 ```
 
 Import Splitting from the package and call it. The CSS imports may vary depending on your bundler.
@@ -34,7 +34,7 @@ Splitting();
 
 ### Using a CDN
 
-> CDN use is only recommended for demos / experiments on platforms like [CodePen](https://codepen.io). For production use, bundle Splitting using the [NPM package](#using-npm) and Webpack or your preferred code bundler.
+> CDN use is only recommended for demos / experiments on platforms like [CodePen](https://codepen.io). For production use, bundle Splitting using the [NPM package](#using-npm) with Webpack or your preferred code bundler.
 
 You can get the latest version of Splitting off of the [unpkg CDN](https://unpkg.com) and include the necessary files as follows.
 
@@ -54,12 +54,14 @@ Then call Splitting on document load/ready or in a script at the bottom the of t
 
 Included in the package are two small stylesheets of recommended CSS that will make text and grid based effects much easier. These styles are non-essential, but provide a lot of value.
 
-- `splitting.css` provides many extra CSS Variables and psuedo elements that help power advanced animations, especially for text.
+- `splitting.css` includes many extra CSS Variables and psuedo elements that help power advanced animations, especially for text.
 - `splitting-cells.css` contain the basic setup styles for cell/grid based effects you'd otherwise need to implement yourself.
 
 ## Browser Support
 
-Splitting should not break any halfway decent browser (IE9+). Browsers that support CSS Variables will have the most options
+Splitting should be thought of as a progressive enhancer. The basic functions work in any halfway decent browser (IE11+). Browsers that support CSS Variables ( [~85% of the current browser market share](https://caniuse.com/#feat=css-variables) ) will have the best experience. Browsers without CSS Variable support can still have a nice experience with at least some animation, but features like index-based staggering may not be feasible without JavaScript.
+
+The [`cells`](#cells) plugin's styles in `splitting-cells.css` rely on `display: grid`, so treat it as a progressive enhancement.
 
 ## Basic Usage
 
