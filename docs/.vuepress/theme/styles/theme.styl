@@ -58,7 +58,7 @@ body {
 .sidebar {
   font-size: 15px;
   background-color: $bgColor;
-  width: $sidebarWidth;
+  max-width: $sidebarWidth;
   position: fixed;
   z-index: 10;
   margin: 0;
@@ -116,7 +116,8 @@ a {
   border-radius: 4px;
   transition: background-color 0.1s ease;
   box-sizing: border-box;
-  apperance: none;
+  appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
   border: none;
   border-bottom: 1px solid darken($accentColor, 30%);

@@ -10,7 +10,8 @@ sidebar: auto
 Why wait? Make your own Splitting demo on CodePen using this template with all of the essentials included!
 
 <form action="https://codepen.io/pen/define" method="POST" target="_blank">
-  <input type="hidden" name="data" value='{"title": "Splitting Demo", "html": "<div data-splitting>Hello, World!</div>", "css_external": "https://unpkg.com/splitting/splitting.css;https://unpkg.com/splitting/splitting-cells.css", "js": "Splitting();", "js_external": "https://unpkg.com/shshaw/dist/splitting.min.js" }'>
+  <input type="hidden" name="data" value='{"title": "Splitting Demo", "description": "_Built with [Splitting](https://splitting.js.org)_", "tags": ["splitting"], "html": "<div data-splitting>Hello World!</div>", "css": "/* Clear out these styles to start fresh or use this as a base! */\n
+@import url(https://fonts.googleapis.com/css?family=Kanit:600);\nhtml { height: 100%; display: flex; }\nbody { margin: auto; }\nhtml, body {\n  background: #00043C;\n  color: #FFF;\n  font: normal 600 10vw/1.5 Kanit, sans-serif;\n}\n\n.splitting .char {\n  animation: slide-in 1s cubic-bezier(.5, 0, .5, 1) both;\n  animation-delay: calc(60ms * var(--char-index));\n}\n\n@keyframes slide-in {\n  from {\n    transform: translateY(-1em) rotate(-.5turn) scale(0.5);\n    opacity: 0;\n  }\n}", "css_external": "https://unpkg.com/splitting@next/dist/splitting.css;https://unpkg.com/splitting@next/dist/splitting-cells.css", "js": "Splitting();", "js_external": "https://unpkg.com/splitting@next/dist/splitting.min.js" }'>
   <input type="submit" class="action-button" value="Open Template on CodePen →">
 </form>
 
@@ -39,9 +40,9 @@ Splitting();
 You can get the latest version of Splitting off of the [unpkg CDN](https://unpkg.com) and include the necessary files as follows.
 
 ```html
-<link rel="stylesheet" src="https://unpkg.com/splitting/splitting.css" />
-<link rel="stylesheet" src="https://unpkg.com/splitting/splitting-cells.css" />
-<script src="https://unpkg.com/shshaw/dist/splitting.min.js"></script>
+<link rel="stylesheet" src="https://unpkg.com/splitting/dist/splitting.css" />
+<link rel="stylesheet" src="https://unpkg.com/splitting/dist/splitting-cells.css" />
+<script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
 ```
 
 Then call Splitting on document load/ready or in a script at the bottom the of the `<body>`.
@@ -54,14 +55,12 @@ Then call Splitting on document load/ready or in a script at the bottom the of t
 
 Included in the package are two small stylesheets of recommended CSS that will make text and grid based effects much easier. These styles are non-essential, but provide a lot of value.
 
-- `splitting.css` provides many extra CSS Variables that help power advanced animations, especially for text.
-- `splitting-cells.css` contain a lot of basic setup styles for cell/grid based effects you'd otherwise need to implement yourself.
+- `splitting.css` provides many extra CSS Variables and psuedo elements that help power advanced animations, especially for text.
+- `splitting-cells.css` contain the basic setup styles for cell/grid based effects you'd otherwise need to implement yourself.
 
 ## Basic Usage
 
 Splitting is a library designed to split (section off) an element in a variety of ways, most often utilizing a series of `<span>`s populated with CSS variables and data attributes that empower you to build all kinds of animations, transitions and interactions.
-
-### How
 
 Splitting can be called without any parameters to automatically split all elements with `data-splitting` attributes by the default of [`chars`](#chars) which wraps the element's text in `<span>`s with relevant CSS vars.
 
@@ -97,15 +96,15 @@ Fill the `data-splitting` attribute with [specific plugin names](#plugins) to sp
 
 ### Options
 
-`Splitting()` takes a single parameter as an [`options` object](#splitting). The default options are shown below, and some plugins offer [expanded options](#splitting).
+`Splitting()` takes a single Object parameter for [options](#splitting). The default options are shown below, and some plugins offer [expanded options](#splitting).
 
 ```js
 Splitting({
-  /* `target`: String selector, Element, Array of Elements, or NodeList */
+  /* target: String selector, Element, Array of Elements, or NodeList */
   target: "[data-splitting]",
-  /* `by`: String of the plugin name */
+  /* by: String of the plugin name */
   by: "chars",
-  /* `key: Optional String to prefix the CSS variables */
+  /* key: Optional String to prefix the CSS variables */
   key: null
 });
 ```
