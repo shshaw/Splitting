@@ -1,6 +1,6 @@
 {
   "name": "splitting",
-  "version": "0.11.3",
+  "version": "1.0.0-beta",
   "description": "Micro-library to split a DOM element's words & chars into elements populated with CSS vars.",
   "main": "splitting.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/shshaw/splitting.git"
   },
+  "files": ["dist/*"],
   "keywords": [
     "split",
     "text",
