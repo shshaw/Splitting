@@ -1,5 +1,5 @@
 {
-  "name": "splitting-docs",
+  "name": "splitting",
   "version": "0.0.0",
   "description": "Documentation for Splitting",
   "main": "index.js",
@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shshaw/splitting-docs.git"
+    "url": "git+https://github.com/shshaw/splitting.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shshaw/splitting-docs/issues"
+    "url": "https://github.com/shshaw/splitting/issues"
   },
-  "homepage": "https://github.com/shshaw/splitting-docs#readme"
+  "homepage": "https://github.com/shshaw/splitting#readme"
 }
