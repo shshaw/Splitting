@@ -1,9 +1,9 @@
-import { $, createElement } from '../utils/dom' 
+import { $, createElement, getData } from '../utils/dom' 
 import { index } from '../utils/css-vars'
 import { each } from '../utils/arrays'
 
 import { add, resolve } from './plugin-manager'; 
-import { CHARS } from '../plugins/chars'; 
+import { CHARS } from '../plugins/chars';
 
 /**
  * # Splitting
@@ -16,7 +16,7 @@ export function Splitting (opts) {
 
   return $(opts.target || '[data-splitting]').map(function(el) {
     var ctx = { el: el };
-    var items = resolve(opts.by || el.dataset.splitting || CHARS);
+    var items = resolve(opts.by || getData(el, 'splitting') || CHARS);
 
     each(items, function(plugin) {
       if (plugin.split) {
@@ -41,8 +41,9 @@ export function Splitting (opts) {
  */
 function html(opts) {
   opts = opts || {}
-  var el = opts.target = createElement();
-  el.innerHTML = opts.content;
+  var parent = createElement();
+  parent.innerHTML = opts.content;
+  var el = opts.target = parent.firstElementChild;
   Splitting(opts)
   return el.outerHTML
 }

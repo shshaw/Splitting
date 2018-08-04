@@ -1,45 +1,29 @@
 import Splitting from '../../src/all';
 
-test('an empty element', function () {
-  // todo
-});
+test('basic test', function () {
+  const content = "<div>Hello World!</div>";
+  const actual = Splitting.html({ content });
 
-test('an element with a single word', function () {
-  // todo
-});
+  // jsdom isn't outputting css custom properties, so this is as correct as we can go
+  const expected = 
+    '<div class="words chars splitting">' +
+        '<span class="word" data-word="Hello">' +
+            '<span class="char" data-char="H">H</span>' +
+            '<span class="char" data-char="e">e</span>' +
+            '<span class="char" data-char="l">l</span>' +
+            '<span class="char" data-char="l">l</span>' +
+            '<span class="char" data-char="o">o</span>' +
+        '</span>' +
+        '<span class="whitespace"> </span>' +
+        '<span class="word" data-word="World!">' +
+            '<span class="char" data-char="W">W</span>' +
+            '<span class="char" data-char="o">o</span>' +
+            '<span class="char" data-char="r">r</span>' +
+            '<span class="char" data-char="l">l</span>' +
+            '<span class="char" data-char="d">d</span>' +
+            '<span class="char" data-char="!">!</span>' +
+        '</span>' +
+    '</div>';
 
-test('an element with a multiple words', function () {
-  // todo
-});
-
-test('a nested empty element', function () {
-  // todo
-});
-
-test('a multi-level nested empty element', function () {
-  // todo
-});
-
-test('a multi-level nested element', function () {
-  // todo
-});
-
-test('retriggering on already split element', function () {
-  // todo
-});
-
-test('an empty string', function () {
-  // todo
-});
-
-test('that it returns an element when options = { element: true }', function () {
-  // todo
-});
-
-test('that it returns words when options = { type: words }', function () {
-  // todo
-});
-
-test('that it returns chars when options = { type: chars }', function () {
-  // todo
+  expect(actual).toBe(expected);
 });

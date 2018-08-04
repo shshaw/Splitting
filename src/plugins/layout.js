@@ -1,5 +1,5 @@
 import { createPlugin } from "../core/plugin-manager";
-import { $, createElement, appendChild, setProperty } from "../utils/dom";
+import { $, createElement, appendChild, setProperty, getData } from "../utils/dom";
 import { _ } from '../utils/objects';
 
 export var LAYOUT = "layout";
@@ -10,11 +10,11 @@ export var layoutPlugin = createPlugin(
     /*key: */ _,
     /*split: */ function(el, opts) {
         // detect and set options
-        var rows =  opts.rows = +(opts.rows || el.dataset.rows || 1);
-        var columns = opts.columns = +(opts.columns || el.dataset.columns || 1);
+        var rows =  opts.rows = +(opts.rows || getData(el, 'rows') || 1);
+        var columns = opts.columns = +(opts.columns || getData(el, 'columns') || 1);
 
         // Seek out the first <img> if the value is true 
-        opts.image = opts.image || el.dataset.image || el.currentSrc || el.src;
+        opts.image = opts.image || getData(el, 'image') || el.currentSrc || el.src;
         if (opts.image) {
             var img = $("img", el)[0];
             opts.image = img && (img.currentSrc || img.src);
