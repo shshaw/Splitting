@@ -8,10 +8,7 @@
   },
   "dependencies": {
     "vuepress": "^0.12.0"
-  },
-  "devDependencies": {
-    "scroll-out": "^2.0.1"
-  },
+  }, 
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "build": "vuepress build docs"
