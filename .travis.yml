@@ -8,7 +8,7 @@ cache:
 
 branches:
   only:
-  - source
+  - docs
 
 install:
   - npm install
@@ -21,7 +21,7 @@ deploy:
   provider: pages
   skip-cleanup: true
   github-token: $GITHUB_ACCESS_TOKEN  # Set in travis-ci.org dashboard, marked secure https://docs.travis-ci.com/user/deployment/pages/#Setting-the-GitHub-token
-  target-branch: master
+  target-branch: gh_pages
   local-dir: docs/.vuepress/dist
   on:
-    branch: source
+    branch: docs
