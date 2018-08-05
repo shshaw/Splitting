@@ -6,6 +6,7 @@
           <SplittingLogo></SplittingLogo>
         </a>
       </h1>
+      <Content class="home-content" custom/>
       <p class="action" v-if="data.actionText && data.actionLink">
         <NavLink class="action-button" :item="actionLink" />
       </p>
@@ -16,7 +17,6 @@
         <p>{{ feature.details }}</p>
       </div>
     </div>
-    <Content custom/>
     <div class="footer" v-if="data.footer">
       {{ data.footer }}
     </div>
@@ -57,9 +57,10 @@
     padding: $navbarHeight 2rem 0;
     max-width: 960px;
     margin: 0px auto;
+    text-align: center;
 
     .hero {
-      text-align: center;
+      padding: 2rem 0 1rem 0;
 
       img {
         max-height: 280px;
@@ -83,14 +84,19 @@
         font-size: 1.6rem;
         line-height: 1.3;
         color: lighten($textColor, 40%);
-      }
+      } // margin-bottom: 3rem;
+    }
 
+    .home-content.home-content {
+      max-width: 30em;
+      margin: 2rem auto;
     }
 
     .features {
       border-top: 1px solid $borderColor;
-      padding: 1.2rem 0;
-      margin-top: 2.5rem;
+      padding: 1.4rem 0;
+      margin-top: 2rem;
+      text-align: center;
       display: flex;
       flex-wrap: wrap;
       align-items: flex-start;
