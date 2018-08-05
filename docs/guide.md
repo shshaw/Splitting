@@ -3,6 +3,20 @@ title: Guide
 sidebar: auto
 ---
 
+## What is Splitting?
+
+Splitting is a collection of small [plugins](#plugins) designed to split (section off) an element in a variety of ways, such as [words](#words), [characters](#chars), [child nodes](#items), and [more](#plugins)!
+
+Most plugins utilize a series of `<span>`s populated with CSS variables and data attributes that empower you to build all kinds of animations, transitions and interactions.
+
+The general flow is:
+
+1.  `Splitting()` is called on a `target` (see: [Basic Usage](#basic-usage))
+1.  Create `<span>`s to inject into `target`, or querying children of `target`
+1.  Index with CSS variables ( `<span class="word" style="--item-index: 0">` )
+1.  Add the total to the target ( `<div data-splitting style="--word-total: 3">` )
+1.  Return an array of the splits (see: [Returns](#returns))
+
 ## Installation
 
 ### CodePen Template
@@ -34,7 +48,7 @@ Splitting();
 
 ### Using a CDN
 
-> CDN use is only recommended for demos / experiments on platforms like [CodePen](https://codepen.io). For production use, bundle Splitting using the [NPM package](#using-npm) with Webpack or your preferred code bundler.
+_CDN use is only recommended for demos / experiments on platforms like [CodePen](https://codepen.io). For production use, bundle Splitting using the [NPM package](#using-npm) with Webpack or your preferred code bundler._
 
 You can get the latest version of Splitting off of the [unpkg CDN](https://unpkg.com) and include the necessary files as follows.
 
@@ -57,17 +71,15 @@ Included in the package are two small stylesheets of recommended CSS that will m
 - `splitting.css` includes many extra CSS Variables and psuedo elements that help power advanced animations, especially for text.
 - `splitting-cells.css` contain the basic setup styles for cell/grid based effects you'd otherwise need to implement yourself.
 
-## Browser Support
+### Browser Support
 
 Splitting should be thought of as a progressive enhancer. The basic functions work in any halfway decent browser (IE11+). Browsers that support CSS Variables ( [~85% of the current browser market share](https://caniuse.com/#feat=css-variables) ) will have the best experience. Browsers without CSS Variable support can still have a nice experience with at least some animation, but features like index-based staggering may not be feasible without JavaScript.
 
-The [`cells`](#cells) plugin's styles in `splitting-cells.css` rely on `display: grid`, so treat it as a progressive enhancement.
+The styles in `splitting-cells.css` for the [`cells` plugin](#cells) rely on `display: grid`, so there may be additional browser limitations. In general, [all browsers that support CSS variables also support grid](https://caniuse.com/#feat=css-variables,css-grid) so you should be in the clear.
 
 ## Basic Usage
 
-Splitting is a library designed to split (section off) an element in a variety of ways, most often utilizing a series of `<span>`s populated with CSS variables and data attributes that empower you to build all kinds of animations, transitions and interactions.
-
-Splitting can be called without any parameters to automatically split all elements with `data-splitting` attributes by the default of [`chars`](#chars) which wraps the element's text in `<span>`s with relevant CSS vars.
+Splitting can be called without parameters, automatically splitting all elements with `data-splitting` attributes by the default of [`chars`](#chars) which wraps the element's text in `<span>`s with relevant CSS vars.
 
 _Initial DOM_
 
@@ -83,6 +95,8 @@ _DOM Output_
 ```
 
 The aftermath may seem verbose, but this won't be visible to the end user. They'll still just see "ABC", but now you can style, animate and transition all of those characters individually!
+
+Splitting will automatically add a `splitting` class to the targetted element after it's been run. Each [plugin](#plugins) will add their own classes to splits/parent as needed ( `char` for `chars`, `word` for `words`, etc. ).
 
 ### `[data-splitting]` Attribute
 
@@ -123,6 +137,11 @@ Each plugin should [return a property matching the plugin name](#returns) contai
 ### words
 
 The `words` plugin splits an element's text into separate words, wrapping each in a `<span>` populated with CSS variables and data attributes.
+
+|                  |                                     |
+| :--------------- | :---------------------------------- |
+| **Dependencies** | None                                |
+| **Classes**      | `.word` added to each word `<span>` |
 
 _Usage_
 
@@ -408,12 +427,3 @@ The `Splitting.html()` function takes the same options as `Spitting()` but has a
 | `key`     | The prefix to set when adding index/total css custom properties to the elements.                                                                  |
 | `split`   | The function to call when this plugin is used. The return value is set in the result of `Splitting()` as the same name as the `by` in the plugin. |
 | `depends` | The plugins that must run prior to this plugin.                                                                                                   |
-
-### Splitting Classes
-
-| ClassName  | Description                                                                                             |
-| :--------- | :------------------------------------------------------------------------------------------------------ |
-| `spitting` | Applied to the element targeted by the split operation. The plugin name is also applied as a classname. |
-| `char`     | Applied by the `chars` plugin on new char elements                                                      |
-| `word`     | Applied by the `words`, `lines`, and `chars` plugin on new word elements                                |
-| `cell`     | Applied by the `cellRows`, `cellCols`, and `cells` plugin on new cell elements                          |
