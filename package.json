@@ -7,8 +7,8 @@
     "doc": "docs"
   },
   "dependencies": {
-    "vuepress": "^0.12.0"
-  }, 
+    "vuepress": "^0.13.1"
+  },
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "build": "vuepress build docs"
