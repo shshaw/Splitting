@@ -27,7 +27,13 @@ module.exports = {
     themeConfig: {
         nav: [{
             text: "Guide",
-            link: "/guide.md"
+            link: "/guide.md#installation"
+        }, {
+            text: "Plugins",
+            link: "/guide.md#plugins"
+        }, {
+            text: "API",
+            link: "/guide.md#api"
         }],
         // Assumes GitHub. Can also be a full GitLab url.
         repo: "shshaw/splitting",
