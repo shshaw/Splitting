@@ -22,12 +22,16 @@ export function appendChild(el, child) {
 
 export function createElement(parent, key, text, whitespace) {
   var el = document.createElement('span');
-  el.className = key; 
+  key && (el.className = key); 
   if (text) { 
       !whitespace && el.setAttribute("data-" + key, text);
       el.textContent = text; 
   }
   return (parent && appendChild(parent, el)) || el;
+}
+
+export function getData(el, key) {
+  return el.getAttribute("data-" + key)
 }
 
 /**
