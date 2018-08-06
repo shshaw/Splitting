@@ -1,8 +1,8 @@
 {
   "name": "splitting",
-  "version": "1.0.1-beta",
+  "version": "1.0.0-beta1",
   "description": "Micro-library to split a DOM element's words & chars into elements populated with CSS vars.",
-  "main": "splitting.js",
+  "main": "dist/splitting.js",
   "scripts": {
     "build": "npm run build:lite && npm run build:lite:compressed && npm run build:all && npm run build:all:compressed",
     "build:all": "rollup -c config/rollup.all.js",
@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/shshaw/splitting/issues"
   },
-  "homepage": "https://github.com/shshaw/splitting#readme",
+  "homepage": "https://splitting.js.org",
   "devDependencies": {
     "babel-jest": "^23.4.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
