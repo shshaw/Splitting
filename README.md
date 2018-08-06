@@ -7,8 +7,8 @@
 ![The GZIP size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting@next/dist/splitting.min.js?compression=gzip&label=GZIP%20Size)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Splitting is a collection of small plugins designed to split (section off) an element in a variety of ways, such as words, characters, child nodes, and more!
+Splitting is a JavaScript microlibrary designed to split (section off) an element in a variety of ways, such as words, characters, child nodes, and more!
 
-Most plugins utilize a series of <span>s populated with CSS variables and data attributes unlocking transitions and animations that were previously not feasible with CSS.
+Most Splitting methods utilize a series of <span>s populated with CSS variables and data attributes unlocking transitions and animations that were previously not feasible with CSS.
 
 Consult the [guide & documentation](https://splitting.js.org/guide.html) for more details and installation instructions.
