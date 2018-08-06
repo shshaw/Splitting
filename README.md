@@ -2,10 +2,9 @@
 
 ### _CSS Vars for split words, chars & more!_
 
-![The current build status based on wether tests are passing](https://api.travis-ci.org/shshaw/splitting.svg?branch=master)
-![The Uncompressed size of Beedle](http://img.badgesize.io/https://unpkg.com/splitting?label=Uncompressed%20Size)
-![The GZIP size of Beedle](http://img.badgesize.io/https://unpkg.com/splitting?compression=gzip&label=GZIP%20Size)
-![The Brotli size of Beedle](http://img.badgesize.io/https://unpkg.com/splitting?compression=brotli&label=Brotli%20Size)
+![The current build status based on whether tests are passing](https://api.travis-ci.org/shshaw/Splitting.svg?branch=master)
+![The Uncompressed size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting?label=Uncompressed%20Size)
+![The GZIP size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting@next/dist/splitting.min.js?compression=gzip&label=GZIP%20Size)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Splitting is a collection of small plugins designed to split (section off) an element in a variety of ways, such as words, characters, child nodes, and more!
