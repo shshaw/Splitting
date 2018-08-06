@@ -36,7 +36,7 @@ module.exports = {
             link: "/guide.md#api"
         }],
         // Assumes GitHub. Can also be a full GitLab url.
-        repo: "shshaw/splitting",
+        repo: "shshaw/splitting/tree/1.0.0",
         repoLabel: "Contribute!",
 
         // if your docs are in a different repo from your main project:

@@ -1,6 +1,6 @@
 {
-  "name": "splitting",
-  "version": "0.0.0",
+  "name": "splitting-docs",
+  "version": "1.0.0-beta",
   "description": "Documentation for Splitting",
   "main": "index.js",
   "directories": {
