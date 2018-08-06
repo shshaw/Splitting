@@ -8,8 +8,9 @@
       </h1>
       <div class="version-note">
         <h3>Version 1.0.0 is coming!</h3>
-        <p>The documentation here applies to the 1.0.0 version which features significant changes to the API and greatly increased
-          functionality. Though not officially released, the beta for 1.0.0 is available at
+        <p>The documentation here applies to the
+          <a href="https://github.com/shshaw/Splitting/tree/1.0.0">1.0.0 version</a> which features significant changes to the API and greatly increased functionality. Though not
+          officially released, the beta for 1.0.0 is pretty dang stable and can be installed at
           <code>npm install splitting@next</code>.</p>
         <p>Reference the
           <a href="https://github.com/shshaw/Splitting/blob/master/README.md">README</a> for the current release's documentation.</p>
