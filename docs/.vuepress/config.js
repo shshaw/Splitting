@@ -27,7 +27,7 @@ module.exports = {
     themeConfig: {
         nav: [{
             text: "Guide",
-            link: "/guide.md#installation"
+            link: "/guide.md"
         }, {
             text: "Plugins",
             link: "/guide.md#plugins"
