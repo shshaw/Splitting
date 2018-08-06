@@ -54,9 +54,9 @@ module.exports = {
         repoLabel: "Contribute!",
 
         // if your docs are in a different repo from your main project:
-        docsRepo: "shshaw/splitting",
+        //docsRepo: "shshaw/splitting",
         // if your docs are not at the root of the repo:
-        docsDir: "docs",
+        //docsDir: "docs",
         // if your docs are in a specific branch (defaults to 'master'):
         docsBranch: "docs",
         // defaults to false, set to true to enable
