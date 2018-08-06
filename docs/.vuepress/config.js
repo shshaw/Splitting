@@ -1,27 +1,41 @@
 module.exports = {
     title: "Splitting",
-    description: "CSS Vars for split words, chars, and images!",
+    description: "CSS Vars for split words, chars, and more!",
     base: "/",
     head: [
-        // prettier-ignore
+        ["link", {
+            rel: "apple-touch-icon",
+            sizes: "180x180",
+            href: "/apple-touch-icon.png"
+        }],
         ["link", {
             rel: "icon",
-            href: "/favicon.png"
+            type: "image/png",
+            sizes: "32x32",
+            href: "/favicon-32x32.png"
         }],
         ["link", {
-            rel: 'stylesheet',
-            href: "https://fonts.googleapis.com/css?family=Kanit:900i|Raleway:400"
+            rel: "icon",
+            type: "image/png",
+            sizes: "16x16",
+            href: "/favicon-16x16.png"
         }],
         ["link", {
-            rel: 'stylesheet',
-            href: "https://lucid-northcutt-877344.netlify.com/dist/splitting.css"
+            rel: "manifest",
+            href: "/site.webmanifest"
         }],
         ["link", {
-            rel: 'stylesheet',
-            href: "https://lucid-northcutt-877344.netlify.com/dist/splitting-cells.css"
+            rel: "mask-icon",
+            href: "/safari-pinned-tab.svg",
+            color: "#5bbad5"
         }],
-        ["script", {
-            src: "https://lucid-northcutt-877344.netlify.com/dist/splitting.js"
+        ["meta", {
+            name: "msapplication-TileColor",
+            content: "#00043c"
+        }],
+        ["meta", {
+            name: "theme-color",
+            content: "#00043C"
         }]
     ],
     themeConfig: {
