@@ -12,3 +12,6 @@ Splitting is a JavaScript microlibrary designed to split (section off) an elemen
 Most Splitting methods utilize a series of <span>s populated with CSS variables and data attributes unlocking transitions and animations that were previously not feasible with CSS.
 
 Consult the [guide & documentation](https://splitting.js.org/guide.html) for more details and installation instructions.
+
+- [**Guide & Documentation**](https://splitting.js.org/guide.html)
+- [**Demos**](https://codepen.io/collection/43588e4b7beaaf25ede7e38e61441e54/)
