@@ -6,6 +6,14 @@
           <SplittingLogo></SplittingLogo>
         </a>
       </h1>
+      <div class="version-note">
+        <h3>Version 1.0.0 is coming!</h3>
+        <p>The documentation here applies to the 1.0.0 version which features significant changes to the API and greatly increased
+          functionality. Though not officially released, the beta for 1.0.0 is available at
+          <code>npm install splitting@next</code>.</p>
+        <p>Reference the
+          <a href="https://github.com/shshaw/Splitting/blob/master/README.md">README</a> for the current release's documentation.</p>
+      </div>
       <Content class="home-content" custom/>
       <p class="action" v-if="data.actionText && data.actionLink">
         <NavLink class="action-button" :item="actionLink" />
@@ -85,9 +93,26 @@
       } // margin-bottom: 3rem;
     }
 
+    .version-note,
     .home-content.home-content {
-      max-width: 30em;
+      max-width: 34em;
       margin: 2rem auto;
+    }
+
+    .version-note {
+      background: $blue;
+      padding: 1rem;
+      border-radius: .25em;
+      code {
+        display: inline-block;
+        background: darken($blue, 20%);
+        padding: .1em .4em;
+        border-radius: .25em;
+      }
+      h3 {
+        font-size: 1.2rem;
+        display: block;
+      }
     }
 
     .features {
