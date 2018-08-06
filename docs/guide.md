@@ -5,7 +5,7 @@ sidebar: auto
 
 ## What is Splitting?
 
-Splitting is a collection of small [plugins](#plugins) designed to split (section off) an element in a variety of ways, such as [words](#words), [characters](#chars), [child nodes](#items), and [more](#plugins)!
+Splitting is a JavaScript microlibrary with a collection of small [plugins](#plugins) designed to split (section off) an element in a variety of ways, such as [words](#words), [characters](#chars), [child nodes](#items), and [more](#plugins)!
 
 Most plugins utilize a series of `<span>`s populated with CSS variables and data attributes that empower you to build all kinds of animations, transitions and interactions.
 
@@ -13,18 +13,16 @@ The general flow is:
 
 1.  `Splitting()` is called on a `target` (see: [Basic Usage](#basic-usage))
 1.  Create `<span>`s to inject into `target`, or query children of `target`
-1.  Index with CSS variables ( `<span class="word" style="--item-index: 0">` )
+1.  Index with CSS variables ( `<span class="word" style="--word-index: 0">` )
 1.  Add the total to the target ( `<div data-splitting style="--word-total: 3">` )
 1.  Return an array of the splits (see: [Returns](#returns))
-1.  Animate those elements with CSS or
-
+1.  Animate those elements with CSS or JavaScript!
 
 ## Get Started
 
-Start playing around with your own Splitting demo on [CodePen](https://codepen.io) with this template that includes all of the essentials!
+Start playing around with your own Splitting demo on CodePen with this template that includes all of the essentials!
 
 <CodePenTemplate />
-
 
 ### Basic Usage
 
@@ -79,7 +77,6 @@ Splitting({
 
 ## Installation
 
-
 Why bother with build systems or files? Use the CodePen Template to make your own Splitting demo!
 
 <CodePenTemplate />
@@ -104,7 +101,9 @@ Splitting();
 
 ### Using a CDN
 
-_CDN use is only recommended for demos / experiments on platforms like [CodePen](https://codepen.io). For production use, bundle Splitting using the [NPM package](#using-npm) with Webpack or your preferred code bundler._
+::: tip
+CDN use is only recommended for demos / experiments on platforms like [CodePen](https://codepen.io). For production use, bundle Splitting using the [NPM package](#using-npm) with Webpack or your preferred code bundler.
+:::
 
 You can get the latest version of Splitting off of the [unpkg CDN](https://unpkg.com) and include the necessary files as follows.
 
@@ -132,7 +131,6 @@ Included in the package are two small stylesheets of recommended CSS that will m
 Splitting should be thought of as a progressive enhancer. The basic functions work in any halfway decent browser (IE11+). Browsers that support CSS Variables ( [~85% of the current browser market share](https://caniuse.com/#feat=css-variables) ) will have the best experience. Browsers without CSS Variable support can still have a nice experience with at least some animation, but features like index-based staggering may not be feasible without JavaScript.
 
 The styles in `splitting-cells.css` for the [`cells` plugin](#cells) rely on `display: grid`, so there may be additional browser limitations. In general, [all browsers that support CSS variables also support grid](https://caniuse.com/#feat=css-variables,css-grid) so you should be in the clear.
-
 
 ## Plugins
 
