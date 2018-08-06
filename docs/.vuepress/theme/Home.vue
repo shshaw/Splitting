@@ -25,12 +25,10 @@
 
 <script>
   import NavLink from "./NavLink.vue";
-  import SplittingLogo from "./SplittingLogo.vue";
 
   export default {
     components: {
       NavLink,
-      SplittingLogo
     },
     computed: {
       data() {

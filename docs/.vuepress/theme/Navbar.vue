@@ -27,11 +27,9 @@
   import AlgoliaSearchBox from "@AlgoliaSearchBox";
   import SearchBox from "./SearchBox.vue";
   import NavLinks from "./NavLinks.vue";
-  import SplittingLogo from "./SplittingLogo.vue";
 
   export default {
     components: {
-      SplittingLogo,
       SidebarButton,
       NavLinks,
       SearchBox,
@@ -89,7 +87,14 @@
   }
 
   @media (max-width: $MQMobile) {
+
     .navbar {
+      .home-link {
+        display: block;
+        font-size: 2rem;
+        margin: auto;
+        text-align: center;
+      }
       padding-left: 4rem;
 
       .can-hide {

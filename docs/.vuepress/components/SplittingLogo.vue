@@ -4,7 +4,8 @@
     <div class="banana"></div>
     <span class="word" data-word="Splitting" style="--word-index:0;">
       <!-- prettier-ignore-start -->
-      <span class="char" data-char="S" style="--char-index:0;">S</span><span class="char" data-char="p" style="--char-index:1;">p</span><span class="char" data-char="l" style="--char-index:2;">l</span><span class="char" data-char="i" style="--char-index:3;">i</span><span class="char" data-char="t" style="--char-index:4;">t</span><span class="char" data-char="t" style="--char-index:5;">t</span><span class="char" data-char="i" style="--char-index:6;">i</span><span class="char" data-char="n" style="--char-index:7;">n</span><span class="char" data-char="g" style="--char-index:8;">g</span><!-- prettier-ignore-end -->
+      <span class="char" data-char="S" style="--char-index:0;">S</span><span class="char" data-char="p" style="--char-index:1;">p</span><span class="char" data-char="l" style="--char-index:2;">l</span><span class="char" data-char="i" style="--char-index:3;">i</span><span class="char" data-char="t" style="--char-index:4;">t</span><span class="char" data-char="t" style="--char-index:5;">t</span><span class="char" data-char="i" style="--char-index:6;">i</span><span class="char" data-char="n" style="--char-index:7;">n</span><span class="char" data-char="g" style="--char-index:8;">g</span>
+      <!-- prettier-ignore-end -->
     </span>
   </span>
 
@@ -22,7 +23,7 @@
 </script>
 
 <style lang="stylus">
-  @import './styles/config.styl';
+  @import '../theme/styles/config.styl';
 
   .splitting-logo {
     font-family: "Kanit";
@@ -34,12 +35,6 @@
     display: inline-block;
     position: relative;
     white-space: nowrap;
-  }
-
-  @media (max-width: 36em) {
-    .splitting-logo {
-      font-size: 3em;
-    }
   }
 
   .splitting-logo .char {
@@ -88,7 +83,6 @@
       animation: banana-spin 0.5s cubic-bezier(0, 0.8, 0.6, 1) 0.8s both;
     }
   }
-
 
   .splitting-logo .banana:after {
     position: absolute;
