@@ -38,17 +38,17 @@
         endingSlashRE
     } from "./util";
 
-    import Splitting from 'splitting/';
+    //import Splitting from 'splitting/';
 
     export default {
         props: ["sidebarItems"],
 
-        mounted() {
-            Splitting({
-                target: this.$el.querySelector('h1,h2,h3,h4,h5'),
-                by: 'words'
-            })
-        },
+        // mounted() {
+        //     Splitting({
+        //         target: this.$el.querySelector('h1,h2,h3,h4,h5'),
+        //         by: 'words'
+        //     })
+        // },
         computed: {
             lastUpdated() {
                 if (this.$page.lastUpdated) {
