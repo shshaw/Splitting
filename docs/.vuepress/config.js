@@ -4,6 +4,10 @@ module.exports = {
     base: "/",
     head: [
         ["link", {
+            rel: "stylesheet",
+            href: "https://fonts.googleapis.com/css?family=Kanit:600,900i|Raleway:400,500,700"
+        }],
+        ["link", {
             rel: "apple-touch-icon",
             sizes: "180x180",
             href: "/apple-touch-icon.png"
