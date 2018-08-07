@@ -136,7 +136,7 @@ The styles in `splitting-cells.css` for the [`cells` plugin](#cells) rely on `di
 
 Plugins are the heart of Splitting, each performing a specific split on the targeted element(s). Some plugins have dependencies that will automatically run when called. For example `chars` will automatically split by `words` to prevent issues with text wrapping.
 
-Each plugin should [return a property matching the plugin name](#returns) containing the split elements. Some plugins have [additional options](#splitting) you can pass directly in the main options object for specific uses.
+Each plugin should [return a property matching the plugin name](#returns) containing the split elements. Some plugins have [additional options](#plugin-specific-options) you can pass directly in the main options object for specific uses.
 
 ### words
 
