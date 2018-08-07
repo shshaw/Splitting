@@ -1,4 +1,4 @@
-# [![Splitting](https://splitting.js.org/splitting.gif "Splitting")](https://splitting.js.org)
+# [<img src="https://splitting.js.org/splitting.gif" alt="Splitting" style="max-width: 100%; height:auto" />](https://splitting.js.org)
 
 ### _CSS Vars for split words, chars & more!_
 
