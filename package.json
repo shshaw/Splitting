@@ -1,18 +1,25 @@
 {
   "name": "splitting",
-  "version": "0.11.3",
-  "description": "Microlibrary to split a DOM element's words & chars into elements populated with CSS vars.",
-  "main": "splitting.js",
+  "version": "1.0.0-beta1",
+  "description": "Micro-library to split a DOM element's words & chars into elements populated with CSS vars.",
+  "main": "dist/splitting.js",
   "scripts": {
-    "build": "rollup src/splitting.js --output.format umd --name 'Splitting' --output.file splitting.js && uglifyjs -c -m -o splitting.min.js -- splitting.js && npm run sizes",
-    "sizes": "gzip -9 -c splitting.min.js | wc -c && cat splitting.min.js | wc -c",
+    "build": "npm run build:lite && npm run build:lite:compressed && npm run build:all && npm run build:all:compressed",
+    "build:all": "rollup -c config/rollup.all.js",
+    "build:all:compressed": "rollup -c config/rollup.all.compressed.js",
+    "build:lite": "rollup -c config/rollup.lite.js",
+    "build:lite:compressed": "rollup -c config/rollup.lite.compressed.js",
     "version": "npm run build && git add .",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shshaw/splitting.git"
   },
+  "files": [
+    "dist/*"
+  ],
   "keywords": [
     "split",
     "text",
@@ -27,5 +34,27 @@
   "bugs": {
     "url": "https://github.com/shshaw/splitting/issues"
   },
-  "homepage": "https://github.com/shshaw/splitting#readme"
+  "homepage": "https://splitting.js.org",
+  "devDependencies": {
+    "babel-jest": "^23.4.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^22.3.0",
+    "jsdom": "^11.11.0",
+    "rollup": "^0.55.5",
+    "rollup-plugin-filesize": "^2.0.0",
+    "rollup-plugin-uglify": "^4.0.0",
+    "uglify-js": "^3.3.11"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js": "babel-jest"
+    },
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testRegex": "tests/features/.*\\.js$",
+    "setupTestFrameworkScriptFile": "./tests/_setup.js"
+  },
+  "dependencies": {}
 }
