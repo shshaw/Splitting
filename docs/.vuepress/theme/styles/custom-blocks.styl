@@ -1,5 +1,7 @@
 .custom-block {
+  font-size: 0.9rem;
   .custom-block-title {
+    font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: -0.4rem;
   }
@@ -12,8 +14,8 @@
   }
 
   &.tip {
-    background-color: #151F2D; //$blue;//#f3f5f7;
-    border-color: $accentColor; //#42b983;
+    background-color: darken(desaturate($blue, 5%), 20%); //#151F38; //$blue;//#f3f5f7;
+    border-color: $accentColor;
   }
 
   &.warning {
