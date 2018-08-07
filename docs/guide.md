@@ -364,6 +364,10 @@ results[0].cells[4] // <span class="cell" style="--cell-index: 3; --row-index: 1
 </script>
 ```
 
+### Make Your Own!
+
+Splitting is easily expandable to create your own splits. See the API for [`Splitting.add()`](#splitting-add) for more details. Be sure to share your plugins and demos with [#splittingjs](https://twitter.com/hashtag/splittingjs)!
+
 ## API
 
 ### `Splitting()`
