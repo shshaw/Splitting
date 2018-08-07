@@ -5,7 +5,7 @@ sidebar: auto
 
 ## What is Splitting?
 
-Splitting is a JavaScript microlibrary with a collection of small [plugins](#plugins) designed to split (section off) an element in a variety of ways, such as [words](#words), [characters](#chars), [child nodes](#items), and [more](#plugins)!
+Splitting is a JavaScript microlibrary with a collection of small [built-in plugins](#plugins) designed to split (section off) an element in a variety of ways, such as [words](#words), [characters](#chars), [child nodes](#items), and [more](#plugins)!
 
 Most plugins utilize a series of `<span>`s populated with CSS variables and data attributes that empower you to build all kinds of animations, transitions and interactions.
 
