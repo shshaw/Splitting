@@ -1,4 +1,4 @@
-# Splitting
+# [![Splitting](https://splitting.js.org/splitting.gif "Splitting")](https://splitting.js.org)
 
 ### _CSS Vars for split words, chars & more!_
 
@@ -9,7 +9,7 @@
 
 Splitting is a JavaScript microlibrary designed to split (section off) an element in a variety of ways, such as words, characters, child nodes, and more!
 
-Most Splitting methods utilize a series of <span>s populated with CSS variables and data attributes unlocking transitions and animations that were previously not feasible with CSS.
+Most Splitting methods utilize a series of `<span>`s populated with CSS variables and data attributes unlocking transitions and animations that were previously not feasible with CSS.
 
 Consult the [guide & documentation](https://splitting.js.org/guide.html) for more details and installation instructions.
 
