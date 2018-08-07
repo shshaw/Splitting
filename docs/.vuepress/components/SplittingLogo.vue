@@ -26,7 +26,7 @@
   @import '../theme/styles/config.styl';
 
   .splitting-logo {
-    font-family: "Kanit";
+    font-family: "Kanit", sans-serif;
     font-weight: 900;
     font-style: italic;
     text-decoration: none;
