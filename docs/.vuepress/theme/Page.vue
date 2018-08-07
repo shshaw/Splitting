@@ -43,12 +43,27 @@
     export default {
         props: ["sidebarItems"],
 
-        // mounted() {
-        //     Splitting({
-        //         target: this.$el.querySelector('h1,h2,h3,h4,h5'),
-        //         by: 'words'
-        //     })
-        // },
+        mounted() {
+            const targets = this.$el.querySelectorAll('h1,h2,h3,h4,h5');
+            if (targets) {
+                import ('scroll-out').then(module => {
+                    const ScrollOut = module.default;
+
+                    ScrollOut({
+                        targets: targets,
+                        threshold: .9
+                    })
+
+                });
+                import ('splitting').then(module => {
+                    const Splitting = module.default;
+                    Splitting({
+                        target: targets,
+                        by: 'chars'
+                    })
+                });
+            }
+        },
         computed: {
             lastUpdated() {
                 if (this.$page.lastUpdated) {
@@ -105,12 +120,14 @@
 
                 if (docsRepo && editLinks) {
                     const base = outboundRE.test(docsRepo) ? docsRepo : `https://github.com/${docsRepo}`;
-                    return base.replace(endingSlashRE, "") + `/edit/${docsBranch}` + (docsDir ? "/" + docsDir.replace(
-                        endingSlashRE, "") : "") + path;
+                    return base.replace(endingSlashRE, "") + `/edit/${docsBranch}` + (docsDir ? "/" +
+                        docsDir.replace(
+                            endingSlashRE, "") : "") + path;
                 }
             },
             editLinkText() {
-                return this.$themeLocaleConfig.editLinkText || this.$site.themeConfig.editLinkText || `Edit this page`;
+                return this.$themeLocaleConfig.editLinkText || this.$site.themeConfig.editLinkText ||
+                    `Edit this page`;
             }
         }
     };
@@ -177,6 +194,20 @@
                 font-weight: 400;
                 color: #aaa;
             }
+        }
+    }
+
+    .page .splitting {
+        overflow: hidden;
+        .char {
+            transition: opacity .4s cubic-bezier(.5, 0, .5, 1);
+            transition-delay: calc(50ms + (50ms * var(--char-index)));
+
+        }
+
+        &[data-scroll="out"] .char {
+            // transform: translateY(100%);
+            opacity: 0.4; // transition-delay: 0s;
         }
     }
 
