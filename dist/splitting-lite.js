@@ -5,6 +5,7 @@
 }(this, (function () { 'use strict';
 
 var root = document;
+var createText = root.createTextNode.bind(root);
 
 /**
  * # setProperty
@@ -27,13 +28,17 @@ function appendChild(el, child) {
 }
 
 function createElement(parent, key, text, whitespace) {
-  var el = document.createElement('span');
-  el.className = key; 
+  var el = root.createElement('span');
+  key && (el.className = key); 
   if (text) { 
       !whitespace && el.setAttribute("data-" + key, text);
       el.textContent = text; 
   }
   return (parent && appendChild(parent, el)) || el;
+}
+
+function getData(el, key) {
+  return el.getAttribute("data-" + key)
 }
 
 /**
@@ -201,19 +206,28 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
 
         // Get the text to split, trimming out the whitespace
         /** @type {string} */
-        var text = (next.wholeText || "").trim();
+        var wholeText = next.wholeText || '';
+        var contents = wholeText.trim();
 
         // If there's no text left after trimming whitespace, continue the loop
-        if (text.length) {
+        if (contents.length) {
+            // insert leading space if there was one
+            if (wholeText[0] === ' ') {
+                allElements.push(createText(' '));
+            }
             // Concatenate the split text children back into the full array
-            each(text.split(splitOn), function(splitText, i) {
+            each(contents.split(splitOn), function(splitText, i) {
                 if (i && preserveWhitespace) {
                     allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
                 }
                 var splitEl = createElement(F, key, splitText);
                 elements.push(splitEl);
                 allElements.push(splitEl);
-            });
+            }); 
+            // insert trailing space if there was one
+            if (wholeText[wholeText.length - 1] === ' ') {
+                allElements.push(createText(' '));
+            }
         }
     });
 
@@ -269,7 +283,7 @@ function Splitting (opts) {
 
   return $(opts.target || '[data-splitting]').map(function(el) {
     var ctx = { el: el };
-    var items = resolve(opts.by || el.dataset.splitting || CHARS);
+    var items = resolve(opts.by || getData(el, 'splitting') || CHARS);
 
     each(items, function(plugin) {
       if (plugin.split) {
@@ -294,8 +308,9 @@ function Splitting (opts) {
  */
 function html(opts) {
   opts = opts || {};
-  var el = opts.target = createElement();
-  el.innerHTML = opts.content;
+  var parent = createElement();
+  parent.innerHTML = opts.content;
+  var el = opts.target = parent.firstElementChild;
   Splitting(opts);
   return el.outerHTML
 }
