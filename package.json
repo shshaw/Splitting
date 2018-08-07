@@ -1,13 +1,14 @@
 {
   "name": "splitting-docs",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "description": "Documentation for Splitting",
   "main": "index.js",
   "directories": {
     "doc": "docs"
   },
   "dependencies": {
-    "splitting": "^1.0.0-beta1",
+    "scroll-out": "^2.1.0",
+    "splitting": "^1.0.0",
     "vuepress": "^0.13.1"
   },
   "scripts": {
