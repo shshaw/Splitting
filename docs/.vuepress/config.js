@@ -2,6 +2,7 @@ module.exports = {
     title: "Splitting",
     description: "CSS Vars for split words, chars, and more!",
     base: "/",
+    ga: "UA-6412794-8",
     head: [
         ["link", {
             rel: "stylesheet",
