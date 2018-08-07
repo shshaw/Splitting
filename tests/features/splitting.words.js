@@ -1,27 +1,27 @@
-import Splitting from '../../src/all';
+import Splitting from "../../src/all";
 
-test("an empty element", function() {
+test("an empty element", () => {
   var $el = document.createElement("div");
 
-  var els = Splitting({ target: $el, by: 'words' });
+  var els = Splitting({ target: $el, by: "words" });
   expect(els.length).toBe(1);
   expect(els[0].words.length).toBe(0);
 });
 
-test("an element with a single word", function() {
+test("an element with a single word", () => {
   var $el = document.createElement("div");
   $el.innerHTML = "SPLITTING";
 
-  var els = Splitting({ target: $el, by: 'words' });
+  var els = Splitting({ target: $el, by: "words" });
   expect(els.length).toBe(1);
   expect(els[0].words[0].textContent).toBe("SPLITTING");
 });
 
-test("an element with a multiple words", function() {
+test("an element with a multiple words", () => {
   var $el = document.createElement("div");
   $el.innerHTML = "with multiple words";
 
-  var els = Splitting({ target: $el, by: 'words' });
+  var els = Splitting({ target: $el, by: "words" });
   expect(els.length).toBe(1);
   expect(els[0].words.length).toBe(3);
   expect(els[0].words[0].textContent).toBe("with");
@@ -29,18 +29,36 @@ test("an element with a multiple words", function() {
   expect(els[0].words[2].textContent).toBe("words");
 });
 
-test("a nested empty element", function() {
+test("mixed content with spaces around words", () => {
+  const input = '<div>Are <b>We</b> Good?</div>'
+  const actual = Splitting.html({ content: input, by: 'words' });
+  // prettier-ignore
+  const expected = 
+    `<div class=\"words splitting\">`
+      + `<span class=\"word\" data-word=\"Are\">Are</span>`
+      + ' ' // <- space preserved
+      + `<b>` 
+        + `<span class=\"word\" data-word=\"We\">We</span>`
+      + `</b>`
+      + ' ' // <- space preserved
+      + `<span class=\"word\" data-word=\"Good?\">Good?</span>` 
+    + `</div>`;
+
+  expect(actual).toBe(expected);
+});
+
+test("a nested empty element", () => {
   // todo
 });
 
-test("a multi-level nested empty element", function() {
+test("a multi-level nested empty element", () => {
   // todo
 });
 
-test("a multi-level nested element", function() {
+test("a multi-level nested element", () => {
   // todo
 });
 
-test("retriggering on already split element", function() {
+test("retriggering on already split element", () => {
   // todo
 });

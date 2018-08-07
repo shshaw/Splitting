@@ -1,4 +1,5 @@
 export var root = document;
+export var createText = root.createTextNode.bind(root);
 
 /**
  * # setProperty
@@ -21,7 +22,7 @@ export function appendChild(el, child) {
 }
 
 export function createElement(parent, key, text, whitespace) {
-  var el = document.createElement('span');
+  var el = root.createElement('span');
   key && (el.className = key); 
   if (text) { 
       !whitespace && el.setAttribute("data-" + key, text);
