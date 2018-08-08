@@ -3,7 +3,7 @@
 ### _CSS Vars for split words, chars & more!_
 
 ![The current build status based on whether tests are passing](https://api.travis-ci.org/shshaw/Splitting.svg?branch=1.0.0)
-![The Uncompressed size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting?label=Uncompressed%20Size)
+![The Uncompressed size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting/dist/splitting.min.js?label=Minified%20Size)
 ![The GZIP size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting/dist/splitting.min.js?compression=gzip&label=GZIP%20Size)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
