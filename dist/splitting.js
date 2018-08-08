@@ -250,6 +250,13 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
 /** an empty value */
 var _ = 0;
 
+function copy(dest, src) {
+    for (var k in src) {
+        dest[k] = src[k];
+    }
+    return dest;
+}
+
 var WORDS = 'words';
 
 var wordPlugin = createPlugin(
@@ -290,12 +297,13 @@ function Splitting (opts) {
   return $(opts.target || '[data-splitting]').map(function(el) {
     var ctx = { el: el };
     var items = resolve(opts.by || getData(el, 'splitting') || CHARS);
+    var opts2 = copy({}, opts);
 
     each(items, function(plugin) {
       if (plugin.split) {
         var pluginBy = plugin.by;
         var key2 = (key ? '-' + key : '') + plugin.key;
-        var results = plugin.split(el, opts, ctx);
+        var results = plugin.split(el, opts2, ctx);
         key2 && index(el, key2, results);
         ctx[pluginBy] = results;
         el.classList.add(pluginBy);
