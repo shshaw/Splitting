@@ -2,7 +2,7 @@
   <div class="home">
     <div class="hero">
       <h1>
-        <a :href="actionLink.link">
+        <a href="./guide.html">
           <SplittingLogo></SplittingLogo>
         </a>
       </h1>
