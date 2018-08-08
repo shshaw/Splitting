@@ -346,9 +346,9 @@ function detectGrid(el, options, side) {
 var linePlugin = createPlugin(
     /*by: */ 'lines',
     /*depends: */ [WORDS],
-    /*key: */ 'line', 
+    /*key: */ 'line',
     /*split: */ function(el, options, ctx) {
-      return detectGrid(ctx[WORDS], options, 'offsetTop')
+      return detectGrid(el, { matching: ctx[WORDS] }, 'offsetTop')
     }
 );
 
