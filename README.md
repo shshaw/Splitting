@@ -4,7 +4,7 @@
 
 ![The current build status based on whether tests are passing](https://api.travis-ci.org/shshaw/Splitting.svg?branch=1.0.0)
 ![The Uncompressed size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting?label=Uncompressed%20Size)
-![The GZIP size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting@next/dist/splitting.min.js?compression=gzip&label=GZIP%20Size)
+![The GZIP size of Splitting](http://img.badgesize.io/https://unpkg.com/splitting/dist/splitting.min.js?compression=gzip&label=GZIP%20Size)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Splitting is a JavaScript microlibrary designed to split (section off) an element in a variety of ways, such as words, characters, child nodes, and more!
