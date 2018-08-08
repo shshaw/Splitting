@@ -5,9 +5,8 @@
         <a :href="ensureExt('./guide.md')">
           <SplittingLogo></SplittingLogo>
         </a>
-
       </h1>
-      <Content class="home-content" custom/>
+      <Content class="home-content" custom></Content>
       <p class="action" v-if="data.actionText && data.actionLink">
         <NavLink class="action-button" :item="actionLink" />
       </p>
