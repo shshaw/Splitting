@@ -7,7 +7,7 @@ features:
 - title: DoubleDash your CSS
   details: The previously impractical becomes downright easy with Splitting's CSS Variables.
 - title: Comically Small
-  details: A shocking amount of features in a 1.5kb (minified and gzipped) package. <a href="https://github.com/shshaw/Splitting/archive/master.zip" class="action-button small">Download</a>
+  details: A shocking amount of features in a 1.5kb (minified and gzipped) package.
 - title: Progressively Enhance
   details: Upgrade websites for modern browsers without breaking IE.
 footer: MIT Licensed | Copyright © 2018-present Stephen Shaw
