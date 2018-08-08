@@ -1,4 +1,4 @@
-.splitting img { width: 100%; display: block; }
+.splitting.cells img { width: 100%; display: block; }
 
 @supports ( display: grid ) {
   .splitting.cells {
