@@ -34,7 +34,8 @@ test("mixed content with spaces around words", () => {
   const actual = Splitting.html({ content: input, by: 'words' });
   // prettier-ignore
   const expected = 
-    `<div class=\"words splitting\">`
+    `<span class=\"words splitting\">`
+      + `<div>`
       + `<span class=\"word\" data-word=\"Are\">Are</span>`
       + ' ' // <- space preserved
       + `<b>` 
@@ -42,7 +43,8 @@ test("mixed content with spaces around words", () => {
       + `</b>`
       + ' ' // <- space preserved
       + `<span class=\"word\" data-word=\"Good?\">Good?</span>` 
-    + `</div>`;
+      + `</div>`
+    + `</span>`;
 
   expect(actual).toBe(expected);
 });

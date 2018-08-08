@@ -6,7 +6,8 @@ test('basic test', function () {
 
   // jsdom isn't outputting css custom properties, so this is as correct as we can go
   const expected = 
-    '<div class="words chars splitting">' +
+  `<span class="words chars splitting">` +
+    '<div>' +
         '<span class="word" data-word="Hello">' +
             '<span class="char" data-char="H">H</span>' +
             '<span class="char" data-char="e">e</span>' +
@@ -23,7 +24,26 @@ test('basic test', function () {
             '<span class="char" data-char="d">d</span>' +
             '<span class="char" data-char="!">!</span>' +
         '</span>' +
-    '</div>';
+    '</div>' + 
+    `</span>`;
 
   expect(actual).toBe(expected);
+});
+
+test('splitting textContent works properly', () => {
+    const content = "Hello!";
+    const actual = Splitting.html({ content }); 
+    
+    const expected = `<span class="words chars splitting">`
+        + `<span class="word" data-word="Hello!">`
+            + `<span class="char" data-char="H">H</span>`
+            + `<span class="char" data-char="e">e</span>`
+            + `<span class="char" data-char="l">l</span>`
+            + `<span class="char" data-char="l">l</span>`
+            + `<span class="char" data-char="o">o</span>`
+            + `<span class="char" data-char="!">!</span>`
+        + `</span>`
+    + `</span>`;
+
+    expect(actual).toBe(expected);
 });

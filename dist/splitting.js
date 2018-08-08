@@ -322,11 +322,10 @@ function Splitting (opts) {
  */
 function html(opts) {
   opts = opts || {};
-  var parent = createElement();
+  var parent = opts.target =  createElement();
   parent.innerHTML = opts.content;
-  var el = opts.target = parent.firstElementChild;
   Splitting(opts);
-  return el.outerHTML
+  return parent.outerHTML
 }
 
 Splitting.html = html;
