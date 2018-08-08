@@ -1,7 +1,7 @@
 <template>
 
   <span class="splitting-logo" :class="{ '-animated': animated }" style="--word-total:1; --char-total:9;">
-    <div class="brad-split"></div>
+    <span class="brad-split"></span>
     <span class="word" data-word="Splitting" style="--word-index:0;">
       <!-- prettier-ignore-start -->
       <span class="char" data-char="S" style="--char-index:0;">S</span><span class="char" data-char="p" style="--char-index:1;">p</span><span class="char" data-char="l" style="--char-index:2;">l</span><span class="char" data-char="i" style="--char-index:3;">i</span><span class="char" data-char="t" style="--char-index:4;">t</span><span class="char" data-char="t" style="--char-index:5;">t</span><span class="char" data-char="i" style="--char-index:6;">i</span><span class="char" data-char="n" style="--char-index:7;">n</span><span class="char" data-char="g" style="--char-index:8;">g</span>
@@ -71,6 +71,7 @@
     z-index: 1;
     margin: auto;
     height: 1.5em;
+    display: block;
   }
 
   .splitting-logo.\-animated .brad-split {
