@@ -63,6 +63,10 @@
     margin: 0px auto;
     text-align: center;
 
+    .action-button:only-child {
+      margin: 1rem auto;
+       }
+
     .hero {
       padding: 2rem 0 1rem 0;
 
@@ -97,21 +101,21 @@
       margin: 2rem auto;
     }
 
-    .version-note {
-      background: $blue;
-      padding: 1rem;
-      border-radius: .25em;
-      code {
-        display: inline-block;
-        background: darken($blue, 20%);
-        padding: .1em .4em;
-        border-radius: .25em;
-      }
-      h3 {
-        font-size: 1.2rem;
-        display: block;
-      }
-    }
+    // .version-note {
+    //   background: $blue;
+    //   padding: 1rem;
+    //   border-radius: .25em;
+    //   code {
+    //     display: inline-block;
+    //     background: darken($blue, 20%);
+    //     padding: .1em .4em;
+    //     border-radius: .25em;
+    //   }
+    //   h3 {
+    //     font-size: 1.2rem;
+    //     display: block;
+    //   }
+    // }
 
     .features {
       border-top: 1px solid $borderColor;

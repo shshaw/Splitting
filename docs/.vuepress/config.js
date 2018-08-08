@@ -59,7 +59,7 @@ module.exports = {
         }],
         // Assumes GitHub. Can also be a full GitLab url.
         repo: "shshaw/splitting/",
-        repoLabel: "Contribute!",
+        repoLabel: "View on GitHub",
 
         // if your docs are in a different repo from your main project:
         //docsRepo: "shshaw/splitting",
