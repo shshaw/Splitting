@@ -10,7 +10,6 @@
     "build:lite": "rollup -c config/rollup.lite.js",
     "build:lite:compressed": "rollup -c config/rollup.lite.compressed.js",
     "version": "npm run build && git add .",
-    "postversion": "git push && git push --tags",
     "test": "jest"
   },
   "repository": {
