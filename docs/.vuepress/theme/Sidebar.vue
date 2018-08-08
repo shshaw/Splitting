@@ -1,5 +1,7 @@
 <template>
   <div class="sidebar">
+
+      <CodePenTemplate classes="action-button small" text="CodePen Template →" style="display: block; margin: 1rem auto; text-align: center;"></CodePenTemplate>
     <NavLinks/>
     <slot name="top"/>
     <ul class="sidebar-links" v-if="items.length">
