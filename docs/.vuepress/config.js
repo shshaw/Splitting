@@ -53,6 +53,9 @@ module.exports = {
         }, {
             text: "API",
             link: "/guide.md#api"
+        }, {
+            text: "Demos",
+            link: "https://codepen.io/collection/XpROaV/"
         }],
         // Assumes GitHub. Can also be a full GitLab url.
         repo: "shshaw/splitting/",
