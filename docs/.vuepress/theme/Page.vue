@@ -199,13 +199,14 @@
 
     .page .splitting {
         .char {
-            transition: opacity .4s cubic-bezier(.5, 0, .5, 1);
-            transition-delay: calc(50ms + (50ms * var(--char-index)));
+            transition: transform .3s cubic-bezier(.3, 0, .3, 1), opacity .3s linear;
+            transition-delay: calc(20ms + ( 30ms * var(--char-index) ) );
 
         }
 
         &[data-scroll="out"] .char {
             opacity: 0.4;
+            transform: translateX( calc( .2em * var(--char-index) ) );
         }
     }
 
