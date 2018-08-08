@@ -198,7 +198,6 @@
     }
 
     .page .splitting {
-        overflow: hidden;
         .char {
             transition: opacity .4s cubic-bezier(.5, 0, .5, 1);
             transition-delay: calc(50ms + (50ms * var(--char-index)));
@@ -206,8 +205,7 @@
         }
 
         &[data-scroll="out"] .char {
-            // transform: translateY(100%);
-            opacity: 0.4; // transition-delay: 0s;
+            opacity: 0.4;
         }
     }
 
