@@ -2,9 +2,10 @@
   <div class="home">
     <div class="hero">
       <h1>
-        <a href="./guide.html">
+        <a :href="ensureExt('./guide.md')">
           <SplittingLogo></SplittingLogo>
         </a>
+
       </h1>
       <Content class="home-content" custom/>
       <p class="action" v-if="data.actionText && data.actionLink">
@@ -25,10 +26,15 @@
 
 <script>
   import NavLink from "./NavLink.vue";
-
+  import {
+    ensureExt
+  } from "./util.js";
   export default {
     components: {
       NavLink,
+    },
+    methods: {
+      ensureExt
     },
     computed: {
       data() {
