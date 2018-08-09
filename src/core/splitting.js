@@ -16,8 +16,7 @@ export function Splitting (opts) {
   var key = opts.key;
 
   return $(opts.target || '[data-splitting]').map(function(el) {
-    var ctx = el['🍌']; 
-    console.log('force: ' + opts.force);
+    var ctx = el['🍌'];  
     if (!opts.force && ctx) {
       return ctx;
     }
