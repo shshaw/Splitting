@@ -58,3 +58,21 @@ test("passing an attribute selector", function () {
 
   document.body.removeChild(el);
 });
+
+test("returns the same thing if split more than once", function () {
+  var el = document.createElement("span"); 
+  el.innerHTML = "Hello World";
+
+  var els1 = Splitting({ target: el });
+  var els2 = Splitting({ target: el });
+  expect(els1[0]).toBe(els2[0]);
+});
+
+test("returns a different thing if force split", function () {
+  var el = document.createElement("span"); 
+  el.innerHTML = "Hello World"; 
+
+  var els1 = Splitting({ target: el, by: 'grid' });
+  var els2 = Splitting({ target: el, by: 'grid', force: true });
+  expect(els1[0]).not.toBe(els2[0]);
+});

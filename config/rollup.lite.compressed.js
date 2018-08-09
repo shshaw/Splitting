@@ -4,7 +4,7 @@ import { minify } from 'uglify-js';
 import uglifyOptions from './compress.json';
 
 export default {
-  entry: 'src/lite.js', 
+  input: 'src/lite.js', 
   output: [ 
     { file: 'dist/splitting-lite.min.js', name: 'Splitting', format: 'umd' },
   ],

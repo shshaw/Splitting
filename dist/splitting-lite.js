@@ -289,10 +289,15 @@ function Splitting (opts) {
   var key = opts.key;
 
   return $(opts.target || '[data-splitting]').map(function(el) {
-    var ctx = { el: el };
+    var ctx = el['🍌']; 
+    console.log('force: ' + opts.force);
+    if (!opts.force && ctx) {
+      return ctx;
+    }
+
+    ctx = el['🍌'] = { el: el };
     var items = resolve(opts.by || getData(el, 'splitting') || CHARS);
     var opts2 = copy({}, opts);
-
     each(items, function(plugin) {
       if (plugin.split) {
         var pluginBy = plugin.by;
