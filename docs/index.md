@@ -13,8 +13,10 @@ features:
 footer: MIT Licensed | Copyright © 2018-present Stephen Shaw
 ---
 
+<HomeTagline></HomeTagline>
+
 Splitting creates elements and adds CSS variables to unlock amazing possibilities for animating text, grids, and more!
 
 <a href="./guide.html" class="action-button">Get Splitting →</a>
 
-Install with `npm i splitting -s` or <a href="https://github.com/shshaw/Splitting/archive/master.zip" target="_blank" class="action-button smaller ">Download</a>
+Install with `npm i splitting -s` or <a href="https://github.com/shshaw/Splitting/archive/master.zip" target="_blank" class="action-button smaller ">Download .zip</a>
