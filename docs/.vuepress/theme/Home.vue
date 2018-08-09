@@ -76,14 +76,13 @@
       }
 
       h1 {
-        font-size: 3rem;
-        font-size: 8vw;
+        font-size: 5rem; // font-size: 6vw;
       }
 
       h1,
       .description,
       .action {
-        margin: 1.8rem auto;
+        margin: 1.5rem auto;
       }
 
       .description {
@@ -114,9 +113,8 @@
     //   }
     // }
     .features {
-      border-top: 1px solid $borderColor;
-      padding: 1.4rem 0;
-      margin-top: 2rem;
+      // border-top: 1px solid $borderColor;
+      padding: 0 0 1rem 0;
       text-align: center;
       display: flex;
       flex-wrap: wrap;
@@ -131,10 +129,11 @@
       max-width: 30%;
 
       h2 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         font-weight: 500;
         border-bottom: none;
         padding-bottom: 0;
+        margin-bottom: 1rem;
         color: lighten($textColor, 10%);
       }
 
