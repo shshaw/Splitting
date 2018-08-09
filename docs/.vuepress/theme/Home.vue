@@ -64,7 +64,7 @@
 
     .action-button:only-child {
       margin: 1rem auto;
-       }
+    }
 
     .hero {
       padding: 2rem 0 1rem 0;
@@ -98,9 +98,7 @@
     .home-content.home-content {
       max-width: 34em;
       margin: 2rem auto;
-    }
-
-    // .version-note {
+    } // .version-note {
     //   background: $blue;
     //   padding: 1rem;
     //   border-radius: .25em;
@@ -115,7 +113,6 @@
     //     display: block;
     //   }
     // }
-
     .features {
       border-top: 1px solid $borderColor;
       padding: 1.4rem 0;
