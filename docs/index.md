@@ -5,9 +5,9 @@ home: true
 # actionLink: /guide.md
 features:
 - title: DoubleDash your CSS
-  details: The previously impractical becomes downright easy with Splitting's CSS Variables.
+  details: The previously impractical becomes easy with Splitting's CSS Variables.
 - title: Comically Small
-  details: A shocking amount of features in a 1.5kb (minified and gzipped) package.
+  details: A shocking amount of features in a 1.5kb (minified & gzipped) package.
 - title: Progressively Enhance
   details: Upgrade websites for modern browsers without breaking IE.
 footer: MIT Licensed | Copyright © 2018-present Stephen Shaw

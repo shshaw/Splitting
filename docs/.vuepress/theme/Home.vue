@@ -77,6 +77,9 @@
 
       h1 {
         font-size: 5rem; // font-size: 6vw;
+        @media (max-width: $MQMobile) {
+          font-size: 4rem;
+        }
       }
 
       h1,

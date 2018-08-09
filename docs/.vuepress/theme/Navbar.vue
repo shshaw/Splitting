@@ -95,7 +95,9 @@
         margin: auto;
         text-align: center;
       }
-      padding-left: 4rem;
+
+      padding: .5rem 2rem;
+      line-height: $navbarHeight - 1rem;
 
       .can-hide {
         display: none;
