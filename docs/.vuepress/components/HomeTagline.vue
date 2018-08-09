@@ -1,22 +1,27 @@
 <template>
-  <div class="home-tagline" v-html="text"></div>
+  <div class="home-tagline">
+    <span v-html="text"></span>
+  </div>
 </template>
 
 <script>
-  import Splitting from 'splitting';
   export default {
     name: 'home-tagline',
-    computed: {
-      text() {
-        return Splitting.html({
-          content: 'CSS Vars for split words & chars!<br /><small>(items, grids, images, too!)</small>'
-          // }) + Splitting.html({
-          //   content: '<br />(and more!)'
-        });
+
+    data() {
+      return {
+        text: 'CSS Vars for split words & chars!<br /><small>(items, grids, images, too!)</small>',
       }
     },
-    methods: {
-      Splitting
+
+    mounted() {
+      import ('splitting').then(module => {
+        const Splitting = module.default;
+        this.text = Splitting.html({
+          content: this.text,
+          by: 'chars'
+        })
+      });
     }
   };
 </script>
@@ -24,10 +29,6 @@
 <style lang="stylus">
   @import '../theme/styles/config.styl';
   .home-tagline {
-    // position: fixed;
-    // top: 50%;
-    // left: 0;
-    // right: 0;
     visibility: hidden;
   }
 
@@ -35,7 +36,7 @@
     font-weight: 600;
     line-height: 1.25;
     font-family: 'Kanit', sans-serif;
-    font-size: 1.5rem; //calc(100vw / var(--char-total)); //letter-spacing: calc(50vw / var(--char-total));
+    font-size: 1.5rem;
   }
 
   /* ---------- */
@@ -68,29 +69,4 @@
       transform: translate( 0.05em, -0.1em);
     }
   }
-
-
-
-  /* ---------- */
-
-  /* ---------- */
-
-  /*
-  // .home-tagline .char { // visibility: visible; // display: inline-block; // animation: falling 20s linear infinite both;
-  // animation: bounce-char 1.75s linear infinite; // animation-delay: calc( -.15s * var(--char-index)); // }
-  @keyframes bounce-char {
-    20% {
-      transform: translateY(0%) scale(1.1, .8);
-    }
-    70% {
-      transform: translateY(-20%) scale(.8, 1.1);
-    }
-  }
-
-  @keyframes falling {
-    to {
-      transform: translateY(100vh);
-    }
-  }
-  */
 </style>
