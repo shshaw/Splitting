@@ -10,5 +10,9 @@ export function detectGrid(el, options, side) {
         (c[val] || (c[val] = [])).push(w);
     });
 
-    return Object.keys(c).map(Number).sort().map(selectFrom(c));
+    return Object.keys(c).map(Number).sort(byNumber).map(selectFrom(c));
+}
+
+function byNumber(a, b) {
+    return a - b;
 }
