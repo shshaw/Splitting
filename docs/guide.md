@@ -10,7 +10,7 @@ meta:
 
 Splitting is a JavaScript microlibrary with a collection of small [built-in plugins](#plugins) designed to split (section off) an element in a variety of ways, such as [words](#words), [characters](#chars), [child nodes](#items), and [more](#plugins)!
 
-Most plugins utilize a series of `<span>`s populated with CSS variables and data attributes that empower you to build all kinds of animations, transitions and interactions.
+The Splitting library does not handle any animation, but it gives you the elements and tools needed to create animations & transitions with JavaScript animation libraries or _only CSS!_. Most plugins utilize a series of `<span>`s populated with CSS variables and data attributes that empower you to build all kinds of animations, transitions and interactions.
 
 The general flow is:
 
