@@ -1,15 +1,18 @@
 ---
 home: true
+meta:
+  - name: description
+    content: Splitting.JS for splitting text, grids, images and more!
 # heroImage: /hero.svg
 # actionText: Get Splitting →
 # actionLink: /guide.md
 features:
-- title: DoubleDash your CSS
-  details: The previously impractical becomes easy with Splitting's CSS Variables.
-- title: Comically Small
-  details: A shocking amount of features in a 1.5kb (minified & gzipped) package.
-- title: Progressively Enhance
-  details: Upgrade websites for modern browsers without breaking IE.
+  - title: DoubleDash your CSS
+    details: The previously impractical becomes easy with Splitting's CSS Variables.
+  - title: Comically Small
+    details: A shocking amount of features in a 1.5kb (minified & gzipped) package.
+  - title: Progressively Enhance
+    details: Upgrade websites for modern browsers without breaking IE.
 footer: MIT Licensed | Copyright © 2018-present Stephen Shaw
 ---
 

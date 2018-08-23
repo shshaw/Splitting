@@ -1,6 +1,9 @@
 ---
 title: Guide
 sidebar: auto
+meta:
+  - name: description
+    content: Splitting.JS Guide - Learn how to split text, images, grids and more!
 ---
 
 ## What is Splitting?
