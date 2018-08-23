@@ -108,8 +108,8 @@ CDN use is only recommended for demos / experiments on platforms like [CodePen](
 You can get the latest version of Splitting off of the [unpkg CDN](https://unpkg.com) and include the necessary files as follows.
 
 ```html
-<link rel="stylesheet" src="https://unpkg.com/splitting/dist/splitting.css" />
-<link rel="stylesheet" src="https://unpkg.com/splitting/dist/splitting-cells.css" />
+<link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+<link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css" />
 <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
 ```
 
