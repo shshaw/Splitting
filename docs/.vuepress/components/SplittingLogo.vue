@@ -1,6 +1,6 @@
 <template>
 
-  <span class="splitting-logo" :class="{ '-animated': animated }" style="--word-total:1; --char-total:9;">
+  <span class="splitting-logo" title="Splitting.js" :class="{ '-animated': animated }" style="--word-total:1; --char-total:9;">
     <span class="brad-split"></span>
     <span class="word" data-word="Splitting" style="--word-index:0;">
       <!-- prettier-ignore-start -->
