@@ -1,5 +1,5 @@
 module.exports = {
-  title: "Splitting",
+  title: "Splitting.js",
   description: "CSS Vars for split words, chars, images, and more!",
   base: "/",
   ga: "UA-6412794-8",
