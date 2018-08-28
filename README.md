@@ -24,5 +24,5 @@ Consult the [guide & documentation](https://splitting.js.org/guide.html) for mor
 
 | Maintainer | GitHub | Twitter |
 | :- | :- | :- |
-| Stephen Shaw | [@shshaw]() | [@shshaw]() |
-| Christopher Wallis | [@notoriousb1t]() | [@notoriousb1t]() |
+| Stephen Shaw | [@shshaw](https://github.com/shshaw) | [@shshaw](https://twitter.com/shshaw) |
+| Christopher Wallis | [@notoriousb1t](https://github.com/notoriousb1t) | [@notoriousb1t](https://twitter.com/notoriousb1t) |
