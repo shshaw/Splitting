@@ -17,3 +17,12 @@ Consult the [guide & documentation](https://splitting.js.org/guide.html) for mor
 
 - [**Guide & Documentation**](https://splitting.js.org/guide.html)
 - [**Demos**](https://codepen.io/collection/43588e4b7beaaf25ede7e38e61441e54/)
+
+---
+
+## Maintainers
+
+| Maintainer | GitHub | Twitter |
+| :- | :- | :- |
+| Stephen Shaw | [@shshaw]() | [@shshaw]() |
+| Christopher Wallis | [@notoriousb1t]() | [@notoriousb1t]() |
