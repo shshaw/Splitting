@@ -1,19 +1,19 @@
 import Splitting from '../../src/all';
 
-test("no arguments", function () {
+test("no arguments", () => {
   var result = Splitting();
   expect(result).toEqual([]);
 });
  
 
-test("passing an element", function () {
+test("passing an element", () => {
   var el = document.createElement("div");
   var els = Splitting({ target: el });
   expect(els.length).toEqual(1);
   expect(els[0].el).toBe(el);
 });
 
-test("passing a nodelist", function () {
+test("passing a nodelist", () => {
 
   var id = 'test-element';
   var el = document.createElement("div");
@@ -27,7 +27,7 @@ test("passing a nodelist", function () {
   document.body.removeChild(el);
 });
 
-test("passing a class selector", function () {
+test("passing a class selector", () => {
   var className = "passing-class-selector"
   var el = document.createElement("div");
   el.className = className;
@@ -40,14 +40,14 @@ test("passing a class selector", function () {
   document.body.removeChild(el);
 });
 
-test("passing a non-existant selector", function () {
+test("passing a non-existant selector", () => {
 
   var els = Splitting({ target: ".nonexistant-class-selector" });
   expect(els.length).toEqual(0);
 
 });
 
-test("passing an attribute selector", function () {
+test("passing an attribute selector", () => {
   var el = document.createElement("span");
   el.setAttribute("data-attribute", true);
   document.body.appendChild(el);
@@ -59,7 +59,7 @@ test("passing an attribute selector", function () {
   document.body.removeChild(el);
 });
 
-test("returns the same thing if split more than once", function () {
+test("returns the same thing if split more than once", () => {
   var el = document.createElement("span"); 
   el.innerHTML = "Hello World";
 
@@ -68,11 +68,32 @@ test("returns the same thing if split more than once", function () {
   expect(els1[0]).toBe(els2[0]);
 });
 
-test("returns a different thing if force split", function () {
+test("returns a different thing if force split", () => {
   var el = document.createElement("span"); 
   el.innerHTML = "Hello World"; 
 
   var els1 = Splitting({ target: el, by: 'grid' });
   var els2 = Splitting({ target: el, by: 'grid', force: true });
   expect(els1[0]).not.toBe(els2[0]);
+});
+
+test("A plugin of \"true\" is assumed to be the default value", () => {
+  var el = document.createElement("span");
+  el.setAttribute("data-splitting", "true");
+  el.innerHTML = "TEST";
+
+  var els1 = Splitting({ target: el });
+  expect(els1[0].chars.length).toBe(4);
+});
+
+test("throw a specific error when the plugin is not loaded", () => {
+  var el = document.createElement("span");
+  el.setAttribute("data-splitting", "not-valid");
+
+  try {
+    Splitting({ target: el })
+    throw new Error("did not throw");
+  } catch (err) {
+    expect(err.message).toBe("plugin not loaded: not-valid")
+  }
 });

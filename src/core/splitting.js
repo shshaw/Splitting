@@ -22,11 +22,15 @@ export function Splitting (opts) {
     }
 
     ctx = el['🍌'] = { el: el };
-    var items = resolve(opts.by || getData(el, 'splitting') || CHARS);
+    var by = opts.by || getData(el, 'splitting');
+    if (!by || by == 'true') {
+      by = CHARS;
+    }
+    var items = resolve(by);
     var opts2 = copy({}, opts);
     each(items, function(plugin) {
-      if (plugin.split) {
-        var pluginBy = plugin.by;
+      if (plugin.split) { 
+        var pluginBy =  plugin.by;
         var key2 = (key ? '-' + key : '') + plugin.key;
         var results = plugin.split(el, opts2, ctx);
         key2 && index(el, key2, results);
