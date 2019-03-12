@@ -355,7 +355,7 @@ const results = Splitting({
   target: '.image',
   by: 'cells',
   image: true,
-  cols: 2,
+  columns: 2,
   rows: 2
 });
 
