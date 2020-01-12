@@ -76,3 +76,24 @@ test("returns a different thing if force split", function () {
   var els2 = Splitting({ target: el, by: 'grid', force: true });
   expect(els1[0]).not.toBe(els2[0]);
 });
+
+test("A plugin of \"true\" is assumed to be the default value", () => {
+  var el = document.createElement("span");
+  el.setAttribute("data-splitting", "true");
+  el.innerHTML = "TEST";
+
+  var els1 = Splitting({ target: el });
+  expect(els1[0].chars.length).toBe(4);
+});
+
+test("throw a specific error when the plugin is not loaded", () => {
+  var el = document.createElement("span");
+  el.setAttribute("data-splitting", "not-valid");
+
+  try {
+    Splitting({ target: el })
+    throw new Error("did not throw");
+  } catch (err) {
+    expect(err.message).toBe("plugin not loaded: not-valid")
+  }
+}); 

@@ -127,7 +127,11 @@ function resolvePlugins(by, parent, deps) {
         deps.unshift(by);
 
         // recursively call this function for all dependencies
-        each(plugins[by].depends, function(p) {
+        var plugin = plugins[by];
+        if (!plugin) {
+            throw new Error("plugin not loaded: " + by);
+        }
+        each(plugin.depends, function(p) {
             resolvePlugins(p, by, deps);
         });
     } else {
@@ -301,7 +305,11 @@ function Splitting (opts) {
     }
 
     ctx = el['🍌'] = { el: el };
-    var items = resolve(opts.by || getData(el, 'splitting') || CHARS);
+    var by = opts.by || getData(el, 'splitting');
+    if (!by || by == 'true') {
+      by = CHARS;
+    }
+    var items = resolve(by);
     var opts2 = copy({}, opts);
     each(items, function(plugin) {
       if (plugin.split) {

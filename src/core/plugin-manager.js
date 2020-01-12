@@ -19,7 +19,11 @@ function resolvePlugins(by, parent, deps) {
         deps.unshift(by);
 
         // recursively call this function for all dependencies
-        each(plugins[by].depends, function(p) {
+        var plugin = plugins[by];
+        if (!plugin) {
+            throw new Error("plugin not loaded: " + by);
+        }
+        each(plugin.depends, function(p) {
             resolvePlugins(p, by, deps);
         });
     } else {
