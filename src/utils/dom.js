@@ -4,9 +4,9 @@ export var createText = root.createTextNode.bind(root);
 /**
  * # setProperty
  * Apply a CSS var
- * @param el{HTMLElement} 
- * @param varName {string} 
- * @param value {string|number}  
+ * @param {HTMLElement} el
+ * @param {string} varName 
+ * @param {string|number} value 
  */
 export function setProperty(el, varName, value) {
     el.style.setProperty(varName, value);
@@ -14,13 +14,20 @@ export function setProperty(el, varName, value) {
 
 /**
  * 
- * @param {Node} el 
- * @param {Node} child 
+ * @param {!HTMLElement} el 
+ * @param {!HTMLElement} child 
  */
 export function appendChild(el, child) {
   return el.appendChild(child);
 }
 
+/**
+ * 
+ * @param {!HTMLElement} parent 
+ * @param {string} key 
+ * @param {string} text 
+ * @param {boolean} whitespace 
+ */
 export function createElement(parent, key, text, whitespace) {
   var el = root.createElement('span');
   key && (el.className = key); 
@@ -31,15 +38,20 @@ export function createElement(parent, key, text, whitespace) {
   return (parent && appendChild(parent, el)) || el;
 }
 
+/**
+ * 
+ * @param {!HTMLElement} el 
+ * @param {string} key 
+ */
 export function getData(el, key) {
   return el.getAttribute("data-" + key)
 }
 
 /**
  * 
- * @param e {import('../types').Target} 
- * @param parent {HTMLElement}
- * @returns {HTMLElement[]}
+ * @param {import('../types').Target} e 
+ * @param {!HTMLElement} parent
+ * @returns {!Array<!HTMLElement>}
  */
 export function $(e, parent) {
     return !e || e.length == 0

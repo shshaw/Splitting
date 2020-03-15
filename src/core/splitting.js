@@ -9,7 +9,8 @@ import { copy } from '../utils/objects';
 /**
  * # Splitting
  * 
- * @param opts {import('./types').ISplittingOptions} 
+ * @param {import('./types').ISplittingOptions} opts
+ * @return {!Array<*>}
  */
 export function Splitting (opts) {
   opts = opts || {};
@@ -47,7 +48,7 @@ export function Splitting (opts) {
 /**
  * # Splitting.html
  * 
- * @param opts {import('./types').ISplittingOptions}
+ * @param {import('./types').ISplittingOptions} opts
  */
 function html(opts) {
   opts = opts || {}

@@ -5,10 +5,10 @@ import { _ } from '../utils/objects';
 export var LAYOUT = "layout";
 
 export var layoutPlugin = createPlugin(
-    /*by: */ LAYOUT,
-    /*depends: */ _,
-    /*key: */ _,
-    /*split: */ function(el, opts) {
+    /* by= */ LAYOUT,
+    /* depends= */ _,
+    /* key= */ _,
+    /* split= */ function(el, opts) {
         // detect and set options
         var rows =  opts.rows = +(opts.rows || getData(el, 'rows') || 1);
         var columns = opts.columns = +(opts.columns || getData(el, 'columns') || 1);

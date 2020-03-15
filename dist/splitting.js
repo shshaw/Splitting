@@ -10,9 +10,9 @@ var createText = root.createTextNode.bind(root);
 /**
  * # setProperty
  * Apply a CSS var
- * @param el{HTMLElement} 
- * @param varName {string} 
- * @param value {string|number}  
+ * @param {HTMLElement} el
+ * @param {string} varName 
+ * @param {string|number} value 
  */
 function setProperty(el, varName, value) {
     el.style.setProperty(varName, value);
@@ -20,13 +20,20 @@ function setProperty(el, varName, value) {
 
 /**
  * 
- * @param {Node} el 
- * @param {Node} child 
+ * @param {!HTMLElement} el 
+ * @param {!HTMLElement} child 
  */
 function appendChild(el, child) {
   return el.appendChild(child);
 }
 
+/**
+ * 
+ * @param {!HTMLElement} parent 
+ * @param {string} key 
+ * @param {string} text 
+ * @param {boolean} whitespace 
+ */
 function createElement(parent, key, text, whitespace) {
   var el = root.createElement('span');
   key && (el.className = key); 
@@ -37,15 +44,20 @@ function createElement(parent, key, text, whitespace) {
   return (parent && appendChild(parent, el)) || el;
 }
 
+/**
+ * 
+ * @param {!HTMLElement} el 
+ * @param {string} key 
+ */
 function getData(el, key) {
   return el.getAttribute("data-" + key)
 }
 
 /**
  * 
- * @param e {import('../types').Target} 
- * @param parent {HTMLElement}
- * @returns {HTMLElement[]}
+ * @param {import('../types').Target} e 
+ * @param {!HTMLElement} parent
+ * @returns {!Array<!HTMLElement>}
  */
 function $(e, parent) {
     return !e || e.length == 0
@@ -60,10 +72,10 @@ function $(e, parent) {
 
 /**
  * Creates and fills an array with the value provided
- * @template {T}
  * @param {number} len
  * @param {() => T} valueProvider
  * @return {T}
+ * @template T
  */
 function Array2D(len) {
     var a = [];
@@ -73,10 +85,21 @@ function Array2D(len) {
     return a;
 }
 
-function each(items, fn) {
-    items && items.some(fn);
+/**
+ * A for loop wrapper used to reduce js minified size.
+ * @param {!Array<T>} items 
+ * @param {function(T):void} consumer
+ * @template T
+ */
+function each(items, consumer) {
+    items && items.some(consumer);
 }
 
+/**
+ * @param {T} obj 
+ * @return {function(string):*}
+ * @template T
+ */
 function selectFrom(obj) {
     return function (key) {
         return obj[key];
@@ -87,9 +110,9 @@ function selectFrom(obj) {
  * # Splitting.index
  * Index split elements and add them to a Splitting instance.
  *
- * @param element {HTMLElement}
- * @param key {string}
- * @param items {HTMLElement[] | HTMLElement[][]}
+ * @param {HTMLElement} element
+ * @param {string} key 
+ * @param {!Array<!HTMLElement> | !Array<!Array<!HTMLElement>>} items 
  */
 function index(element, key, items) {
     var prefix = '--' + key;
@@ -114,10 +137,10 @@ function index(element, key, items) {
 var plugins = {};
 
 /**
- * @param by {string}
- * @param parent {string}
- * @param deps {string[]}
- * @return {string[]}
+ * @param {string} by
+ * @param {string} parent
+ * @param {!Array<string>} deps
+ * @return {!Array<string>}
  */
 function resolvePlugins(by, parent, deps) {
     // skip if already visited this dependency
@@ -164,7 +187,7 @@ function createPlugin(by, depends, key, split) {
 
 /**
  *
- * @param by {string}
+ * @param {string} by
  * @returns {import('./types').ISplittingPlugin[]}
  */
 function resolve(by) {
@@ -173,7 +196,7 @@ function resolve(by) {
 
 /**
  * Adds a new plugin to splitting
- * @param opts {import('./types').ISplittingPlugin}
+ * @param {import('./types').ISplittingPlugin} opts
  */
 function add(opts) {
     plugins[opts.by] = opts;
@@ -182,11 +205,12 @@ function add(opts) {
 /**
  * # Splitting.split
  * Split an element's textContent into individual elements
- * @param el {Node} Element to split
- * @param key {string}
- * @param splitOn {string}
- * @param includeSpace {boolean}
- * @returns {HTMLElement[]}
+ * @param {!HTMLElement} el  Element to split
+ * @param {string} key 
+ * @param {string} splitOn 
+ * @param {boolean} includePrevious 
+ * @param {boolean} preserveWhitespace
+ * @return {!Array<!HTMLElement>}
  */
 function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
     // Combine any strange text nodes or empty whitespace.
@@ -264,10 +288,10 @@ function copy(dest, src) {
 var WORDS = 'words';
 
 var wordPlugin = createPlugin(
-    /*by: */ WORDS,
-    /*depends: */ _,
-    /*key: */ 'word', 
-    /*split: */ function(el) {
+    /* by= */ WORDS,
+    /* depends= */ _,
+    /* key= */ 'word', 
+    /* split= */ function(el) {
         return splitText(el, 'word', /\s+/, 0, 1)
     }
 );
@@ -275,10 +299,10 @@ var wordPlugin = createPlugin(
 var CHARS = "chars";
 
 var charPlugin = createPlugin(
-    /*by: */ CHARS,
-    /*depends: */ [WORDS],
-    /*key: */ "char", 
-    /*split: */ function(el, options, ctx) {
+    /* by= */ CHARS,
+    /* depends= */ [WORDS],
+    /* key= */ "char", 
+    /* split= */ function(el, options, ctx) {
         var results = [];
 
         each(ctx[WORDS], function(word, i) {
@@ -292,7 +316,8 @@ var charPlugin = createPlugin(
 /**
  * # Splitting
  * 
- * @param opts {import('./types').ISplittingOptions} 
+ * @param {import('./types').ISplittingOptions} opts
+ * @return {!Array<*>}
  */
 function Splitting (opts) {
   opts = opts || {};
@@ -330,7 +355,7 @@ function Splitting (opts) {
 /**
  * # Splitting.html
  * 
- * @param opts {import('./types').ISplittingOptions}
+ * @param {import('./types').ISplittingOptions} opts
  */
 function html(opts) {
   opts = opts || {};
@@ -343,6 +368,12 @@ function html(opts) {
 Splitting.html = html;
 Splitting.add = add;
 
+/**
+ * Detects the grid by measuring which elements align to a side of it.
+ * @param {!HTMLElement} el 
+ * @param {import('../core/types').ISplittingOptions} options
+ * @param {*} side 
+ */
 function detectGrid(el, options, side) {
     var items = $(options.matching || el.children, el);
     var c = {};
@@ -355,58 +386,64 @@ function detectGrid(el, options, side) {
     return Object.keys(c).map(Number).sort(byNumber).map(selectFrom(c));
 }
 
+/**
+ * Sorting function for numbers.
+ * @param {number} a 
+ * @param {number} b
+ * @return {number} 
+ */
 function byNumber(a, b) {
     return a - b;
 }
 
 var linePlugin = createPlugin(
-    /*by: */ 'lines',
-    /*depends: */ [WORDS],
-    /*key: */ 'line',
-    /*split: */ function(el, options, ctx) {
+    /* by= */ 'lines',
+    /* depends= */ [WORDS],
+    /* key= */ 'line',
+    /* split= */ function(el, options, ctx) {
       return detectGrid(el, { matching: ctx[WORDS] }, 'offsetTop')
     }
 );
 
 var itemPlugin = createPlugin(
-    /*by: */ 'items',
-    /*depends: */ _,
-    /*key: */ 'item', 
-    /*split: */ function(el, options) {
+    /* by= */ 'items',
+    /* depends= */ _,
+    /* key= */ 'item', 
+    /* split= */ function(el, options) {
         return $(options.matching || el.children, el)
     }
 );
 
 var rowPlugin = createPlugin(
-    /*by: */ 'rows',
-    /*depends: */ _,
-    /*key: */ 'row', 
-    /*split: */ function(el, options) {
+    /* by= */ 'rows',
+    /* depends= */ _,
+    /* key= */ 'row', 
+    /* split= */ function(el, options) {
         return detectGrid(el, options, "offsetTop");
     }
 );
 
 var columnPlugin = createPlugin(
-    /*by: */ 'cols',
-    /*depends: */ _,
-    /*key: */ "col", 
-    /*split: */ function(el, options) {
+    /* by= */ 'cols',
+    /* depends= */ _,
+    /* key= */ "col", 
+    /* split= */ function(el, options) {
         return detectGrid(el, options, "offsetLeft");
     }
 );
 
 var gridPlugin = createPlugin(
-    /*by: */ 'grid',
-    /*depends: */ ['rows', 'cols']
+    /* by= */ 'grid',
+    /* depends= */ ['rows', 'cols']
 );
 
 var LAYOUT = "layout";
 
 var layoutPlugin = createPlugin(
-    /*by: */ LAYOUT,
-    /*depends: */ _,
-    /*key: */ _,
-    /*split: */ function(el, opts) {
+    /* by= */ LAYOUT,
+    /* depends= */ _,
+    /* key= */ _,
+    /* split= */ function(el, opts) {
         // detect and set options
         var rows =  opts.rows = +(opts.rows || getData(el, 'rows') || 1);
         var columns = opts.columns = +(opts.columns || getData(el, 'columns') || 1);
@@ -442,10 +479,10 @@ var layoutPlugin = createPlugin(
 );
 
 var cellRowPlugin = createPlugin(
-    /*by: */ "cellRows",
-    /*depends: */ [LAYOUT],
-    /*key: */ "row",
-    /*split: */ function(el, opts, ctx) {
+    /* by= */ "cellRows",
+    /* depends= */ [LAYOUT],
+    /* key= */ "row",
+    /* split= */ function(el, opts, ctx) {
         var rowCount = opts.rows;
         var result = Array2D(rowCount);
 
@@ -458,10 +495,10 @@ var cellRowPlugin = createPlugin(
 );
 
 var cellColumnPlugin = createPlugin(
-    /*by: */ "cellColumns",
-    /*depends: */ [LAYOUT],
-    /*key: */ "col",
-    /*split: */ function(el, opts, ctx) {
+    /* by= */ "cellColumns",
+    /* depends= */ [LAYOUT],
+    /* key= */ "col",
+    /* split= */ function(el, opts, ctx) {
         var columnCount = opts.columns;
         var result = Array2D(columnCount);
 
@@ -474,10 +511,10 @@ var cellColumnPlugin = createPlugin(
 );
 
 var cellPlugin = createPlugin(
-    /*by: */ "cells",
-    /*depends: */ ['cellRows', 'cellColumns'],
-    /*key: */ "cell", 
-    /*split: */ function(el, opt, ctx) { 
+    /* by= */ "cells",
+    /* depends= */ ['cellRows', 'cellColumns'],
+    /* key= */ "cell", 
+    /* split= */ function(el, opt, ctx) { 
         // re-index the layout as the cells
         return ctx[LAYOUT];
     }

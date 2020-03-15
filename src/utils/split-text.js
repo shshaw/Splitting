@@ -4,11 +4,12 @@ import { each } from "./arrays";
 /**
  * # Splitting.split
  * Split an element's textContent into individual elements
- * @param el {Node} Element to split
- * @param key {string}
- * @param splitOn {string}
- * @param includeSpace {boolean}
- * @returns {HTMLElement[]}
+ * @param {!HTMLElement} el  Element to split
+ * @param {string} key 
+ * @param {string} splitOn 
+ * @param {boolean} includePrevious 
+ * @param {boolean} preserveWhitespace
+ * @return {!Array<!HTMLElement>}
  */
 export function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
     // Combine any strange text nodes or empty whitespace.

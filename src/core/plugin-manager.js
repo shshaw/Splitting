@@ -6,10 +6,10 @@ import { selectFrom, each } from "../utils/arrays";
 var plugins = {};
 
 /**
- * @param by {string}
- * @param parent {string}
- * @param deps {string[]}
- * @return {string[]}
+ * @param {string} by
+ * @param {string} parent
+ * @param {!Array<string>} deps
+ * @return {!Array<string>}
  */
 function resolvePlugins(by, parent, deps) {
     // skip if already visited this dependency
@@ -56,7 +56,7 @@ export function createPlugin(by, depends, key, split) {
 
 /**
  *
- * @param by {string}
+ * @param {string} by
  * @returns {import('./types').ISplittingPlugin[]}
  */
 export function resolve(by) {
@@ -65,7 +65,7 @@ export function resolve(by) {
 
 /**
  * Adds a new plugin to splitting
- * @param opts {import('./types').ISplittingPlugin}
+ * @param {import('./types').ISplittingPlugin} opts
  */
 export function add(opts) {
     plugins[opts.by] = opts;

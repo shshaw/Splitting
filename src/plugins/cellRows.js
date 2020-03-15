@@ -3,10 +3,10 @@ import { Array2D, each } from "../utils/arrays";
 import { LAYOUT } from './layout';
 
 export var cellRowPlugin = createPlugin(
-    /*by: */ "cellRows",
-    /*depends: */ [LAYOUT],
-    /*key: */ "row",
-    /*split: */ function(el, opts, ctx) {
+    /* by= */ "cellRows",
+    /* depends= */ [LAYOUT],
+    /* key= */ "row",
+    /* split= */ function(el, opts, ctx) {
         var rowCount = opts.rows;
         var result = Array2D(rowCount);
 

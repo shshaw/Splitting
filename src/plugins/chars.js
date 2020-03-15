@@ -6,10 +6,10 @@ import { WORDS } from './words';
 export var CHARS = "chars";
 
 export var charPlugin = createPlugin(
-    /*by: */ CHARS,
-    /*depends: */ [WORDS],
-    /*key: */ "char", 
-    /*split: */ function(el, options, ctx) {
+    /* by= */ CHARS,
+    /* depends= */ [WORDS],
+    /* key= */ "char", 
+    /* split= */ function(el, options, ctx) {
         var results = [];
 
         each(ctx[WORDS], function(word, i) {
