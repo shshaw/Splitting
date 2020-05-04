@@ -383,6 +383,8 @@ Splitting is easily expandable to create your own splits. See the API for [`Spli
 | `by`     | The splitting plugin to use. See the plugin page for a full list. If not specified, the value of the data-splitting attribute will be use. If that is not present, the `chars` plugin will be used.                                                                                                                          |
 | `key`    | An optional key used as a prefix on on CSS Variables. For instance when a key of `hero` is used with the `chars` plugin, it will changethe CSS variable `--char-index` to `--hero-char-index`. This should be used if multiple splits have been performed on the same element, or to resolve conflicts with other libraries. |
 
+| `force`    | By default, Splitting will not "resplit" an Element that's already been split. Set `force: true` if you want to re-split regardless. This is especially helpful for Splitting by `grid`, `cols`, `rows`, and `lines` on resize. |
+
 #### Plugin-specific Options
 
 | Options      | Description                                                                                                                                                                                       |
