@@ -39,7 +39,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-preset-env": "^1.7.0",
     "jest": "^22.3.0",
-    "jsdom": "^11.11.0",
+    "jsdom": "^16.5.0",
     "rollup": "^0.55.5",
     "rollup-plugin-filesize": "^2.0.0",
     "rollup-plugin-uglify": "^4.0.0",
