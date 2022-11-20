@@ -126,7 +126,7 @@ Then call Splitting on document load/ready or in a script at the bottom the of t
 
 Included in the package are two small stylesheets of recommended CSS that will make text and grid based effects much easier. These styles are non-essential, but provide a lot of value.
 
-- `splitting.css` includes many extra CSS Variables and psuedo elements that help power advanced animations, especially for text.
+- `splitting.css` includes many extra CSS Variables and pseudo elements that help power advanced animations, especially for text.
 - `splitting-cells.css` contain the basic setup styles for cell/grid based effects you'd otherwise need to implement yourself.
 
 ### Browser Support
