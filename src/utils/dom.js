@@ -61,5 +61,5 @@ export function $(e, parent) {
             ? // a single element is wrapped in an array
               [e]
             : // selector and NodeList are converted to Element[]
-              [].slice.call(e[0].nodeName ? e : document.querySelectorAll(e));
+              [].slice.call(e[0].nodeName ? e : (parent || document).querySelectorAll(e));
 }
