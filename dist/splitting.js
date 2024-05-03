@@ -4,8 +4,8 @@
 	(global.Splitting = factory());
 }(this, (function () { 'use strict';
 
-var root = document;
-var createText = root.createTextNode.bind(root);
+let root = document;
+let createText = root.createTextNode.bind(root);
 
 /**
  * # setProperty
@@ -35,7 +35,7 @@ function appendChild(el, child) {
  * @param {boolean} whitespace 
  */
 function createElement(parent, key, text, whitespace) {
-  var el = root.createElement('span');
+  let el = root.createElement('span');
   key && (el.className = key); 
   if (text) { 
       !whitespace && el.setAttribute("data-" + key, text);
@@ -67,7 +67,7 @@ function $(e, parent) {
             ? // a single element is wrapped in an array
               [e]
             : // selector and NodeList are converted to Element[]
-              [].slice.call(e[0].nodeName ? e : (parent || root).querySelectorAll(e));
+              [].slice.call(e[0].nodeName ? e : document.querySelectorAll(e));
 }
 
 /**
@@ -78,7 +78,7 @@ function $(e, parent) {
  * @template T
  */
 function Array2D(len) {
-    var a = [];
+    let a = [];
     for (; len--; ) {
         a[len] = [];
     }
@@ -115,8 +115,8 @@ function selectFrom(obj) {
  * @param {!Array<!HTMLElement> | !Array<!Array<!HTMLElement>>} items 
  */
 function index(element, key, items) {
-    var prefix = '--' + key;
-    var cssVar = prefix + "-index";
+    let prefix = '--' + key;
+    let cssVar = prefix + "-index";
 
     each(items, function (items, i) {
         if (Array.isArray(items)) {
@@ -134,7 +134,7 @@ function index(element, key, items) {
 /**
  * @type {Record<string, import('./types').ISplittingPlugin>}
  */
-var plugins = {};
+let plugins = {};
 
 /**
  * @param {string} by
@@ -144,13 +144,13 @@ var plugins = {};
  */
 function resolvePlugins(by, parent, deps) {
     // skip if already visited this dependency
-    var index = deps.indexOf(by);
+    let index = deps.indexOf(by);
     if (index == -1) {
         // if new to dependency array, add to the beginning
         deps.unshift(by);
 
         // recursively call this function for all dependencies
-        var plugin = plugins[by];
+        let plugin = plugins[by];
         if (!plugin) {
             throw new Error("plugin not loaded: " + by);
         }
@@ -160,7 +160,7 @@ function resolvePlugins(by, parent, deps) {
     } else {
         // if this dependency was added already move to the left of
         // the parent dependency so it gets loaded in order
-        var indexOfParent = deps.indexOf(parent);
+        let indexOfParent = deps.indexOf(parent);
         deps.splice(index, 1);
         deps.splice(indexOfParent, 0, by);
     }
@@ -217,14 +217,14 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
     el.normalize();
 
     // Use fragment to prevent unnecessary DOM thrashing.
-    var elements = [];
-    var F = document.createDocumentFragment();
+    let elements = [];
+    let F = document.createDocumentFragment();
 
     if (includePrevious) {
         elements.push(el.previousSibling);
     }
 
-    var allElements = [];
+    let allElements = [];
     $(el.childNodes).some(function(next) {
         if (next.tagName && !next.hasChildNodes()) {
             // keep elements without child nodes (no text and no children)
@@ -240,8 +240,8 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
 
         // Get the text to split, trimming out the whitespace
         /** @type {string} */
-        var wholeText = next.wholeText || '';
-        var contents = wholeText.trim();
+        let wholeText = next.wholeText || '';
+        let contents = wholeText.trim();
 
         // If there's no text left after trimming whitespace, continue the loop
         if (contents.length) {
@@ -254,7 +254,7 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
                 if (i && preserveWhitespace) {
                     allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
                 }
-                var splitEl = createElement(F, key, splitText);
+                let splitEl = createElement(F, key, splitText);
                 elements.push(splitEl);
                 allElements.push(splitEl);
             }); 
@@ -276,18 +276,18 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
 }
 
 /** an empty value */
-var _ = 0;
+let _ = 0;
 
 function copy(dest, src) {
-    for (var k in src) {
+    for (let k in src) {
         dest[k] = src[k];
     }
     return dest;
 }
 
-var WORDS = 'words';
+let WORDS = 'words';
 
-var wordPlugin = createPlugin(
+let wordPlugin = createPlugin(
     /* by= */ WORDS,
     /* depends= */ _,
     /* key= */ 'word', 
@@ -296,14 +296,14 @@ var wordPlugin = createPlugin(
     }
 );
 
-var CHARS = "chars";
+let CHARS = "chars";
 
-var charPlugin = createPlugin(
+let charPlugin = createPlugin(
     /* by= */ CHARS,
     /* depends= */ [WORDS],
     /* key= */ "char", 
     /* split= */ function(el, options, ctx) {
-        var results = [];
+        let results = [];
 
         each(ctx[WORDS], function(word, i) {
             results.push.apply(results, splitText(word, "char", "", options.whitespace && i));
@@ -321,26 +321,26 @@ var charPlugin = createPlugin(
  */
 function Splitting (opts) {
   opts = opts || {};
-  var key = opts.key;
+  let key = opts.key;
 
   return $(opts.target || '[data-splitting]').map(function(el) {
-    var ctx = el['🍌'];  
+    let ctx = el['🍌'];  
     if (!opts.force && ctx) {
       return ctx;
     }
 
     ctx = el['🍌'] = { el: el };
-    var by = opts.by || getData(el, 'splitting');
+    let by = opts.by || getData(el, 'splitting');
     if (!by || by == 'true') {
       by = CHARS;
     }
-    var items = resolve(by);
-    var opts2 = copy({}, opts);
+    let items = resolve(by);
+    let opts2 = copy({}, opts);
     each(items, function(plugin) {
       if (plugin.split) {
-        var pluginBy = plugin.by;
-        var key2 = (key ? '-' + key : '') + plugin.key;
-        var results = plugin.split(el, opts2, ctx);
+        let pluginBy = plugin.by;
+        let key2 = (key ? '-' + key : '') + plugin.key;
+        let results = plugin.split(el, opts2, ctx);
         key2 && index(el, key2, results);
         ctx[pluginBy] = results;
         el.classList.add(pluginBy);
@@ -359,7 +359,7 @@ function Splitting (opts) {
  */
 function html(opts) {
   opts = opts || {};
-  var parent = opts.target =  createElement();
+  let parent = opts.target =  createElement();
   parent.innerHTML = opts.content;
   Splitting(opts);
   return parent.outerHTML
@@ -375,11 +375,11 @@ Splitting.add = add;
  * @param {*} side 
  */
 function detectGrid(el, options, side) {
-    var items = $(options.matching || el.children, el);
-    var c = {};
+    let items = $(options.matching || el.children, el);
+    let c = {};
 
     each(items, function(w) {
-        var val = Math.round(w[side]);
+        let val = Math.round(w[side]);
         (c[val] || (c[val] = [])).push(w);
     });
 
@@ -396,7 +396,7 @@ function byNumber(a, b) {
     return a - b;
 }
 
-var linePlugin = createPlugin(
+let linePlugin = createPlugin(
     /* by= */ 'lines',
     /* depends= */ [WORDS],
     /* key= */ 'line',
@@ -405,7 +405,7 @@ var linePlugin = createPlugin(
     }
 );
 
-var itemPlugin = createPlugin(
+let itemPlugin = createPlugin(
     /* by= */ 'items',
     /* depends= */ _,
     /* key= */ 'item', 
@@ -414,7 +414,7 @@ var itemPlugin = createPlugin(
     }
 );
 
-var rowPlugin = createPlugin(
+let rowPlugin = createPlugin(
     /* by= */ 'rows',
     /* depends= */ _,
     /* key= */ 'row', 
@@ -423,7 +423,7 @@ var rowPlugin = createPlugin(
     }
 );
 
-var columnPlugin = createPlugin(
+let columnPlugin = createPlugin(
     /* by= */ 'cols',
     /* depends= */ _,
     /* key= */ "col", 
@@ -432,26 +432,26 @@ var columnPlugin = createPlugin(
     }
 );
 
-var gridPlugin = createPlugin(
+let gridPlugin = createPlugin(
     /* by= */ 'grid',
     /* depends= */ ['rows', 'cols']
 );
 
-var LAYOUT = "layout";
+let LAYOUT = "layout";
 
-var layoutPlugin = createPlugin(
+let layoutPlugin = createPlugin(
     /* by= */ LAYOUT,
     /* depends= */ _,
     /* key= */ _,
     /* split= */ function(el, opts) {
         // detect and set options
-        var rows =  opts.rows = +(opts.rows || getData(el, 'rows') || 1);
-        var columns = opts.columns = +(opts.columns || getData(el, 'columns') || 1);
+        let rows =  opts.rows = +(opts.rows || getData(el, 'rows') || 1);
+        let columns = opts.columns = +(opts.columns || getData(el, 'columns') || 1);
 
         // Seek out the first <img> if the value is true 
         opts.image = opts.image || getData(el, 'image') || el.currentSrc || el.src;
         if (opts.image) {
-            var img = $("img", el)[0];
+            let img = $("img", el)[0];
             opts.image = img && (img.currentSrc || img.src);
         }
 
@@ -460,13 +460,13 @@ var layoutPlugin = createPlugin(
             setProperty(el, "background-image", "url(" + opts.image + ")");
         }
 
-        var totalCells = rows * columns;
-        var elements = [];
+        let totalCells = rows * columns;
+        let elements = [];
 
-        var container = createElement(_, "cell-grid");
+        let container = createElement(_, "cell-grid");
         while (totalCells--) {
             // Create a span
-            var cell = createElement(container, "cell");
+            let cell = createElement(container, "cell");
             createElement(cell, "cell-inner");
             elements.push(cell);
         }
@@ -478,13 +478,13 @@ var layoutPlugin = createPlugin(
     }
 );
 
-var cellRowPlugin = createPlugin(
+let cellRowPlugin = createPlugin(
     /* by= */ "cellRows",
     /* depends= */ [LAYOUT],
     /* key= */ "row",
     /* split= */ function(el, opts, ctx) {
-        var rowCount = opts.rows;
-        var result = Array2D(rowCount);
+        let rowCount = opts.rows;
+        let result = Array2D(rowCount);
 
         each(ctx[LAYOUT], function(cell, i, src) {
             result[Math.floor(i / (src.length / rowCount))].push(cell);
@@ -494,13 +494,13 @@ var cellRowPlugin = createPlugin(
     }
 );
 
-var cellColumnPlugin = createPlugin(
+let cellColumnPlugin = createPlugin(
     /* by= */ "cellColumns",
     /* depends= */ [LAYOUT],
     /* key= */ "col",
     /* split= */ function(el, opts, ctx) {
-        var columnCount = opts.columns;
-        var result = Array2D(columnCount);
+        let columnCount = opts.columns;
+        let result = Array2D(columnCount);
 
         each(ctx[LAYOUT], function(cell, i) {
             result[i % columnCount].push(cell);
@@ -510,7 +510,7 @@ var cellColumnPlugin = createPlugin(
     }
 );
 
-var cellPlugin = createPlugin(
+let cellPlugin = createPlugin(
     /* by= */ "cells",
     /* depends= */ ['cellRows', 'cellColumns'],
     /* key= */ "cell", 
@@ -520,16 +520,20 @@ var cellPlugin = createPlugin(
     }
 );
 
+// Plugins
 // install plugins
+
 // word/char plugins
 add(wordPlugin);
 add(charPlugin);
 add(linePlugin);
+
 // grid plugins
 add(itemPlugin);
 add(rowPlugin);
 add(columnPlugin);
 add(gridPlugin);
+
 // cell-layout plugins
 add(layoutPlugin);
 add(cellRowPlugin);

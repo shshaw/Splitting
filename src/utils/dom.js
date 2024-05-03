@@ -1,5 +1,5 @@
-export var root = document;
-export var createText = root.createTextNode.bind(root);
+export let root = document;
+export let createText = root.createTextNode.bind(root);
 
 /**
  * # setProperty
@@ -29,7 +29,7 @@ export function appendChild(el, child) {
  * @param {boolean} whitespace 
  */
 export function createElement(parent, key, text, whitespace) {
-  var el = root.createElement('span');
+  let el = root.createElement('span');
   key && (el.className = key); 
   if (text) { 
       !whitespace && el.setAttribute("data-" + key, text);
@@ -61,5 +61,5 @@ export function $(e, parent) {
             ? // a single element is wrapped in an array
               [e]
             : // selector and NodeList are converted to Element[]
-              [].slice.call(e[0].nodeName ? e : (parent || root).querySelectorAll(e));
+              [].slice.call(e[0].nodeName ? e : document.querySelectorAll(e));
 }

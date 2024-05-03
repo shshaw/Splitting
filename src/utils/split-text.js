@@ -16,14 +16,14 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
     el.normalize();
 
     // Use fragment to prevent unnecessary DOM thrashing.
-    var elements = [];
-    var F = document.createDocumentFragment();
+    let elements = [];
+    let F = document.createDocumentFragment();
 
     if (includePrevious) {
         elements.push(el.previousSibling);
     }
 
-    var allElements = [];
+    let allElements = [];
     $(el.childNodes).some(function(next) {
         if (next.tagName && !next.hasChildNodes()) {
             // keep elements without child nodes (no text and no children)
@@ -39,8 +39,8 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
 
         // Get the text to split, trimming out the whitespace
         /** @type {string} */
-        var wholeText = next.wholeText || '';
-        var contents = wholeText.trim();
+        let wholeText = next.wholeText || '';
+        let contents = wholeText.trim();
 
         // If there's no text left after trimming whitespace, continue the loop
         if (contents.length) {
@@ -53,7 +53,7 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
                 if (i && preserveWhitespace) {
                     allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
                 }
-                var splitEl = createElement(F, key, splitText);
+                let splitEl = createElement(F, key, splitText);
                 elements.push(splitEl);
                 allElements.push(splitEl);
             }); 

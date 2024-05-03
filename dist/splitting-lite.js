@@ -4,8 +4,8 @@
 	(global.Splitting = factory());
 }(this, (function () { 'use strict';
 
-var root = document;
-var createText = root.createTextNode.bind(root);
+let root = document;
+let createText = root.createTextNode.bind(root);
 
 /**
  * # setProperty
@@ -35,7 +35,7 @@ function appendChild(el, child) {
  * @param {boolean} whitespace 
  */
 function createElement(parent, key, text, whitespace) {
-  var el = root.createElement('span');
+  let el = root.createElement('span');
   key && (el.className = key); 
   if (text) { 
       !whitespace && el.setAttribute("data-" + key, text);
@@ -67,7 +67,7 @@ function $(e, parent) {
             ? // a single element is wrapped in an array
               [e]
             : // selector and NodeList are converted to Element[]
-              [].slice.call(e[0].nodeName ? e : (parent || root).querySelectorAll(e));
+              [].slice.call(e[0].nodeName ? e : document.querySelectorAll(e));
 }
 
 /**
@@ -109,8 +109,8 @@ function selectFrom(obj) {
  * @param {!Array<!HTMLElement> | !Array<!Array<!HTMLElement>>} items 
  */
 function index(element, key, items) {
-    var prefix = '--' + key;
-    var cssVar = prefix + "-index";
+    let prefix = '--' + key;
+    let cssVar = prefix + "-index";
 
     each(items, function (items, i) {
         if (Array.isArray(items)) {
@@ -128,7 +128,7 @@ function index(element, key, items) {
 /**
  * @type {Record<string, import('./types').ISplittingPlugin>}
  */
-var plugins = {};
+let plugins = {};
 
 /**
  * @param {string} by
@@ -138,13 +138,13 @@ var plugins = {};
  */
 function resolvePlugins(by, parent, deps) {
     // skip if already visited this dependency
-    var index = deps.indexOf(by);
+    let index = deps.indexOf(by);
     if (index == -1) {
         // if new to dependency array, add to the beginning
         deps.unshift(by);
 
         // recursively call this function for all dependencies
-        var plugin = plugins[by];
+        let plugin = plugins[by];
         if (!plugin) {
             throw new Error("plugin not loaded: " + by);
         }
@@ -154,7 +154,7 @@ function resolvePlugins(by, parent, deps) {
     } else {
         // if this dependency was added already move to the left of
         // the parent dependency so it gets loaded in order
-        var indexOfParent = deps.indexOf(parent);
+        let indexOfParent = deps.indexOf(parent);
         deps.splice(index, 1);
         deps.splice(indexOfParent, 0, by);
     }
@@ -211,14 +211,14 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
     el.normalize();
 
     // Use fragment to prevent unnecessary DOM thrashing.
-    var elements = [];
-    var F = document.createDocumentFragment();
+    let elements = [];
+    let F = document.createDocumentFragment();
 
     if (includePrevious) {
         elements.push(el.previousSibling);
     }
 
-    var allElements = [];
+    let allElements = [];
     $(el.childNodes).some(function(next) {
         if (next.tagName && !next.hasChildNodes()) {
             // keep elements without child nodes (no text and no children)
@@ -234,8 +234,8 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
 
         // Get the text to split, trimming out the whitespace
         /** @type {string} */
-        var wholeText = next.wholeText || '';
-        var contents = wholeText.trim();
+        let wholeText = next.wholeText || '';
+        let contents = wholeText.trim();
 
         // If there's no text left after trimming whitespace, continue the loop
         if (contents.length) {
@@ -248,7 +248,7 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
                 if (i && preserveWhitespace) {
                     allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
                 }
-                var splitEl = createElement(F, key, splitText);
+                let splitEl = createElement(F, key, splitText);
                 elements.push(splitEl);
                 allElements.push(splitEl);
             }); 
@@ -270,18 +270,18 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
 }
 
 /** an empty value */
-var _ = 0;
+let _ = 0;
 
 function copy(dest, src) {
-    for (var k in src) {
+    for (let k in src) {
         dest[k] = src[k];
     }
     return dest;
 }
 
-var WORDS = 'words';
+let WORDS = 'words';
 
-var wordPlugin = createPlugin(
+let wordPlugin = createPlugin(
     /* by= */ WORDS,
     /* depends= */ _,
     /* key= */ 'word', 
@@ -290,14 +290,14 @@ var wordPlugin = createPlugin(
     }
 );
 
-var CHARS = "chars";
+let CHARS = "chars";
 
-var charPlugin = createPlugin(
+let charPlugin = createPlugin(
     /* by= */ CHARS,
     /* depends= */ [WORDS],
     /* key= */ "char", 
     /* split= */ function(el, options, ctx) {
-        var results = [];
+        let results = [];
 
         each(ctx[WORDS], function(word, i) {
             results.push.apply(results, splitText(word, "char", "", options.whitespace && i));
@@ -315,26 +315,26 @@ var charPlugin = createPlugin(
  */
 function Splitting (opts) {
   opts = opts || {};
-  var key = opts.key;
+  let key = opts.key;
 
   return $(opts.target || '[data-splitting]').map(function(el) {
-    var ctx = el['🍌'];  
+    let ctx = el['🍌'];  
     if (!opts.force && ctx) {
       return ctx;
     }
 
     ctx = el['🍌'] = { el: el };
-    var by = opts.by || getData(el, 'splitting');
+    let by = opts.by || getData(el, 'splitting');
     if (!by || by == 'true') {
       by = CHARS;
     }
-    var items = resolve(by);
-    var opts2 = copy({}, opts);
+    let items = resolve(by);
+    let opts2 = copy({}, opts);
     each(items, function(plugin) {
       if (plugin.split) {
-        var pluginBy = plugin.by;
-        var key2 = (key ? '-' + key : '') + plugin.key;
-        var results = plugin.split(el, opts2, ctx);
+        let pluginBy = plugin.by;
+        let key2 = (key ? '-' + key : '') + plugin.key;
+        let results = plugin.split(el, opts2, ctx);
         key2 && index(el, key2, results);
         ctx[pluginBy] = results;
         el.classList.add(pluginBy);
@@ -353,7 +353,7 @@ function Splitting (opts) {
  */
 function html(opts) {
   opts = opts || {};
-  var parent = opts.target =  createElement();
+  let parent = opts.target =  createElement();
   parent.innerHTML = opts.content;
   Splitting(opts);
   return parent.outerHTML
@@ -362,20 +362,49 @@ function html(opts) {
 Splitting.html = html;
 Splitting.add = add;
 
-// import { linePlugin } from "./plugins/lines";
-// import { itemPlugin } from "./plugins/items";
-// import { rowPlugin } from "./plugins/rows";
-// import { columnPlugin } from "./plugins/columns";
-// import { gridPlugin } from "./plugins/grid";
-// import { layoutPlugin } from "./plugins/layout";
-// import { cellRowPlugin } from "./plugins/cellRows";
-// import { cellColumnPlugin } from "./plugins/cellColumns";
-// import { cellPlugin } from "./plugins/cells";
+/**
+ * Detects the grid by measuring which elements align to a side of it.
+ * @param {!HTMLElement} el 
+ * @param {import('../core/types').ISplittingOptions} options
+ * @param {*} side 
+ */
+function detectGrid(el, options, side) {
+    let items = $(options.matching || el.children, el);
+    let c = {};
+
+    each(items, function(w) {
+        let val = Math.round(w[side]);
+        (c[val] || (c[val] = [])).push(w);
+    });
+
+    return Object.keys(c).map(Number).sort(byNumber).map(selectFrom(c));
+}
+
+/**
+ * Sorting function for numbers.
+ * @param {number} a 
+ * @param {number} b
+ * @return {number} 
+ */
+function byNumber(a, b) {
+    return a - b;
+}
+
+let linePlugin = createPlugin(
+    /* by= */ 'lines',
+    /* depends= */ [WORDS],
+    /* key= */ 'line',
+    /* split= */ function(el, options, ctx) {
+      return detectGrid(el, { matching: ctx[WORDS] }, 'offsetTop')
+    }
+);
 
 // install plugins
+
 // word/char plugins
 add(wordPlugin);
-add(charPlugin);
+add(charPlugin); 
+add(linePlugin);
 
 return Splitting;
 

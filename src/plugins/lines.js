@@ -2,7 +2,7 @@ import { createPlugin } from '../core/plugin-manager';
 import { detectGrid } from '../utils/detect-grid'
 import { WORDS } from './words';
 
-export var linePlugin = createPlugin(
+export let linePlugin = createPlugin(
     /* by= */ 'lines',
     /* depends= */ [WORDS],
     /* key= */ 'line',

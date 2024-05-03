@@ -6,7 +6,7 @@
  * @template T
  */
 export function Array2D(len) {
-    var a = [];
+    let a = [];
     for (; len--; ) {
         a[len] = []
     }

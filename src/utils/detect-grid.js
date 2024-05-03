@@ -8,11 +8,11 @@ import { $ } from './dom';
  * @param {*} side 
  */
 export function detectGrid(el, options, side) {
-    var items = $(options.matching || el.children, el);
-    var c = {};
+    let items = $(options.matching || el.children, el);
+    let c = {};
 
     each(items, function(w) {
-        var val = Math.round(w[side]);
+        let val = Math.round(w[side]);
         (c[val] || (c[val] = [])).push(w);
     });
 

@@ -1,6 +1,6 @@
 import size from 'rollup-plugin-filesize';
 import { uglify } from 'rollup-plugin-uglify';
-import { minify } from 'uglify-js';
+import { minify } from 'terser';
 import uglifyOptions from './compress.json';
 
 export default {
