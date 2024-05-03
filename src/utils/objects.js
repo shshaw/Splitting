@@ -1,8 +1,8 @@
 /** an empty value */
-export var _ = 0
+export let _ = 0
 
 export function copy(dest, src) {
-    for (var k in src) {
+    for (let k in src) {
         dest[k] = src[k]
     }
     return dest;

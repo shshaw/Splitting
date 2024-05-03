@@ -26,3 +26,4 @@ Consult the [guide & documentation](https://splitting.js.org/guide.html) for mor
 | :- | :- | :- |
 | Stephen Shaw | [@shshaw](https://github.com/shshaw) | [@shshaw](https://twitter.com/shshaw) |
 | Christopher Wallis | [@notoriousb1t](https://github.com/notoriousb1t) | [@notoriousb1t](https://twitter.com/notoriousb1t) |
+| Emmanuel Omoiya | [@EmmanuelOmoiya](https://github.com/EmmanuelOmoiya) | [@Emmanuel_Omoiya](https://twitter.com/Emmanuel_Omoiya) |

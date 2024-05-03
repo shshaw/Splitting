@@ -2,7 +2,7 @@ import { createPlugin } from '../core/plugin-manager';
 import { _ } from '../utils/objects';
 import { LAYOUT } from './layout';
 
-export var cellPlugin = createPlugin(
+export let cellPlugin = createPlugin(
     /* by= */ "cells",
     /* depends= */ ['cellRows', 'cellColumns'],
     /* key= */ "cell", 

@@ -2,13 +2,13 @@ import Splitting from '../../src/all'
 import { $create } from '../utils/dom';
 
 test('creates a 4 x 3 grid correctly', function() { 
-  var el = $create`
+  let el = $create`
     <div>
         <img src="http://placehold.it/1/1" />
     </div>
   `
 
-  var actual = Splitting({ 
+  let actual = Splitting({ 
       target: el, 
       by: 'cells',
       rows: 4,
@@ -25,7 +25,7 @@ test('creates a 4 x 3 grid correctly', function() {
 });
 
 test('initializes multiple cell zones', function() { 
-  var els = [
+  let els = [
     $create`<div data-splitting="cells" data-rows="3">
       <img src="http://placehold.it/1/1" />
     </div>`,
@@ -36,7 +36,7 @@ test('initializes multiple cell zones', function() {
 
   debugger;
 
-  var actual = Splitting({
+  let actual = Splitting({
     target: els,
     image: true
   });

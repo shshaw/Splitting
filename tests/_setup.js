@@ -1,9 +1,9 @@
 Element.prototype.insertAdjacentElement = function(position, container) {
-  var ref = this;
-  var ref_parent = ref.parentNode;
-  var node;
-  var first_child;
-  var next_sibling;
+  let ref = this;
+  let ref_parent = ref.parentNode;
+  let node;
+  let first_child;
+  let next_sibling;
 
   switch (position.toLowerCase()) {
     case 'beforebegin':
@@ -32,19 +32,19 @@ Element.prototype.insertAdjacentElement = function(position, container) {
 }
 
 Element.prototype.insertAdjacentText = function(position, html) { 
-  var container =  this.ownerDocument.createElementNS('http://www.w3.org/1999/xhtml', '_');
+  let container =  this.ownerDocument.createElementNS('http://www.w3.org/1999/xhtml', '_');
   container.innerHTML = html;
   this.insertAdjacentElement(position, container);
 };
 
 // polyfill css variables
-var originalSetProperty = CSSStyleDeclaration.prototype.setProperty;
-var originalPropValue = CSSStyleDeclaration.prototype.getPropertyValue;
+let originalSetProperty = CSSStyleDeclaration.prototype.setProperty;
+let originalPropValue = CSSStyleDeclaration.prototype.getPropertyValue;
 CSSStyleDeclaration.prototype.setProperty = function(key, value) {
   if (!key.startsWith('--')) {
     return originalSetProperty.call(this, key, value);
   }
-  var maps = (this._maps || (this._maps = {}));
+  let maps = (this._maps || (this._maps = {}));
   maps[key] = value;
 }
 CSSStyleDeclaration.prototype.getPropertyValue = function(key) {

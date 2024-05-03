@@ -3,7 +3,7 @@ import { selectFrom, each } from "../utils/arrays";
 /**
  * @type {Record<string, import('./types').ISplittingPlugin>}
  */
-var plugins = {};
+let plugins = {};
 
 /**
  * @param {string} by
@@ -13,13 +13,13 @@ var plugins = {};
  */
 function resolvePlugins(by, parent, deps) {
     // skip if already visited this dependency
-    var index = deps.indexOf(by);
+    let index = deps.indexOf(by);
     if (index == -1) {
         // if new to dependency array, add to the beginning
         deps.unshift(by);
 
         // recursively call this function for all dependencies
-        var plugin = plugins[by];
+        let plugin = plugins[by];
         if (!plugin) {
             throw new Error("plugin not loaded: " + by);
         }
@@ -29,7 +29,7 @@ function resolvePlugins(by, parent, deps) {
     } else {
         // if this dependency was added already move to the left of
         // the parent dependency so it gets loaded in order
-        var indexOfParent = deps.indexOf(parent);
+        let indexOfParent = deps.indexOf(parent);
         deps.splice(index, 1);
         deps.splice(indexOfParent, 0, by);
     }

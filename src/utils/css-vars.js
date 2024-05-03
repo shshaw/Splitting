@@ -10,8 +10,8 @@ import { each } from './arrays';
  * @param {!Array<!HTMLElement> | !Array<!Array<!HTMLElement>>} items 
  */
 export function index(element, key, items) {
-    var prefix = '--' + key;
-    var cssVar = prefix + "-index";
+    let prefix = '--' + key;
+    let cssVar = prefix + "-index";
 
     each(items, function (items, i) {
         if (Array.isArray(items)) {
