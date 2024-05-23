@@ -244,7 +244,8 @@ function splitText(el, key, splitOn, includePrevious, preserveWhitespace) {
                 allElements.push(createText(' '));
             }
             // Concatenate the split text children back into the full array
-            each(contents.split(splitOn), function(splitText, i) {
+            var useSegmenter = splitOn === "" && typeof Intl.Segmenter === "function";
+            each(useSegmenter ? Array.from(new Intl.Segmenter().segment(contents)).map(function(x){return x.segment}) : contents.split(splitOn), function (splitText, i) {
                 if (i && preserveWhitespace) {
                     allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
                 }
