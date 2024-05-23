@@ -49,7 +49,8 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
                 allElements.push(createText(' '));
             }
             // Concatenate the split text children back into the full array
-            each(contents.split(splitOn), function(splitText, i) {
+            const useSegmenter = splitOn === "" && typeof Intl.Segmenter === "function";
+            each(useSegmenter ? [...new Intl.Segmenter().segment(contents)].map((x) => x.segment) : contents.split(splitOn), function (splitText, i) {
                 if (i && preserveWhitespace) {
                     allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
                 }

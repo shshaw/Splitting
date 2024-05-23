@@ -83,6 +83,17 @@ test('a nested empty element', function() {
   expect(results[0].words.length).toBe(0);
 });
 
+test('an element with emojis', function () {
+  var $el = document.createElement("div");
+  $el.innerHTML = "Hello 👨‍👩‍👧‍👦⭐️";
+
+  var results = Splitting({ target: $el, by: 'chars' });
+
+  expect(results.length).toBe(1);
+  expect(results[0].chars.length).toBe(7);
+  expect(results[0].words.length).toBe(2);
+});
+
 test('a multi-level nested empty element', function() {
   // todo
 });
