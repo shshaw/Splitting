@@ -49,6 +49,22 @@ test("mixed content with spaces around words", () => {
   expect(actual).toBe(expected);
 });
 
+test("an element with a multiple words and emojis", () => {
+  var $el = document.createElement("div");
+  $el.innerHTML = "with multiple words and 🤔 🍌bananas! 👨‍👩‍👧‍👦";
+
+  var els = Splitting({ target: $el, by: "words" });
+  expect(els.length).toBe(1);
+  expect(els[0].words.length).toBe(7);
+  expect(els[0].words[0].textContent).toBe("with");
+  expect(els[0].words[1].textContent).toBe("multiple");
+  expect(els[0].words[2].textContent).toBe("words");
+  expect(els[0].words[3].textContent).toBe("and");
+  expect(els[0].words[4].textContent).toBe("🤔");
+  expect(els[0].words[5].textContent).toBe("🍌bananas!");
+  expect(els[0].words[6].textContent).toBe("👨‍👩‍👧‍👦");
+});
+
 test("a nested empty element", () => {
   // todo
 });
