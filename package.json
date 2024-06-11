@@ -35,7 +35,7 @@
   },
   "homepage": "https://splitting.js.org",
   "devDependencies": {
-    "babel-jest": "^23.4.0",
+    "babel-jest": "^29.7.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-preset-env": "^1.7.0",
     "jest": "^29.3.1",
