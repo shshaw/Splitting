@@ -46,7 +46,7 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
         if (contents.length) {
             // insert leading space if there was one
             if (wholeText[0] === ' ') {
-                allElements.push(createText(' '));
+                allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
             }
             // Concatenate the split text children back into the full array
             var useSegmenter = splitOn === "" && typeof Intl.Segmenter === "function";
@@ -60,7 +60,7 @@ export function splitText(el, key, splitOn, includePrevious, preserveWhitespace)
             }); 
             // insert trailing space if there was one
             if (wholeText[wholeText.length - 1] === ' ') {
-                allElements.push(createText(' '));
+                allElements.push(createElement(F, "whitespace", " ", preserveWhitespace));
             }
         }
     });
